@@ -1,0 +1,31 @@
+{
+  "target_url": "https://www.release.tdnet.info/index.html",
+  "actions": [
+    {
+      "action": "click",
+      "selector": "#searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)",
+      "wait_time_ms": 5000
+    },
+    {
+      "action": "select_option",
+      "selector": "#searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)",
+      "wait_time_ms": 5000,
+      "option_type": "index",
+      "option_value": 7
+    },
+    {
+      "action": "input",
+      "selector": "#freewordtxt",
+      "value": "不動産"
+    },
+    {
+      "action": "click",
+      "selector": "#searchbtn > img"
+    },
+    {
+      "action": "get_all_text_contents",
+      "selector": "tr td.title a",
+      "attribute_name": "href"
+    }
+  ]
+}

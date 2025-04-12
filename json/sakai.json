@@ -1,0 +1,22 @@
+{
+  "target_url": "https://duckduckgo.com/",
+  "actions": [
+    {
+      "action": "input",
+      "selector": "#searchbox_input",
+      "value": "堺市　個人事業主"
+    },
+    {
+      "action": "click",
+      "selector": "#searchbox_homepage > div > div.searchbox_searchbox__bfbmv > div > button.iconButton_button__A_Uiu.searchbox_searchButton__LxebD > svg"
+    },
+    {
+      "action": "click",
+      "selector": "#r1-0 > div.ikg2IXiCD14iVX7AdZo1 > h2 > a"
+    },
+    {
+      "action": "get_inner_text",
+      "selector": "#basebgwrapall > div > div"
+    }
+  ]
+}

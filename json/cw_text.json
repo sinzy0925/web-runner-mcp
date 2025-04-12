@@ -1,0 +1,13 @@
+{
+  "target_url": "https://crowdworks.jp/public/jobs/search?category_id=228&order=new&page=1",
+  "actions": [
+    {
+      "action": "click",
+      "selector": "#vue-container > div > div.ynFt_ > div > div.qZ4Xs > div.j1jEB > section.aGZRW > ul > li:nth-child(4) > div > div.FY2t2 > div.WkZ08 > h3 > a"
+    },
+    {
+      "action": "get_inner_text",
+      "selector": "#job_offer_detail > div.cw-row.has_sticky.job_detail > div.cw-column.main"
+    }
+  ]
+}

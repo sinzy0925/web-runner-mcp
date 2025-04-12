@@ -1,0 +1,6 @@
+.env
+venv312/
+venv/
+screenshots/
+output/
+output_web_runner.log

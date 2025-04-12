@@ -1,0 +1,23 @@
+{
+  "target_url": "https://duckduckgo.com/",
+  "actions": [
+    {
+      "action": "input",
+      "selector": "#searchbox_input",
+      "wait_time_ms": 5000,
+      "value": "google"
+    },
+    {
+      "action": "click",
+      "selector": "#searchbox_homepage > div > div.searchbox_searchbox__bfbmv > div > button.iconButton_button__A_Uiu.searchbox_searchButton__LxebD > svg"
+    },
+    {
+      "action": "get_inner_text",
+      "selector": "#react-layout > div > div > div"
+    },
+    {
+      "action": "get_text_content",
+      "selector": "#react-layout > div > div > div"
+    }
+  ]
+}

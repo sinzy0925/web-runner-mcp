@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playwright 入力データ ジェネレーター (JSON)</title>
+    <style>
+        /* --- スタイルは変更なし --- */
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: auto; }
+        h1, h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="url"], input[type="number"], select, textarea {
+            width: 95%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* paddingを含めて幅計算 */
+        }
+        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #cccccc; cursor: not-allowed;}
+        button.remove-step { background-color: #dc3545; margin-left: 10px; }
+        button.remove-step:hover { background-color: #c82333; }
+        .step { border: 1px solid #eee; padding: 15px; margin-bottom: 20px; border-radius: 5px; background-color: #f9f9f9; position: relative; }
+        .step h3 { margin-top: 0; }
+        .step .remove-step { position: absolute; top: 10px; right: 10px; padding: 5px 10px; font-size: 0.8em;}
+        .form-group { margin-bottom: 15px; }
+        .hidden { display: none; }
+        .option-group label { display: inline-block; margin-right: 10px; font-weight: normal;}
+        .option-group input[type="radio"] { margin-right: 5px;}
+        #generated-json-container { margin-top: 20px; border: 1px solid #ddd; padding: 15px; background-color: #f0f0f0; border-radius: 5px;}
+        #generated-json { display: block; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 500px; overflow-y: auto; }
+        #error-message { color: red; font-weight: bold; margin-top: 10px; white-space: pre-wrap;}
+        .loader { border: 4px solid #f3f3f3; border-radius: 50%; border-top: 4px solid #3498db; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-left: 10px;}
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .button-container { display: flex; align-items: center; flex-wrap: wrap; margin-top: 20px; gap: 10px; }
+        #copy-json-button { background-color: #28a745; }
+        #copy-json-button:hover { background-color: #218838; }
+        #download-json-button { background-color: #17a2b8; }
+        #download-json-button:hover { background-color: #117a8b; }
+    </style>
+</head>
+<body>
+
+    <h1>Playwright 入力データ ジェネレーター (JSON)</h1>
+    <p>Webサイトの自動化手順を入力し、<code>main.py</code> 用の入力データ (<code>input.json</code>) を生成・ダウンロードします。</p>
+
+    <form id="mcp-form">
+
+        <h2>1. 開始URL</h2>
+        <div class="form-group">
+            <label for="start_url">自動化を開始するURL:</label>
+            <input type="url" id="start_url" name="start_url" placeholder="https://example.com" required>
+        </div>
+
+        <h2>2. 操作ステップ</h2>
+        <div id="steps-container">
+            <!-- ステップ1 (初期表示用) -->
+            <div class="step" data-step-index="0">
+                <h3>ステップ 1 <button type="button" class="remove-step" onclick="removeStep(this)">削除</button></h3>
+                <div class="form-group">
+                    <label for="action_0">操作:</label>
+                    <select id="action_0" name="action_0" required onchange="toggleActionFields(this)">
+                        <option value="">-- 選択してください --</option>
+                        <option value="click">要素をクリック (Click)</option>
+                        <option value="input">要素に入力 (Input Text)</option>
+                        <option value="hover">要素にマウスオーバー (Hover)</option>
+                        <option value="get_inner_text">テキスト取得 (単一: innerText)</option>
+                        <option value="get_text_content">テキスト取得 (単一: textContent)</option>
+                        <option value="get_inner_html">HTML取得 (単一: innerHTML)</option>
+                        <option value="get_attribute">属性値を取得 (単一: Get Attribute)</option>
+                        <option value="get_all_attributes">属性値リストを取得 (複数: Get All Attributes)</option>
+                        <option value="get_all_text_contents">テキストリストを取得 (複数: Get All textContents)</option> <!-- ★★★ 追加 ★★★ -->
+                        <option value="wait_visible">要素が表示されるまで待つ (Wait Visible)</option>
+                        <option value="select_option">ドロップダウンを選択 (Select Option)</option>
+                        <option value="screenshot">スクリーンショットを撮る (Screenshot)</option>
+                        <option value="scroll_page_to_bottom">ページ最下部へスクロール (Scroll Page Bottom)</option>
+                        <option value="scroll_to_element">要素までスクロール (Scroll To Element)</option>
+                        <option value="wait_page_load">ページ読み込み完了を待つ (Wait Page Load)</option>
+                        <option value="sleep">指定時間待機 (Sleep)</option>
+                        <option value="switch_to_iframe">iframe に切り替える (Switch to iframe)</option>
+                        <option value="switch_to_parent_frame">親フレームに戻る (Switch to Parent Frame)</option>
+                    </select>
+                </div>
+                <div class="form-group selector-group"> <!-- セレクターグループ -->
+                    <label for="selector_0">対象要素のCSSセレクター:</label>
+                    <input type="text" id="selector_0" name="selector_0" placeholder="#id, .class, tag[attribute=value]">
+                    <small><br/>※ ページ全体操作(スクロール, 読み込み待機, sleep, 親フレームへ戻る)では不要</small>
+                </div>
+                 <!-- --- 各アクションの付加情報フィールド --- -->
+                 <div class="form-group action-field iframe_selector-group hidden">
+                    <label for="iframe_selector_0">iframeのCSSセレクター:</label>
+                    <input type="text" id="iframe_selector_0" name="iframe_selector_0" placeholder="#frame-id, iframe[name=frame-name]">
+                    <small>※ <code>switch_to_iframe</code> を選択した場合に必須</small>
+                </div>
+                <div class="form-group action-field input-field hidden">
+                    <label for="value_0">入力するテキスト:</label>
+                    <input type="text" id="value_0" name="value_0" placeholder="入力する値">
+                </div>
+                <!-- ▼▼▼ get_attribute と get_all_attributes で共用 ▼▼▼ -->
+                <div class="form-group action-field get_attribute-field hidden">
+                    <label for="attribute_name_0">取得する属性名:</label>
+                    <input type="text" id="attribute_name_0" name="attribute_name_0" placeholder="href, src, value など">
+                </div>
+                <div class="form-group action-field select_option-field hidden">
+                    <label>ドロップダウン選択方法:</label>
+                    <div class="option-group">
+                         <label><input type="radio" name="option_type_0" value="value" checked> 値 (Value)</label>
+                         <label><input type="radio" name="option_type_0" value="index"> インデックス (Index)</label>
+                         <label><input type="radio" name="option_type_0" value="label"> 表示ラベル (Label)</label>
+                    </div>
+                    <label for="option_value_0">選択する値/インデックス/ラベル:</label>
+                    <input type="text" id="option_value_0" name="option_value_0" placeholder="選択する項目">
+                    <small>※ インデックスは0から始まる数値</small>
+                </div>
+                <div class="form-group action-field sleep-field hidden">
+                    <label for="sleep_seconds_0">待機時間 (秒):</label>
+                    <input type="number" id="sleep_seconds_0" name="sleep_seconds_0" placeholder="例: 3" step="0.1" min="0">
+                </div>
+                 <div class="form-group action-field screenshot-field hidden">
+                    <label for="screenshot_filename_0">ファイル名 (任意):</label>
+                    <input type="text" id="screenshot_filename_0" name="screenshot_filename_0" placeholder="例: screenshot_step1.png">
+                 </div>
+                 <div class="form-group action-field wait-field hidden"> <!-- wait_visible, click など共通 -->
+                    <label for="wait_time_ms_0">最大待機時間 (ミリ秒、任意):</label>
+                    <input type="number" id="wait_time_ms_0" name="wait_time_ms_0" placeholder="デフォルト: 5000 (5秒)" min="1"> <!-- デフォルト値を設定 -->
+                </div>
+                 <!-- --- 付加情報フィールドここまで --- -->
+            </div>
+        </div>
+        <button type="button" id="add-step" onclick="addStep()">ステップを追加</button>
+
+        <!-- ボタンコンテナ -->
+        <div class="button-container">
+            <button type="button" id="generate-json-button" onclick="generateJsonData()">
+                 入力データ生成 (JSON)
+                 <span id="loading-indicator" class="loader hidden"></span> <!-- ★ ローダーに class="loader" 追加 -->
+            </button>
+            <button type="button" id="copy-json-button" onclick="copyJson()" class="hidden">JSONをコピー</button>
+            <button type="button" id="download-json-button" onclick="downloadJson()" class="hidden">input.json をダウンロード</button>
+        </div>
+    </form>
+
+    <!-- 生成されたJSON表示エリア -->
+    <div id="generated-json-container" class="hidden">
+        <h2>生成された入力データ (JSON):</h2>
+        <pre><code id="generated-json"></code></pre>
+    </div>
+    <div id="error-message"></div>
+
+    <script>
+        // ★★★ toggleActionFields に get_all_text_contents の処理を追加 ★★★
+        function toggleActionFields(selectElement) {
+            const stepDiv = selectElement.closest('.step');
+            const action = selectElement.value;
+            const stepIndex = stepDiv.dataset.stepIndex;
+
+            // 全ての付加フィールドを一旦隠す
+            stepDiv.querySelectorAll('.action-field').forEach(el => el.classList.add('hidden'));
+
+            const selectorGroup = stepDiv.querySelector('.selector-group');
+            const selectorInput = stepDiv.querySelector(`input[name="selector_${stepIndex}"]`);
+            const iframeSelectorGroup = stepDiv.querySelector('.iframe_selector-group');
+            const iframeSelectorInput = stepDiv.querySelector(`input[name="iframe_selector_${stepIndex}"]`);
+
+            // アクションごとにセレクターが必要かどうかを定義
+            const noSelectorNeeded = ['scroll_page_to_bottom', 'wait_page_load', 'sleep', 'switch_to_parent_frame'];
+            const iframeSelectorNeeded = ['switch_to_iframe'];
+            const elementSelectorNeeded = !noSelectorNeeded.includes(action) && !iframeSelectorNeeded.includes(action);
+
+            // セレクターフィールドの表示/非表示と必須属性を設定
+            if (selectorGroup && selectorInput) {
+                selectorGroup.classList.toggle('hidden', !elementSelectorNeeded);
+                selectorInput.required = elementSelectorNeeded;
+                selectorInput.disabled = !elementSelectorNeeded;
+                if (!elementSelectorNeeded) selectorInput.value = ''; // 不要な場合はクリア
+            }
+
+            // iframeセレクターフィールドの表示/非表示と必須属性を設定
+            if (iframeSelectorGroup && iframeSelectorInput) {
+                iframeSelectorGroup.classList.toggle('hidden', !iframeSelectorNeeded.includes(action));
+                iframeSelectorInput.required = iframeSelectorNeeded.includes(action);
+                iframeSelectorInput.disabled = !iframeSelectorNeeded.includes(action);
+                if (!iframeSelectorNeeded.includes(action)) iframeSelectorInput.value = ''; // 不要な場合はクリア
+            }
+
+            // 各アクションに必要な付加フィールドを表示
+            const fieldsToShow = {
+                'input': '.input-field',
+                'get_attribute': '.get_attribute-field',
+                'get_all_attributes': '.get_attribute-field', // 属性名入力フィールドを共用
+                'select_option': '.select_option-field',
+                'sleep': '.sleep-field',
+                'screenshot': '.screenshot-field'
+                // 'get_inner_text', 'get_text_content', 'get_inner_html', 'get_all_text_contents' は付加フィールド不要
+            };
+             if (fieldsToShow[action]) {
+                const fieldDiv = stepDiv.querySelector(fieldsToShow[action]);
+                if (fieldDiv) fieldDiv.classList.remove('hidden');
+            }
+
+            // 待機時間フィールドの表示/非表示
+            const waitField = stepDiv.querySelector('.wait-field');
+            if (waitField) {
+                // セレクターが必要なアクション、または wait_page_load 以外で表示
+                const showWait = elementSelectorNeeded || iframeSelectorNeeded.includes(action) || action === 'wait_page_load';
+                waitField.classList.toggle('hidden', !showWait);
+            }
+        }
+
+        // ステップ追加 (変更なし)
+        function addStep() {
+            const stepsContainer = document.getElementById('steps-container');
+            const stepIndex = stepsContainer.children.length;
+            const newStep = document.createElement('div');
+            newStep.classList.add('step');
+            newStep.dataset.stepIndex = stepIndex;
+            const firstStepHtml = document.querySelector('.step[data-step-index="0"]').innerHTML;
+            // ステップ番号と削除ボタンを含むh3は新しく生成し、それ以外をコピー
+            const stepContentHtml = firstStepHtml.replace(/<h3.*?<\/h3>/s, ''); // h3全体を削除
+            newStep.innerHTML = `<h3>ステップ ${stepIndex + 1} <button type="button" class="remove-step" onclick="removeStep(this)">削除</button></h3>` +
+                                stepContentHtml.replace(/_0"/g, `_${stepIndex}"`).replace(/_0'/g, `_${stepIndex}'`).replace(/_0</g, `_${stepIndex}<`);
+
+            stepsContainer.appendChild(newStep);
+            // 新しいステップの入力値をクリア
+            newStep.querySelectorAll('input[type="text"], input[type="number"], input[type="url"]').forEach(input => input.value = '');
+            newStep.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+            newStep.querySelectorAll('input[type="radio"]').forEach((radio, idx) => radio.checked = (idx === 0)); // 最初のラジオボタンを選択状態に
+            toggleActionFields(newStep.querySelector('select')); // 追加したステップのフィールド表示を更新
+            updateStepNumbers(); // ステップ番号表示を更新
+        }
+
+        // ステップ削除 (変更なし)
+        function removeStep(button) {
+            const stepDiv = button.closest('.step');
+            const stepsContainer = document.getElementById('steps-container');
+            if (stepsContainer.children.length > 1) {
+                stepDiv.remove();
+                updateStepNumbers(); // ステップ番号表示を更新
+            } else {
+                alert('最初のステップは削除できません。');
+            }
+        }
+
+        // ステップ番号とID/name更新 (変更なし)
+        function updateStepNumbers() {
+            const steps = document.querySelectorAll('#steps-container .step');
+            steps.forEach((step, index) => {
+                step.dataset.stepIndex = index; // data属性も更新
+                step.querySelector('h3').firstChild.textContent = `ステップ ${index + 1} `; // ステップ番号表示を更新
+                // ID, name, htmlFor の末尾の数字を更新
+                step.querySelectorAll('[id]').forEach(el => { el.id = el.id.replace(/_\d+$/, `_${index}`); });
+                step.querySelectorAll('[name]').forEach(el => { el.name = el.name.replace(/_\d+$/, `_${index}`); });
+                step.querySelectorAll('label[for]').forEach(el => { el.htmlFor = el.htmlFor.replace(/_\d+$/, `_${index}`); });
+            });
+        }
+
+        // ★★★ JSONデータ生成 (get_all_text_contents を考慮) ★★★
+        function generateJsonData() {
+            const form = document.getElementById('mcp-form');
+            const generateButton = document.getElementById('generate-json-button');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const jsonContainer = document.getElementById('generated-json-container');
+            const jsonElement = document.getElementById('generated-json');
+            const errorElement = document.getElementById('error-message');
+            const copyButton = document.getElementById('copy-json-button');
+            const downloadButton = document.getElementById('download-json-button');
+
+            generateButton.disabled = true;
+            loadingIndicator.classList.remove('hidden');
+            jsonElement.textContent = 'JSONデータ生成中...';
+            errorElement.textContent = '';
+            jsonContainer.classList.remove('hidden');
+            copyButton?.classList.add('hidden'); // ?. で要素が存在しない場合のエラー回避
+            downloadButton?.classList.add('hidden');
+
+            const outputData = {
+                target_url: form.querySelector('#start_url')?.value, // ?. で要素が存在しない場合のエラー回避
+                actions: []
+            };
+
+            let formIsValid = true;
+            if (!outputData.target_url || !isValidHttpUrl(outputData.target_url)) {
+                errorElement.textContent = '有効な開始URL (http:// または https://) を入力してください。';
+                formIsValid = false;
+            }
+
+            const steps = document.querySelectorAll('#steps-container .step');
+            steps.forEach((step, index) => {
+                if (!formIsValid) return;
+                const stepIndex = index; // dataset.stepIndex ではなくループインデックスを使用
+                const actionSelect = step.querySelector(`select[name="action_${stepIndex}"]`);
+                const action = actionSelect ? actionSelect.value : '';
+
+                if (!action) { errorElement.textContent = `ステップ ${index + 1}: 操作を選択してください。`; formIsValid = false; return; }
+
+                const actionData = { action: action };
+
+                // セレクターが必要かどうかの判定ロジックは toggleActionFields と同じにする
+                const noSelectorNeeded = ['scroll_page_to_bottom', 'wait_page_load', 'sleep', 'switch_to_parent_frame'];
+                const iframeSelectorNeeded = ['switch_to_iframe'];
+                const elementSelectorNeeded = !noSelectorNeeded.includes(action) && !iframeSelectorNeeded.includes(action);
+
+                if (elementSelectorNeeded) {
+                    const selectorInput = step.querySelector(`input[name="selector_${stepIndex}"]`);
+                    const selector = selectorInput ? selectorInput.value.trim() : null;
+                    if (!selector) { errorElement.textContent = `ステップ ${index + 1}: アクション '${action}' には要素のCSSセレクターが必要です。`; formIsValid = false; return; }
+                    actionData.selector = selector;
+                }
+                if (iframeSelectorNeeded.includes(action)) {
+                    const iframeSelectorInput = step.querySelector(`input[name="iframe_selector_${stepIndex}"]`);
+                    const iframeSelector = iframeSelectorInput ? iframeSelectorInput.value.trim() : null;
+                    if (!iframeSelector) { errorElement.textContent = `ステップ ${index + 1}: アクション '${action}' にはiframeのCSSセレクターが必要です。`; formIsValid = false; return; }
+                    actionData.iframe_selector = iframeSelector;
+                }
+
+                // 待機時間
+                const waitTimeoutInput = step.querySelector(`input[name="wait_time_ms_${stepIndex}"]`);
+                if (waitTimeoutInput && waitTimeoutInput.value.trim() !== '') {
+                    const timeout = parseInt(waitTimeoutInput.value.trim(), 10);
+                    if (!isNaN(timeout) && timeout >= 1) {
+                        actionData.wait_time_ms = timeout;
+                    } else { errorElement.textContent = `ステップ ${index + 1}: 待機時間は1以上の数値をミリ秒で入力してください。`; formIsValid = false; return; }
+                }
+
+                // アクション固有のパラメータ
+                if (action === 'input') {
+                    // input アクションでは value は必須ではないかもしれない（空文字列を入力する場合）
+                    actionData.value = step.querySelector(`input[name="value_${stepIndex}"]`)?.value ?? '';
+                } else if (action === 'get_attribute' || action === 'get_all_attributes') {
+                    const attrName = step.querySelector(`input[name="attribute_name_${stepIndex}"]`)?.value.trim();
+                    if (!attrName) { errorElement.textContent = `ステップ ${index + 1}: アクション '${action}' には取得する属性名が必要です。`; formIsValid = false; return; }
+                    actionData.attribute_name = attrName;
+                } else if (action === 'select_option') {
+                    const optionType = step.querySelector(`input[name="option_type_${stepIndex}"]:checked`)?.value;
+                    let optionValue = step.querySelector(`input[name="option_value_${stepIndex}"]`)?.value;
+                    // option_value が空文字を許容するかどうかは要件による
+                    if (!optionType || optionValue === null || optionValue === undefined) { errorElement.textContent = `ステップ ${index + 1}: ドロップダウン選択方法と値を入力してください。`; formIsValid = false; return; }
+                    actionData.option_type = optionType;
+                    if (optionType === 'index') {
+                        const indexVal = parseInt(optionValue, 10);
+                        if (isNaN(indexVal) || indexVal < 0) { errorElement.textContent = `ステップ ${index + 1}: インデックスは0以上の数値を入力してください。`; formIsValid = false; return; }
+                        actionData.option_value = indexVal;
+                    } else {
+                        actionData.option_value = optionValue; // value や label は文字列として扱う
+                    }
+                } else if (action === 'sleep') {
+                    const secondsInput = step.querySelector(`input[name="sleep_seconds_${stepIndex}"]`);
+                    if (!secondsInput || secondsInput.value.trim() === '') { errorElement.textContent = `ステップ ${index + 1}: sleep アクションには待機時間 (秒) が必要です。`; formIsValid = false; return; }
+                    const seconds = parseFloat(secondsInput.value);
+                    if (isNaN(seconds) || seconds < 0) { errorElement.textContent = `ステップ ${index + 1}: 待機時間は0以上の数値を秒で入力してください。`; formIsValid = false; return; }
+                    actionData.value = seconds;
+                } else if (action === 'screenshot') {
+                    const filename = step.querySelector(`input[name="screenshot_filename_${stepIndex}"]`)?.value.trim();
+                    // ファイル名は任意なので、空でもエラーにしない
+                    actionData.value = filename || null; // 空の場合は null を設定
+                }
+                // get_inner_text, get_text_content, get_inner_html, get_all_text_contents は追加パラメータ不要
+
+                outputData.actions.push(actionData);
+            });
+
+            if (!formIsValid) {
+                jsonElement.textContent = '入力エラーがあります。フォームを確認してください。';
+                // エラーメッセージは各チェックで設定済み
+                generateButton.disabled = false;
+                loadingIndicator.classList.add('hidden');
+                copyButton?.classList.add('hidden');
+                downloadButton?.classList.add('hidden');
+                return;
+            }
+
+            // 成功した場合
+            const jsonString = JSON.stringify(outputData, null, 2); // 整形して出力
+            jsonElement.textContent = jsonString;
+            errorElement.textContent = ''; // エラーメッセージをクリア
+            copyButton?.classList.remove('hidden');
+            downloadButton?.classList.remove('hidden');
+
+            generateButton.disabled = false;
+            loadingIndicator.classList.add('hidden');
+        }
+
+        // URL簡易バリデーション (変更なし)
+        function isValidHttpUrl(string) { try { const url = new URL(string); return url.protocol === "http:" || url.protocol === "https:"; } catch (_) { return false; } }
+
+        // JSONコピー (変更なし)
+        function copyJson() {
+            const jsonElement = document.getElementById('generated-json');
+            if (!jsonElement || !jsonElement.textContent || jsonElement.textContent.startsWith('JSON') || jsonElement.textContent.startsWith('入力エラー')) { alert('コピーする有効なJSONデータがありません。'); return; }
+            navigator.clipboard.writeText(jsonElement.textContent).then(() => alert('JSONデータがクリップボードにコピーされました！')).catch(err => { alert('コピーに失敗しました。コンソールを確認してください。'); console.error('Copy failed:', err); });
+        }
+
+        // JSONダウンロード (変更なし)
+        function downloadJson() {
+            const jsonElement = document.getElementById('generated-json');
+            const jsonString = jsonElement.textContent;
+            if (!jsonString || jsonString.startsWith('JSON') || jsonString.startsWith('入力エラー')) { alert('ダウンロードする有効なJSONデータがありません。'); return; }
+            try {
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'input.json'; // ファイル名を input.json に固定
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                // alert は不要かもしれない（ブラウザのダウンロード通知に任せる）
+            } catch (error) { alert('ダウンロードに失敗しました。'); console.error('Download failed', error); }
+        }
+
+        // 初期表示時のフィールド更新 (変更なし)
+        document.addEventListener('DOMContentLoaded', () => {
+             document.querySelectorAll('.step').forEach(step => {
+                 const select = step.querySelector('select');
+                 if (select) toggleActionFields(select);
+             });
+         });
+    </script>
+
+</body>
+</html>

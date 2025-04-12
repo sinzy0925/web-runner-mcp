@@ -1,0 +1,9 @@
+{
+  "target_url": "https://qiita.com/",
+  "actions": [
+    {
+      "action": "get_all_text_contents",
+      "selector": "article h2 a"
+    }
+  ]
+}
