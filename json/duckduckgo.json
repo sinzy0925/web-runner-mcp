@@ -5,7 +5,7 @@
       "action": "input",
       "selector": "#searchbox_input",
       "wait_time_ms": 5000,
-      "value": "google"
+      "value": "堺市　補助金"
     },
     {
       "action": "click",
