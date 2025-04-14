@@ -1,96 +1,97 @@
 import time
-from playwright.sync_api import sync_playwright
-import logging
+import random
+from playwright.sync_api import sync_playwright, Page, expect
+from playwright_stealth import stealth_sync # playwright-stealthをインポート
 
-# ロギングの設定
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+def human_like_delay(min_seconds=0.5, max_seconds=1.5):
+    """人間らしいランダムな遅延を生成"""
+    time.sleep(random.uniform(min_seconds, max_seconds))
 
-def main():
-    with sync_playwright() as p:
-        # Chromiumブラウザを起動 (headless=Falseで表示)
-        browser = p.chromium.launch(headless=False)
-        page = browser.new_page()
-        logging.info("ブラウザを起動しました。")
+def run(page: Page):
+    """指定されたページでGoogle検索とクリック操作を実行"""
+    search_term = "あああ"
+    search_box_selector = "#APjFqb"
+    #first_result_selector = "#rso > div:nth-child(1) > div.A6K0A > div > div > div.kb0PBd.ieodic.jGGQ5e > div > div:nth-child(2) > div > div > span > a"
+    first_result_selector = "#rso > div:nth-child(3) > div > div > div.kb0PBd.A9Y9g.jGGQ5e > div > div:nth-child(2) > div > div > span > a"
 
+    print("1. Googleにアクセスします...")
+    page.goto("https://www.google.co.jp/", wait_until="networkidle")
+    human_like_delay(1, 2)
+
+    print(f"2. 検索ボックス ({search_box_selector}) を探しています...")
+    search_box = page.locator(search_box_selector)
+    expect(search_box).to_be_visible(timeout=10000)
+
+    print("3. 検索ボックスをクリック（より人間らしく）...")
+    search_box.click()
+    human_like_delay(0.3, 0.8)
+
+    print(f"4. '{search_term}' を人間のように入力します...")
+    search_box.type(search_term, delay=random.uniform(80, 250))
+    human_like_delay(0.5, 1.0)
+
+    print("5. Enterキーを押します...")
+    search_box.press("Enter")
+
+    print("6. 検索結果が表示されるのを待ちます...")
+    page.wait_for_selector(first_result_selector, state="visible", timeout=15000)
+    human_like_delay(1, 2.5)
+
+    print(f"7. 最初の結果 ({first_result_selector}) を探しています...")
+    first_result_link = page.locator(first_result_selector)
+    expect(first_result_link).to_be_visible(timeout=10000)
+
+    print("8. 結果リンクの上にマウスカーソルを移動（より人間らしく）...")
+    try:
+        first_result_link.hover()
+        human_like_delay(0.4, 0.9)
+    except Exception as e:
+        print(f"  警告: ホバー中にエラーが発生しました: {e}。クリックは試行します。")
+
+    print("9. 最初の結果をクリックします...")
+    first_result_link.click()
+
+    print("10. ページ遷移を待ちます...")
+    page.wait_for_load_state("networkidle", timeout=20000)
+    print("   新しいページがロードされました。")
+    human_like_delay(1.5, 3)
+
+    print("操作完了！")
+
+
+# --- メイン処理 ---
+with sync_playwright() as p:
+    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" # 例
+
+    browser = p.chromium.launch(headless=True,
+                                 args=["--start-maximized"],
+                                 slow_mo=random.uniform(50, 150)
+                                )
+    context = browser.new_context(
+        user_agent=user_agent,
+        viewport={'width': 1920, 'height': 1080},
+        locale='ja-JP',
+        timezone_id='Asia/Tokyo',
+        no_viewport=True
+    )
+
+    page = context.new_page()
+
+    # --- ここで stealth_sync を適用 ---
+    print("Stealth機能を適用します...")
+    stealth_sync(page)
+    # ------------------------------------
+
+    try:
+        run(page)
+    except Exception as e:
+        print(f"エラーが発生しました: {e}")
         try:
-            # DuckDuckGoにアクセス
-            url = "https://duckduckgo.com/"
-            logging.info(f"{url} にアクセスします...")
-            page.goto(url, wait_until="domcontentloaded") # ページの基本構造が読み込まれるまで待機
-            logging.info("アクセス完了。")
-
-            # 検索ボックスの特定 (複数のセレクタ候補で安定性を高める)
-            search_box_selector = '#search_form_input_homepage' # ホームページ用のID
-            # 念のため、一般的な検索ボックスのname属性も用意
-            search_box_selector_general = 'input[name="q"]'
-
-            logging.info("検索ボックスを探しています...")
-            try:
-                # まずホームページ用のIDで試す
-                search_box = page.locator(search_box_selector)
-                # 要素が表示されるまで少し待つ (念のため)
-                search_box.wait_for(state="visible", timeout=5000) # 5秒待機
-                logging.info(f"検索ボックス ({search_box_selector}) を見つけました。")
-            except Exception:
-                logging.warning(f"{search_box_selector} が見つかりません。代替セレクタ {search_box_selector_general} で試します。")
-                # 代替セレクタで試す
-                search_box = page.locator(search_box_selector_general)
-                search_box.wait_for(state="visible", timeout=5000) # 5秒待機
-                logging.info(f"検索ボックス ({search_box_selector_general}) を見つけました。")
-
-            # 検索語を入力
-            search_term = "堺市 補助金"
-            logging.info(f"検索ボックスに '{search_term}' を入力します...")
-            search_box.fill(search_term)
-
-            # Enterキーを押して検索を実行
-            logging.info("Enterキーを押して検索を実行します...")
-            search_box.press("Enter")
-
-            # 検索結果が表示されるまで待機
-            # 結果ページの主要なリンクのコンテナや特定の要素を待つ
-            # DuckDuckGoの結果リンクは data-testid="result-title-a" を持つことが多い
-            result_selector = 'a[data-testid="result-title-a"]'
-            logging.info("検索結果の読み込みを待機しています...")
-            page.wait_for_selector(result_selector, state="visible", timeout=15000) # 15秒待機
-            logging.info("検索結果が表示されました。")
-
-            # 結果リンクのhrefを取得
-            logging.info("結果リンクのhrefを取得します...")
-            # result_selectorに一致するすべての要素を取得
-            link_elements = page.locator(result_selector)
-
-            # 各要素からhref属性を抽出
-            hrefs = []
-            count = link_elements.count()
-            logging.info(f"{count} 件の結果リンクが見つかりました。")
-            for i in range(count):
-                element = link_elements.nth(i)
-                href = element.get_attribute('href')
-                if href: # href属性が存在する場合のみ追加
-                    hrefs.append(href)
-
-            # 取得したhrefの配列をログに出力
-            logging.info("取得したhref一覧:")
-            # 1つずつ改行して表示する場合
-            # for i, href_val in enumerate(hrefs):
-            #     logging.info(f"  {i+1}: {href_val}")
-            # 配列として表示する場合
-            logging.info(hrefs)
-
-            # 少し待機して結果を確認できるようにする（任意）
-            logging.info("処理が完了しました。5秒後にブラウザを閉じます。")
-            time.sleep(5)
-
-        except Exception as e:
-            logging.error(f"エラーが発生しました: {e}")
-            # エラー発生時も確認のため少し待機（任意）
-            time.sleep(5)
-
-        finally:
-            # ブラウザを閉じる
-            browser.close()
-            logging.info("ブラウザを閉じました。")
-
-if __name__ == "__main__":
-    main()
+            page.screenshot(path="error_screenshot.png")
+            print("エラー発生時のスクリーンショットを 'error_screenshot.png' として保存しました。")
+        except Exception as se:
+            print(f"スクリーンショットの保存中にエラーが発生しました: {se}")
+    finally:
+        print("ブラウザを閉じます...")
+        human_like_delay(2, 4)
+        browser.close()
