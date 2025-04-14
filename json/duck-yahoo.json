@@ -1,0 +1,36 @@
+{
+  "target_url": "https://duckduckgo.com/",
+  "actions": [
+    {
+      "action": "input",
+      "selector": "#searchbox_input",
+      "wait_time_ms": 5000,
+      "value": "yahoo ファイナンス"
+    },
+    {
+      "action": "click",
+      "selector": "#searchbox_homepage > div > div.searchbox_searchbox__bfbmv > div > button.iconButton_button__A_Uiu.searchbox_searchButton__LxebD > svg"
+    },    
+    {
+      "action": "click",
+      "selector": "#r1-0 > div.ikg2IXiCD14iVX7AdZo1 > h2 > a"
+    },
+    {
+      "action": "input",
+      "selector": "#search > form > input",
+      "value": "9501"
+    },
+    {
+      "action": "click",
+      "selector": "#search > form > button"
+    },
+    {
+      "action": "click",
+      "selector": "#stk_info > li:nth-child(7) > a"
+    },
+    {
+      "action": "get_inner_text",
+      "selector": "#root > main > div > div.Column__rMa8 > div.Column__main__XuqD > div:nth-child(3) > section.StocksEtfReitPriceHistory__26aY.StocksEtfReitPriceHistory--price__h40V.StocksContents__stockHistory__2P-X > div > table"
+    }
+  ]
+}

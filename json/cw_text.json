@@ -14,6 +14,11 @@
       "action": "get_all_attributes",
       "selector": "li a.wB71r",
       "attribute_name": "content"
+    },
+    {
+      "action": "get_all_attributes",
+      "selector": "li a.wB71r",
+      "attribute_name": "pdf"
     }
   ]
 }

@@ -15,14 +15,6 @@
       "selector": "#ResultList > tbody > tr.TrColor01 > td:nth-child(4) > div > a:nth-child(2)"
     },
     {
-      "action": "get_inner_html",
-      "selector": "#ResultSet > div:nth-child(2)"
-    },
-    {
-      "action": "get_text_content",
-      "selector": "#ResultSet > div:nth-child(2)"
-    },
-    {
       "action": "get_inner_text",
       "selector": "#ResultSet > div:nth-child(2)"
     }

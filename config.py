@@ -4,10 +4,10 @@
 """
 
 # --- Playwright 関連設定 ---
-DEFAULT_ACTION_TIMEOUT = 30000  # デフォルトのアクションタイムアウト (ミリ秒)
-IFRAME_LOCATOR_TIMEOUT = 30000  # iframe存在確認のタイムアウト (ミリ秒)
-PDF_DOWNLOAD_TIMEOUT   = 60000    # PDFダウンロードのタイムアウト (ミリ秒)
-NEW_PAGE_EVENT_TIMEOUT = 30000  # 新しいページが開くのを待つタイムアウト (ミリ秒)
+DEFAULT_ACTION_TIMEOUT = 10000  # 10000 デフォルトのアクションタイムアウト (ミリ秒)
+IFRAME_LOCATOR_TIMEOUT = 5000   #  5000 iframe存在確認のタイムアウト (ミリ秒)
+PDF_DOWNLOAD_TIMEOUT   = 60000  # 60000 PDFダウンロードのタイムアウト (ミリ秒)
+NEW_PAGE_EVENT_TIMEOUT = 4000   #  4000 新しいページが開くのを待つタイムアウト (ミリ秒)(クリック後常に待つので長くすると常にクリック後遅い)
 
 # --- 動的探索関連設定 ---
 DYNAMIC_SEARCH_MAX_DEPTH = 2    # iframe探索の最大深度

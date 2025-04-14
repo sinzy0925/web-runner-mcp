@@ -31,7 +31,7 @@ def should_exclude(filepath, exclude_patterns):
     return False
 
 def main():
-    target_extensions = [".py", ".js", ".html", ".css", ".json"]
+    target_extensions = [".py", ".js", ".html", ".md", ".json", ".txt"]
     exclude_patterns = ["./venv312/*", ".git/*", "./output/*", "./codeA.py","./__pycache__/*"]  # 除外するファイル/ディレクトリのパターン
     output_file = "code_output.txt"  # 出力ファイル名
 

@@ -11,24 +11,6 @@
       "selector": "li a.wB71r",
       "wait_time_ms": 5000,
       "attribute_name": "href"
-    },
-    {
-      "action": "get_all_attributes",
-      "selector": "li a.wB71r",
-      "wait_time_ms": 5000,
-      "attribute_name": "content"
-    },
-    {
-      "action": "get_all_attributes",
-      "selector": "li a.wB71r",
-      "wait_time_ms": 5000,
-      "attribute_name": "pdf"
-    },
-    {
-      "action": "get_all_text_contents",
-      "selector": "#vue-container h3 a",
-      "wait_time_ms": 5000,
-      "attribute_name": "content"
     }
   ]
 }
