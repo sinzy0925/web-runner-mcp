@@ -19,7 +19,7 @@
       "memo": "全てのcontent取得",
       "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
       "wait_time_ms": 3000,
-      "attribute_name": "content"
+      "attribute_name": "href"
     }
   ]
 }

@@ -1,15 +1,16 @@
-# --- ファイル: utils.py ---
+# --- ファイル: utils.py (修正版) ---
 """
 JSON読み込み、PDF処理、ロギング設定などの汎用ヘルパー関数。
+Playwrightに直接依存しない関数群。
 """
 import json
 import logging
 import os
 import sys
 import asyncio
-import time # ★ time をインポート
+import time
 import fitz  # PyMuPDF
-from playwright.async_api import Locator, APIRequestContext, TimeoutError as PlaywrightTimeoutError
+from playwright.async_api import APIRequestContext, TimeoutError as PlaywrightTimeoutError # download_pdf_async のため必要
 from typing import Optional, Dict, Any, List
 from urllib.parse import urljoin
 
@@ -19,21 +20,36 @@ logger = logging.getLogger(__name__)
 
 def setup_logging_for_standalone(log_file_path: str = config.LOG_FILE):
     """Web-Runner単体実行用のロギング設定を行います。"""
-    # 既存のハンドラをすべて削除
+    # 既存のハンドラをすべて削除 (他のライブラリが追加したハンドラも消す)
     for handler in logging.root.handlers[:]:
         logging.root.removeHandler(handler)
+
+    # 出力ディレクトリがなければ作成
+    log_dir = os.path.dirname(log_file_path)
+    if log_dir and not os.path.exists(log_dir):
+        try:
+            os.makedirs(log_dir, exist_ok=True)
+        except Exception as e:
+            print(f"警告: ログディレクトリの作成に失敗しました ({log_dir}): {e}", file=sys.stderr)
+
     # 新しいハンドラを設定 (ファイルとコンソール)
+    handlers = [logging.StreamHandler()] # まずコンソールハンドラ
+    try:
+        # ファイルハンドラを追加（エラー発生時はコンソールのみ）
+        file_handler = logging.FileHandler(log_file_path, encoding='utf-8', mode='a') # 追記モード
+        file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+        handlers.append(file_handler)
+    except Exception as e:
+        print(f"警告: ログファイル '{log_file_path}' の設定に失敗しました: {e}", file=sys.stderr)
+
     logging.basicConfig(
         level=logging.INFO, # INFOレベル以上を記録
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', # ログフォーマット
-        handlers=[
-            logging.FileHandler(log_file_path, encoding='utf-8', mode='a'), # ファイル追記モード
-            logging.StreamHandler() # コンソール出力
-        ]
+        handlers=handlers
     )
     # Playwrightの冗長なログを抑制 (必要に応じて調整)
     logging.getLogger('playwright').setLevel(logging.WARNING)
-    logger.info(f"Standalone ロガー設定完了。ログファイル: {log_file_path}")
+    logger.info(f"Standalone ロガー設定完了。ログファイル: {log_file_path if len(handlers) > 1 else 'コンソールのみ'}")
 
 def load_input_from_json(filepath: str) -> Dict[str, Any]:
     """指定されたJSONファイルから入力データを読み込む。"""
@@ -64,9 +80,8 @@ def load_input_from_json(filepath: str) -> Dict[str, Any]:
         logger.error(f"入力ファイルの読み込み中に予期せぬエラーが発生しました ({filepath}): {e}", exc_info=True)
         raise
 
-# --- ▼▼▼ PDFテキスト抽出関数 (例外処理修正) ▼▼▼ ---
 def extract_text_from_pdf_sync(pdf_data: bytes) -> Optional[str]:
-    """PDFのバイトデータからテキストを抽出する (同期的)。エラー時はNoneを返すかエラーメッセージ文字列を返す。"""
+    """PDFのバイトデータからテキストを抽出する (同期的)。エラー時はエラーメッセージ文字列を返す。"""
     doc = None
     try:
         logger.info(f"PDFデータ (サイズ: {len(pdf_data)} bytes) からテキスト抽出を開始します...")
@@ -81,8 +96,8 @@ def extract_text_from_pdf_sync(pdf_data: bytes) -> Optional[str]:
                 page_text = page.get_text("text", sort=True)
                 if page_text:
                     text_parts.append(page_text.strip())
-                else:
-                    logger.debug(f"ページ {page_num + 1}/{len(doc)} からテキストは抽出されませんでした。")
+                # else:
+                #     logger.debug(f"ページ {page_num + 1}/{len(doc)} からテキストは抽出されませんでした。")
                 page_elapsed = (time.monotonic() - page_start_time) * 1000
                 logger.debug(f"ページ {page_num + 1} 処理完了 ({page_elapsed:.0f}ms)。")
             except Exception as page_e:
@@ -93,8 +108,16 @@ def extract_text_from_pdf_sync(pdf_data: bytes) -> Optional[str]:
         # 空白行を除去して整形
         cleaned_text = '\n'.join([line.strip() for line in full_text.splitlines() if line.strip()])
         logger.info(f"PDFテキスト抽出完了。総文字数 (整形後): {len(cleaned_text)}")
-        return cleaned_text if cleaned_text else None # テキストがなければNoneを返す
-    except RuntimeError as e: # ★★★ fitz.FitzError の代わりに RuntimeError を捕捉 ★★★
+        # テキストが全く抽出できなかった場合もNoneではなく空文字列を返すか、あるいはその旨を示すメッセージを返すのが良いかもしれない
+        return cleaned_text if cleaned_text else "(No text extracted from PDF)"
+    except fitz.fitz.TryingToReadFromEmptyFileError: # fitz.fitz... PyMuPDF 1.24+
+         logger.error("PDF処理エラー: ファイルデータが空または破損しています。")
+         return "Error: PDF data is empty or corrupted."
+    except fitz.fitz.FileDataError as e: # fitz.fitz...
+         logger.error(f"PDF処理エラー (PyMuPDF FileDataError): {e}", exc_info=False) # トレースバックは不要な場合も
+         return f"Error: PDF file data error - {e}"
+    except RuntimeError as e:
+        # PyMuPDFの他のランタイムエラー（メモリ不足など）
         logger.error(f"PDF処理エラー (PyMuPDF RuntimeError): {e}", exc_info=True)
         return f"Error: PDF processing failed (PyMuPDF RuntimeError) - {e}"
     except Exception as e:
@@ -108,7 +131,6 @@ def extract_text_from_pdf_sync(pdf_data: bytes) -> Optional[str]:
             except Exception as close_e:
                 # クローズエラーは警告レベルに留める
                 logger.warning(f"PDFドキュメントのクローズ中にエラーが発生しました (無視): {close_e}")
-# --- ▲▲▲ PDFテキスト抽出関数 (例外処理修正) ▲▲▲ ---
 
 async def download_pdf_async(api_request_context: APIRequestContext, url: str) -> Optional[bytes]:
     """指定されたURLからPDFを非同期でダウンロードし、バイトデータを返す。失敗時はNoneを返す。"""
@@ -118,11 +140,11 @@ async def download_pdf_async(api_request_context: APIRequestContext, url: str) -
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
             'Accept': 'application/pdf,text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            'Accept-Encoding': 'gzip, deflate, br, zstd',
+            'Accept-Encoding': 'gzip, deflate, br, zstd', # 圧縮を受け入れる
             'Accept-Language': 'ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7'
         }
-        # リクエスト実行
-        response = await api_request_context.get(url, headers=headers, timeout=config.PDF_DOWNLOAD_TIMEOUT)
+        # リクエスト実行 (fail_on_status_code=False で 4xx/5xx でもエラーにしない)
+        response = await api_request_context.get(url, headers=headers, timeout=config.PDF_DOWNLOAD_TIMEOUT, fail_on_status_code=False)
 
         # ステータスコード確認
         if not response.ok:
@@ -132,16 +154,21 @@ async def download_pdf_async(api_request_context: APIRequestContext, url: str) -
                 error_body = await response.text(timeout=5000) # ボディ読み取りにもタイムアウト
                 logger.debug(f"エラーレスポンスボディ (一部): {error_body[:500]}")
             except Exception as body_err:
-                logger.error(f"エラーレスポンスボディの読み取り中にエラーが発生しました: {body_err}")
+                logger.warning(f"エラーレスポンスボディの読み取り中にエラーが発生しました: {body_err}")
             return None # 失敗時はNoneを返す
 
         # Content-Type確認 (小文字化して比較)
         content_type = response.headers.get('content-type', '').lower()
         if 'application/pdf' not in content_type:
             logger.warning(f"レスポンスのContent-TypeがPDFではありません ({url}): '{content_type}'。ダウンロードは続行しますが、後続処理で失敗する可能性があります。")
+            # ここでNoneを返すか、続行するかは要件による
+            # return None
 
         # レスポンスボディ取得
         body = await response.body()
+        if not body:
+             logger.warning(f"PDFダウンロード成功 ({url}) Status: {response.status} ですが、レスポンスボディが空です。")
+             return None
         logger.info(f"PDFダウンロード成功 ({url})。サイズ: {len(body)} bytes")
         return body # 成功時はバイトデータを返す
 
@@ -152,36 +179,6 @@ async def download_pdf_async(api_request_context: APIRequestContext, url: str) -
         logger.error(f"PDF非同期ダウンロード中に予期せぬエラーが発生しました ({url}): {e}", exc_info=True)
         return None
 
-async def generate_iframe_selector_async(iframe_locator: Locator) -> Optional[str]:
-    """(変更なし) iframe要素のLocatorから、特定しやすいセレクター文字列を生成する試み。"""
-    try:
-        # 属性取得を並行実行 (タイムアウト短め)
-        attrs = await asyncio.gather(
-            iframe_locator.get_attribute('id', timeout=200),
-            iframe_locator.get_attribute('name', timeout=200),
-            iframe_locator.get_attribute('src', timeout=200),
-            return_exceptions=True # エラーが発生しても処理を止めない
-        )
-        # 結果から例外を除外して値を取得
-        iframe_id, iframe_name, iframe_src = [a if not isinstance(a, Exception) else None for a in attrs]
-
-        # 優先度順にセレクターを生成
-        if iframe_id:
-            return f'iframe[id="{iframe_id}"]'
-        if iframe_name:
-            return f'iframe[name="{iframe_name}"]'
-        if iframe_src:
-            # srcは長すぎる場合があるので、必要に応じて調整
-            return f'iframe[src="{iframe_src}"]'
-
-    except Exception as e:
-        # 属性取得中のエラーはデバッグレベルでログ記録し、無視
-        logger.debug(f"iframe属性取得中にエラー（無視）: {e}")
-
-    # 適切なセレクターが見つからなければNoneを返す
-    return None
-
-# --- 結果ファイル書き込み (変更なし) ---
 def write_results_to_file(results: List[Dict[str, Any]], filepath: str):
     """実行結果を指定されたファイルに書き込む。"""
     logger.info(f"実行結果を '{filepath}' に書き込みます...")
@@ -203,88 +200,105 @@ def write_results_to_file(results: List[Dict[str, Any]], filepath: str):
                 file.write(f"--- Step {step_num}: {action_type} ({status}) ---\n")
                 if selector: # セレクターがあれば表示
                     file.write(f"Selector: {selector}\n")
+                if res.get('iframe_selector'): # iframeセレクターがあれば表示
+                    file.write(f"IFrame Selector (for switch): {res.get('iframe_selector')}\n")
+                if res.get('required_state'): # 要素探索時の状態指定があれば表示
+                    file.write(f"Required Element State: {res.get('required_state')}\n")
 
                 if status == "error":
                      # エラーメッセージと詳細情報を書き込む
                      file.write(f"Message: {res.get('message')}\n")
+                     # full_error が message と異なる場合のみ詳細として出力
                      if res.get('full_error') and res.get('full_error') != res.get('message'):
                           file.write(f"Details: {res.get('full_error')}\n")
                      if res.get('error_screenshot'):
                           file.write(f"Screenshot: {res.get('error_screenshot')}\n")
+                     # トレースバック情報があれば出力 (デバッグに有用)
+                     if res.get('traceback'):
+                         file.write(f"Traceback:\n{res.get('traceback')}\n")
+
                 elif status == "success":
-                    # 成功時の詳細情報を pop しながら書き込む
-                    details_to_write = {k: v for k, v in res.items() if k not in ['step', 'status', 'action', 'selector']}
+                    # 成功時の詳細情報を pop しながら書き込む (元の辞書を変更しないようにコピー)
+                    details_to_write = res.copy()
+                    # 共通情報を削除
+                    for key in ['step', 'status', 'action', 'selector', 'iframe_selector', 'required_state']:
+                        details_to_write.pop(key, None)
 
                     # --- アクションタイプに応じた整形出力 ---
                     if action_type == 'get_all_attributes':
                         attr_name = details_to_write.pop('attribute', 'N/A')
-                        url_list = details_to_write.pop('url_list', None) # URLリストを取得
+                        url_list = details_to_write.pop('url_list', None)
                         pdf_texts = details_to_write.pop('pdf_texts', None)
                         scraped_texts = details_to_write.pop('scraped_texts', None)
                         attr_list = details_to_write.pop('attribute_list', None)
 
-                        file.write(f"Requested Attribute: {attr_name}\n")
+                        file.write(f"Requested Attribute/Content: {attr_name}\n")
 
-                        # URLリストが存在する場合、それと内容を組み合わせて出力
-                        if url_list is not None:
-                            file.write("Results (URL and Content/Attribute):\n")
-                            max_len = max(len(url_list), len(pdf_texts or []), len(scraped_texts or []), len(attr_list or []))
-                            # リストの長さが不一致の場合に備えて安全にアクセス
+                        # 結果リストの最大長を取得
+                        list_lengths = [len(lst) for lst in [url_list, pdf_texts, scraped_texts, attr_list] if lst is not None]
+                        max_len = max(list_lengths) if list_lengths else 0
+
+                        if max_len > 0:
+                            file.write(f"Results ({max_len} items found):\n")
                             for idx in range(max_len):
-                                current_url = url_list[idx] if idx < len(url_list) else "(URL index out of bounds)"
-                                file.write(f"  [{idx+1}] URL: {current_url}\n")
-
+                                file.write(f"  [{idx+1}]\n")
+                                # 各リストから安全に値を取得
+                                current_url = url_list[idx] if url_list and idx < len(url_list) else None
                                 pdf_content = pdf_texts[idx] if pdf_texts and idx < len(pdf_texts) else None
                                 scraped_content = scraped_texts[idx] if scraped_texts and idx < len(scraped_texts) else None
                                 attr_content = attr_list[idx] if attr_list and idx < len(attr_list) else None
 
+                                if current_url is not None:
+                                     file.write(f"    URL: {current_url}\n")
+
+                                # コンテンツや属性値を出力
+                                content_written = False
                                 if pdf_content is not None:
                                     prefix = "PDF Content"
                                     if isinstance(pdf_content, str) and pdf_content.startswith("Error:"):
                                         file.write(f"      -> {prefix} (Error): {pdf_content}\n")
+                                    elif pdf_content == "(No text extracted from PDF)":
+                                        file.write(f"      -> {prefix}: (No text extracted)\n")
                                     else:
-                                        file.write(f"      -> {prefix} (Length: {len(pdf_content or '')}:\n")
-                                        # 可読性のためインデントして複数行出力
+                                        file.write(f"      -> {prefix} (Length: {len(pdf_content or '')}):\n")
                                         indented_content = "\n".join(["        " + line for line in str(pdf_content).splitlines()])
                                         file.write(indented_content + "\n")
-                                elif scraped_content is not None:
+                                    content_written = True
+                                if scraped_content is not None: # pdf と scraped は通常排他だが両方出力
                                     prefix = "Page Content"
                                     if isinstance(scraped_content, str) and scraped_content.startswith("Error"):
                                         file.write(f"      -> {prefix} (Error): {scraped_content}\n")
                                     else:
-                                        file.write(f"      -> {prefix} (Length: {len(scraped_content or '')}:\n")
+                                        file.write(f"      -> {prefix} (Length: {len(scraped_content or '')}):\n")
                                         indented_content = "\n".join(["        " + line for line in str(scraped_content).splitlines()])
                                         file.write(indented_content + "\n")
-                                elif attr_content is not None:
+                                    content_written = True
+                                if attr_content is not None:
                                      # href, pdf, content 以外の汎用属性の場合
                                      file.write(f"      -> Attribute '{attr_name}' Value: {attr_content}\n")
-                                # else:
-                                #     # 何も関連情報がない場合
-                                #     file.write("      -> (No relevant content/attribute found for this URL index)\n") # 必要ならコメント解除
+                                     content_written = True
 
-                        # URLリストがない場合（旧バージョン互換 or エラー）
-                        elif attr_list is not None:
-                             file.write(f"Result (Attribute List for '{attr_name}'):\n")
-                             file.write('\n'.join(f"- {str(item)}" for item in attr_list if item is not None) + "\n")
-                        elif pdf_texts is not None:
-                             file.write("Extracted PDF Texts (URL mapping lost):\n")
-                             file.write('\n\n--- Next PDF Text ---\n\n'.join(str(t) for t in pdf_texts if t is not None) + '\n')
-                        elif scraped_texts is not None:
-                             file.write("Scraped Page Texts (URL mapping lost):\n")
-                             file.write('\n\n--- Next Page Text ---\n\n'.join(str(t) for t in scraped_texts if t is not None) + '\n')
+                                # if not content_written and current_url is not None:
+                                #     file.write("      -> (No specific content/attribute requested or found for this item)\n")
+
+                        else: # max_len == 0
+                             file.write("Results: (No items found matching the selector)\n")
 
                     elif action_type == 'get_all_text_contents':
                         text_list_result = details_to_write.pop('text_list', [])
                         if isinstance(text_list_result, list):
-                            valid_texts = [str(text) for text in text_list_result if text is not None] # 空文字も含む可能性
+                            valid_texts = [str(text) for text in text_list_result if text is not None]
+                            file.write(f"Result Text List ({len(valid_texts)} items):\n")
                             if valid_texts:
-                                file.write(f"Result Text List ({len(valid_texts)} items):\n")
                                 file.write('\n'.join(f"- {text}" for text in valid_texts) + "\n")
                             else:
-                                file.write("Result Text List: (No text content found)\n")
+                                file.write("(No text content found)\n")
+                        else:
+                             file.write("Result Text List: (Invalid format received)\n")
+
                     elif action_type == 'get_text_content' or action_type == 'get_inner_text':
                         text = details_to_write.pop('text', None)
-                        file.write(f"Result Text: {text}\n")
+                        file.write(f"Result Text:\n{text}\n")
                     elif action_type == 'get_inner_html':
                         html = details_to_write.pop('html', None)
                         file.write(f"Result HTML:\n{html}\n") # HTMLはそのまま出力
@@ -293,16 +307,32 @@ def write_results_to_file(results: List[Dict[str, Any]], filepath: str):
                         file.write(f"Result Attribute ('{attr_name}'): {attr_value}\n")
                         pdf_text = details_to_write.pop('pdf_text', None)
                         if pdf_text:
-                             file.write(f"Extracted PDF Text:\n{pdf_text}\n")
+                             prefix = "Extracted PDF Text"
+                             if isinstance(pdf_text, str) and pdf_text.startswith("Error:"):
+                                 file.write(f"{prefix} (Error): {pdf_text}\n")
+                             elif pdf_text == "(No text extracted from PDF)":
+                                 file.write(f"{prefix}: (No text extracted)\n")
+                             else:
+                                 file.write(f"{prefix}:\n{pdf_text}\n")
+                    elif action_type == 'screenshot':
+                         filename = details_to_write.pop('filename', None)
+                         if filename: file.write(f"Screenshot saved to: {filename}\n")
+                    elif action_type == 'click':
+                         if details_to_write.get('new_page_opened'):
+                              file.write(f"New page opened: {details_to_write.get('new_page_url')}\n")
+                         else:
+                              file.write("New page did not open within timeout.\n")
+                         # 不要なキーを削除
+                         details_to_write.pop('new_page_opened', None)
+                         details_to_write.pop('new_page_url', None)
 
                     # 残りの詳細情報（汎用）を書き込む
                     if details_to_write:
                         file.write("Other Details:\n")
                         for key, val in details_to_write.items():
-                             # 特定のキーは表示を調整するなどしても良い
                              file.write(f"  {key}: {val}\n")
 
-                elif status == "skipped":
+                elif status == "skipped" or status == "warning":
                     file.write(f"Message: {res.get('message', 'No message provided.')}\n")
                 else: # Unknown status or other cases
                      file.write(f"Raw Data: {res}\n") # 不明な場合は生データを書き出す

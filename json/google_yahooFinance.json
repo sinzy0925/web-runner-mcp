@@ -1,30 +1,37 @@
 {
-  "target_url": "https://duckduckgo.com/",
+  "target_url": "https://www.google.com/",
   "actions": [
     {
+      "memo": "入力",
       "action": "input",
-      "selector": "#searchbox_input",
-      "wait_time_ms": 5000,
+      "selector": "#APjFqb",
       "value": "yahoo ファイナンス"
     },
     {
+      "memo": "検索ボタン　クリック",
       "action": "click",
-      "selector": "#searchbox_homepage > div > div.searchbox_searchbox__bfbmv > div > button.iconButton_button__A_Uiu.searchbox_searchButton__LxebD > svg"
-    },    
-    {
-      "action": "click",
-      "selector": "#r1-0 > div.ikg2IXiCD14iVX7AdZo1 > h2 > a"
+      "selector": "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b",
+      "wait_time_ms": 5000
     },
     {
+      "memo": "検索結果の１件目　クリック",
+      "action": "click",
+      "selector": "#rso > div.MjjYud > div > div > div > div > div > div > div > div:nth-child(1) > div:nth-child(2) > div > div > span > a",
+      "wait_time_ms": 3000
+    },
+    {
+      "memo": "yahoo ファイナンスの検索ボックスに9501と入力",
       "action": "input",
       "selector": "#search > form > input",
       "value": "9501"
     },
     {
+      "memo": "検索をクリック",
       "action": "click",
       "selector": "#search > form > button"
     },
     {
+      "memo": "時系列をクリック",
       "action": "click",
       "selector": "#stk_info > li:nth-child(7) > a"
     },
