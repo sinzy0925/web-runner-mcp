@@ -62,6 +62,13 @@
             <!-- ステップ1 (初期表示用) -->
             <div class="step" data-step-index="0">
                 <h3>ステップ 1 <button type="button" class="remove-step" onclick="removeStep(this)">削除</button></h3>
+                 <!-- ▼▼▼ メモ欄を追加 ▼▼▼ -->
+                <div class="form-group">
+                    <label for="memo_0">メモ:</label>
+                    <input type="text" id="memo_0" name="memo_0" placeholder="例: クリックする, contentを取得する, URLを取得する">
+                    <small>※ このメモはJSONに保存されますが、実行時には無視されます。</small>
+                </div>
+                <!-- ▲▲▲ メモ欄を追加 ▲▲▲ -->
                 <div class="form-group">
                     <label for="action_0">操作:</label>
                     <select id="action_0" name="action_0" required onchange="toggleActionFields(this)">
@@ -136,7 +143,7 @@
                  </div>
                  <div class="form-group action-field wait-field hidden">
                     <label for="wait_time_ms_0">最大待機時間 (ミリ秒、任意):</label>
-                    <input type="number" id="wait_time_ms_0" name="wait_time_ms_0" placeholder="デフォルト値はサーバー設定" min="1"> <!-- デフォルト値を更新 -->
+                    <input type="number" id="wait_time_ms_0" name="wait_time_ms_0" placeholder="デフォルト値はサーバー設定" value="3000" min="1"> <!-- デフォルト値を更新 -->
                 </div>
             </div>
         </div>
@@ -251,7 +258,7 @@
             });
         }
 
-        // --- JSONデータ生成 (変更なし) ---
+        // --- JSONデータ生成 (変更) ---
         function generateJsonData() {
             const form = document.getElementById('mcp-form');
             const generateButton = document.getElementById('generate-json-button');
@@ -289,6 +296,12 @@
                 const action = actionSelect ? actionSelect.value : '';
                 if (!action) { errorElement.textContent = `ステップ ${index + 1}: 操作を選択してください。`; formIsValid = false; return; }
                 const actionData = { action: action };
+
+                 // --- メモを追加 ---
+                const memoInput = step.querySelector(`input[name="memo_${stepIndex}"]`);
+                const memo = memoInput ? memoInput.value.trim() : '';
+                if (memo) { actionData.memo = memo; }
+
                 const noSelectorNeeded = ['scroll_page_to_bottom', 'wait_page_load', 'sleep', 'switch_to_parent_frame'];
                 const iframeSelectorNeeded = ['switch_to_iframe'];
                 const elementSelectorNeeded = !noSelectorNeeded.includes(action) && !iframeSelectorNeeded.includes(action);

@@ -1,0 +1,25 @@
+{
+  "target_url": "https://www.google.com/",
+  "actions": [
+    {
+      "action": "input",
+      "selector": "#APjFqb",
+      "value": "経済"
+    },
+    {
+      "action": "click",
+      "selector": "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b",
+      "wait_time_ms": 5000
+    },
+    {
+      "action": "click",
+      "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
+      "wait_time_ms": 5000
+    },
+    {
+      "action": "get_inner_text",
+      "selector": "body",
+      "wait_time_ms": 5000
+    }
+  ]
+}

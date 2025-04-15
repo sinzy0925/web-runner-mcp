@@ -10,7 +10,7 @@ def human_like_delay(min_seconds=0.5, max_seconds=1.5):
 def run(page: Page):
     """指定されたページでGoogle検索とクリック操作を実行"""
     search_term = "あああ"
-    search_box_selector = "#APjFqb"
+    search_box_selector = ".gLFyf"
     #first_result_selector = "#rso > div:nth-child(1) > div.A6K0A > div > div > div.kb0PBd.ieodic.jGGQ5e > div > div:nth-child(2) > div > div > span > a"
     first_result_selector = "#rso > div:nth-child(3) > div > div > div.kb0PBd.A9Y9g.jGGQ5e > div > div:nth-child(2) > div > div > span > a"
 

@@ -243,7 +243,7 @@ def write_results_to_file(results: List[Dict[str, Any]], filepath: str):
                                     if isinstance(pdf_content, str) and pdf_content.startswith("Error:"):
                                         file.write(f"      -> {prefix} (Error): {pdf_content}\n")
                                     else:
-                                        file.write(f"      -> {prefix} (Length: {len(pdf_content or '')}):\n")
+                                        file.write(f"      -> {prefix} (Length: {len(pdf_content or '')}:\n")
                                         # 可読性のためインデントして複数行出力
                                         indented_content = "\n".join(["        " + line for line in str(pdf_content).splitlines()])
                                         file.write(indented_content + "\n")
@@ -252,7 +252,7 @@ def write_results_to_file(results: List[Dict[str, Any]], filepath: str):
                                     if isinstance(scraped_content, str) and scraped_content.startswith("Error"):
                                         file.write(f"      -> {prefix} (Error): {scraped_content}\n")
                                     else:
-                                        file.write(f"      -> {prefix} (Length: {len(scraped_content or '')}):\n")
+                                        file.write(f"      -> {prefix} (Length: {len(scraped_content or '')}:\n")
                                         indented_content = "\n".join(["        " + line for line in str(scraped_content).splitlines()])
                                         file.write(indented_content + "\n")
                                 elif attr_content is not None:

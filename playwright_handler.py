@@ -886,13 +886,13 @@ async def run_playwright_automation_async(
         # APIリクエスト用のコンテキスト (PDFダウンロード等で使用)
         api_request_context = context.request
 
-        # --- Stealth モード (必要であればコメント解除) ---
-        # logger.info("Applying stealth mode to the context...")
-        # try:
-        #     await stealth_async(context)
-        #     logger.info("Stealth mode applied successfully.")
-        # except Exception as stealth_err:
-        #      logger.warning(f"Failed to apply stealth mode: {stealth_err}")
+        ## --- Stealth モード (必要であればコメント解除) ---
+        logger.info("Applying stealth mode to the context...")
+        try:
+            await stealth_async(context)
+            logger.info("Stealth mode applied successfully.")
+        except Exception as stealth_err:
+             logger.warning(f"Failed to apply stealth mode: {stealth_err}")
 
         logger.info("新しいページを作成します...")
         page = await context.new_page()

@@ -1,4 +1,4 @@
-# --- ファイル: web_runner_mcp_client_GUI.py (core利用・結果表示改善・オプション追加版) ---
+# --- ファイル: web_runner_mcp_client_GUI.py (コピーボタン追加版) ---
 
 import sys
 import os
@@ -18,6 +18,9 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import (
     Qt, QThread, Signal, Slot, QUrl, QObject
 )
+# --- ▼▼▼ QClipboard をインポート ▼▼▼ ---
+from PySide6.QtGui import QClipboard
+# --- ▲▲▲ QClipboard をインポート ▲▲▲ ---
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtWebChannel import QWebChannel
 
@@ -33,7 +36,9 @@ except ImportError:
 try:
     import config
     import utils
+    # --- ▼▼▼ configからファイルパスを取得 ▼▼▼ ---
     DEFAULT_OUTPUT_FILE = Path(config.MCP_CLIENT_OUTPUT_FILE)
+    # --- ▲▲▲ configからファイルパスを取得 ▲▲▲ ---
 except ImportError:
     print("Warning: config.py or utils.py not found. Using default output filename './output/web_runner_mcp.txt'")
     DEFAULT_OUTPUT_FILE = Path("./output/web_runner_mcp.txt")
@@ -164,7 +169,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Web-Runner MCP Client (Core Utilized)")
-        self.setGeometry(100, 100, 800, 650)
+        # ウィンドウサイズを少し広げる場合
+        self.setGeometry(100, 100, 850, 650)
 
         self.mcp_worker: Optional[McpWorker] = None
         self.generator_dialog: Optional[GeneratorDialog] = None
@@ -173,6 +179,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
 
+        # --- 上部のファイル選択・実行ボタンなど ---
         top_layout = QHBoxLayout()
         self.json_selector = QComboBox()
         self.refresh_button = QPushButton("🔄 更新")
@@ -185,11 +192,13 @@ class MainWindow(QMainWindow):
         top_layout.addWidget(self.run_button)
         main_layout.addLayout(top_layout)
 
+        # --- オプション設定のレイアウト ---
         options_layout = QHBoxLayout()
         self.headless_checkbox = QCheckBox("ヘッドレスモードで実行")
         self.headless_checkbox.setChecked(False)
         self.headless_checkbox.setToolTip("チェックするとブラウザ画面を表示せずにバックグラウンドで実行します。")
         options_layout.addWidget(self.headless_checkbox)
+
         options_layout.addWidget(QLabel("SlowMo (ms):"))
         self.slowmo_spinbox = QSpinBox()
         self.slowmo_spinbox.setRange(0, 30000)
@@ -197,25 +206,45 @@ class MainWindow(QMainWindow):
         self.slowmo_spinbox.setSingleStep(100)
         self.slowmo_spinbox.setToolTip("各Playwright操作間の遅延時間(ミリ秒)。デバッグ時に便利です。")
         options_layout.addWidget(self.slowmo_spinbox)
-        options_layout.addStretch()
+
+        # --- ▼▼▼ コピーボタン追加 ▼▼▼ ---
+        # ファイル名をボタンテキストに表示 (パスが長い場合は調整が必要かも)
+        copy_button_text = f"コピー ({os.path.join('output', DEFAULT_OUTPUT_FILE.name)})" # 例: output/ファイル名
+        self.copy_button = QPushButton(copy_button_text)
+        self.copy_button.setToolTip(f"結果ファイル ({DEFAULT_OUTPUT_FILE}) の内容をクリップボードにコピーします。")
+        options_layout.addWidget(self.copy_button)
+        # --- ▲▲▲ コピーボタン追加 ▲▲▲ ---
+
+        options_layout.addStretch() # ボタンの後にスペーサーを追加
         main_layout.addLayout(options_layout)
 
+        # --- 結果表示エリア ---
         self.result_display = QPlainTextEdit()
         self.result_display.setReadOnly(True)
         self.result_display.setPlaceholderText("ここに実行結果が表示されます...")
-        main_layout.addWidget(self.result_display, 1)
+        main_layout.addWidget(self.result_display, 1) # 縦方向に伸縮
+
+        # --- ステータスラベル ---
         self.status_label = QLabel("アイドル")
         main_layout.addWidget(self.status_label)
 
+        # --- シグナルとスロットの接続 ---
         self.refresh_button.clicked.connect(self.populate_json_files)
         self.generator_button.clicked.connect(self.open_generator)
         self.run_button.clicked.connect(self.run_mcp)
+        # --- ▼▼▼ コピーボタンのシグナル接続 ▼▼▼ ---
+        self.copy_button.clicked.connect(self.copy_output_to_clipboard)
+        # --- ▲▲▲ コピーボタンのシグナル接続 ▲▲▲ ---
 
+        # --- 初期設定 ---
         JSON_FOLDER.mkdir(exist_ok=True)
+        # output ディレクトリもなければ作成
+        DEFAULT_OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
         self.populate_json_files()
         self.run_button.setStyleSheet("background-color: #28a745; color: white;")
 
     def populate_json_files(self):
+        # ... (変更なし) ...
         self.json_selector.clear()
         try:
             json_files = sorted([f.name for f in JSON_FOLDER.glob("*.json") if f.is_file()])
@@ -232,6 +261,7 @@ class MainWindow(QMainWindow):
             self.run_button.setEnabled(False)
 
     def open_generator(self):
+        # ... (変更なし) ...
          if not GENERATOR_HTML.exists():
               self.show_error_message(f"エラー: {GENERATOR_HTML} が見つかりません。")
               return
@@ -245,6 +275,7 @@ class MainWindow(QMainWindow):
 
     @Slot(str)
     def paste_generated_json(self, json_string):
+        # ... (変更なし) ...
         self.result_display.setPlaceholderText("JSONジェネレーターからJSONが入力されました。\n内容を確認し、必要であればファイルに保存して選択、または直接実行してください。")
         try:
              parsed_json = json.loads(json_string)
@@ -256,6 +287,7 @@ class MainWindow(QMainWindow):
               self.result_display.setPlainText(json_string)
 
     def run_mcp(self, json_data: Optional[Dict[str, Any]] = None):
+        # ... (変更なし) ...
         if self.mcp_worker and self.mcp_worker.isRunning():
             self.show_error_message("現在、別のタスクを実行中です。")
             return
@@ -294,6 +326,7 @@ class MainWindow(QMainWindow):
         self.generator_button.setEnabled(False)
         self.headless_checkbox.setEnabled(False)
         self.slowmo_spinbox.setEnabled(False)
+        self.copy_button.setEnabled(False) # コピーボタンも実行中は無効化
 
         headless_mode = self.headless_checkbox.isChecked()
         slow_mo_value = self.slowmo_spinbox.value()
@@ -305,10 +338,50 @@ class MainWindow(QMainWindow):
         self.mcp_worker.finished.connect(self.task_finished)
         self.mcp_worker.start()
 
-    # --- ▼▼▼ 結果・エラー表示スロット (修正済み) ▼▼▼ ---
+    # --- ▼▼▼ コピー処理用スロット関数 ▼▼▼ ---
+    @Slot()
+    def copy_output_to_clipboard(self):
+        """結果ファイルの内容をクリップボードにコピーする。"""
+        output_filepath = DEFAULT_OUTPUT_FILE
+        # output ディレクトリが存在しない場合は作成を試みる
+        try:
+            output_filepath.parent.mkdir(parents=True, exist_ok=True)
+        except Exception as e:
+            print(f"Warning: Could not create output directory {output_filepath.parent}: {e}")
+
+        if not output_filepath.exists():
+            self.show_error_message(f"エラー: 結果ファイルが見つかりません。\nパス: {output_filepath}")
+            self.status_label.setText("コピー失敗: ファイルなし")
+            return
+
+        try:
+            with open(output_filepath, 'r', encoding='utf-8') as f:
+                file_content = f.read()
+
+            clipboard = QApplication.instance().clipboard()
+            if clipboard is None:
+                self.show_error_message("エラー: クリップボードにアクセスできません。")
+                self.status_label.setText("コピー失敗: クリップボードエラー")
+                return
+
+            clipboard.setText(file_content)
+            self.status_label.setText(f"'{output_filepath.name}' の内容をクリップボードにコピーしました。")
+            # 必要であれば情報メッセージを表示
+            # QMessageBox.information(self, "コピー完了", f"'{output_filepath.name}' の内容をクリップボードにコピーしました。")
+
+        except IOError as e:
+            self.show_error_message(f"エラー: 結果ファイルの読み込みに失敗しました。\nエラー: {e}")
+            self.status_label.setText("コピー失敗: 読み込みエラー")
+        except Exception as e:
+            self.show_error_message(f"予期せぬエラーが発生しました。\nエラー: {e}")
+            self.status_label.setText("コピー失敗: 不明なエラー")
+            traceback.print_exc() # デバッグ用にトレースバックを出力
+    # --- ▲▲▲ コピー処理用スロット関数 ▲▲▲ ---
+
+
     @Slot(str)
     def display_result(self, result_json_string: str):
-        """サーバーからの成功結果を整形して表示し、ファイルにも書き込む"""
+        # ... (変更なし) ...
         display_text = ""
         result_data_list_for_file = None
         try:
@@ -331,37 +404,26 @@ class MainWindow(QMainWindow):
                     details_to_write = {k: v for k, v in step_result.items() if k not in ['step', 'status', 'action']}
                     if 'selector' in details_to_write:
                         display_text += f"Selector: {details_to_write.pop('selector')}\n"
-
-                    # --- 特定アクションの整形表示 ---
                     if action_type == 'get_all_attributes':
                         attr_name = details_to_write.pop('attribute', 'N/A')
-                        # file.write(f"Original Attribute Name: {attr_name}\n") # GUIでは省略
-
-                        if 'url_lists' in details_to_write:
-                            url_list = details_to_write.pop('url_lists', [])
+                        if 'url_list' in details_to_write: # 'url_list' キーをチェック
+                            url_list = details_to_write.pop('url_list', []) # 'url_list' を取得
                             if url_list:
                                 display_text += "Result (URL List):\n" + '\n'.join(f"- {str(item)}" for item in url_list if item is not None) + "\n"
                         elif 'attribute_list' in details_to_write:
                              attr_list = details_to_write.pop('attribute_list', [])
                              if attr_list:
                                  display_text += f"Result (Attribute List for '{attr_name}'):\n" + '\n'.join(f"- {str(item)}" for item in attr_list if item is not None) + "\n"
-
                         if 'pdf_texts' in details_to_write:
                              pdf_texts = details_to_write.pop('pdf_texts', [])
                              valid_pdf_texts = [t for t in pdf_texts if t and isinstance(t, str)]
                              if valid_pdf_texts:
                                  display_text += "Extracted PDF Texts:\n" + '\n\n--- Next PDF Text ---\n\n'.join(valid_pdf_texts) + '\n'
-                             # else: display_text += "Extracted PDF Texts: (None or errors only)\n" # GUIでは冗長なので省略
-
-                        # ★★★ scraped_texts の表示を修正 ★★★
                         if 'scraped_texts' in details_to_write:
                              scraped_texts = details_to_write.pop('scraped_texts', [])
                              if scraped_texts:
                                  display_text += "Scraped Page Texts:\n"
-                                 # 各テキストを区切り線で表示
                                  display_text += '\n\n--- Next Page Text ---\n\n'.join(str(t) if t is not None else '(No text or Error)' for t in scraped_texts) + '\n'
-                        # ★★★ scraped_texts の表示を修正 ★★★
-
                     elif action_type == 'get_all_text_contents':
                         text_list_result = details_to_write.pop('text_list', [])
                         if isinstance(text_list_result, list):
@@ -377,13 +439,10 @@ class MainWindow(QMainWindow):
                         display_text += f"Result Attribute ('{attr_name}'): {attr_value}\n"
                         if 'pdf_text' in details_to_write:
                             display_text += f"Extracted PDF Text:\n{details_to_write.pop('pdf_text', '')}\n"
-
-                    # 残りの詳細情報
                     if details_to_write:
                         display_text += "Other Details:\n"
                         for key, val in details_to_write.items():
                             display_text += f"  {key}: {val}\n"
-
                 elif status == "error":
                     if step_result.get('selector'): display_text += f"Selector: {step_result.get('selector')}\n"
                     display_text += f"Message: {step_result.get('message')}\n"
@@ -391,13 +450,11 @@ class MainWindow(QMainWindow):
                     if step_result.get('error_screenshot'): display_text += f"Screenshot: {step_result.get('error_screenshot')}\n"
                 else:
                     display_text += f"Message: {step_result.get('message', 'No details')}\n"
-
                 display_text += "\n"
 
              self.result_display.setPlainText(display_text)
              self.status_label.setText("実行成功")
 
-             # ファイル書き込み
              if utils and result_data_list_for_file:
                  try:
                      utils.write_results_to_file(result_data_list_for_file, str(DEFAULT_OUTPUT_FILE))
@@ -410,7 +467,6 @@ class MainWindow(QMainWindow):
              self.result_display.setPlainText(error_msg)
              self.status_label.setText("警告: 不正な応答")
              print(error_msg)
-    # --- ▲▲▲ 結果・エラー表示スロット (修正済み) ▲▲▲ ---
 
     @Slot(object)
     def display_error(self, error_info: Union[str, Dict[str, Any]]):
@@ -423,13 +479,16 @@ class MainWindow(QMainWindow):
             error_message = error_info
         self.result_display.setPlainText(f"エラーが発生しました:\n\n{error_message}")
         self.status_label.setText("エラー発生")
-        self.show_error_message(error_message)
+        # エラー時にもファイルに書き込み試行
         try:
             with open(DEFAULT_OUTPUT_FILE, 'w', encoding='utf-8') as f:
                  f.write(f"--- Execution Failed ---\n{error_message}")
             print(f"Error details written to {DEFAULT_OUTPUT_FILE}")
         except Exception as write_e:
             print(f"Error writing error details to file: {write_e}")
+        # エラーメッセージボックス表示は削除（冗長なため）
+        # self.show_error_message(error_message)
+
 
     @Slot(str)
     def update_status(self, status: str):
@@ -445,6 +504,7 @@ class MainWindow(QMainWindow):
         self.generator_button.setEnabled(True)
         self.headless_checkbox.setEnabled(True)
         self.slowmo_spinbox.setEnabled(True)
+        self.copy_button.setEnabled(True) # コピーボタンも再度有効化
         if not self.status_label.text().startswith("エラー"):
             self.status_label.setText("アイドル")
         self.mcp_worker = None
@@ -468,7 +528,10 @@ class MainWindow(QMainWindow):
 
 # --- アプリケーション実行 ---
 if __name__ == "__main__":
-    # ... (変更なし) ...
+    # WindowsでのAnyIOポリシー設定 (必要に応じて)
+    # if platform.system() == "Windows":
+    #     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
