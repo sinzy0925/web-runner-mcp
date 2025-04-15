@@ -1,4 +1,4 @@
-# --- ファイル: playwright_actions.py ---
+# --- ファイル: playwright_actions.py (修正版) ---
 """
 Playwrightの各アクション（クリック、入力、取得など）を実行するコアロジック。
 """
@@ -8,8 +8,9 @@ import os
 import time
 import pprint
 import traceback
-from urllib.parse import urljoin
-from typing import List, Tuple, Optional, Union, Dict, Any
+import re # <<< 正規表現モジュールをインポート
+from urllib.parse import urljoin, urlparse # <<< urlparse を追加
+from typing import List, Tuple, Optional, Union, Dict, Any, Set # <<< Set を追加
 
 from playwright.async_api import (
     Page,
@@ -25,9 +26,100 @@ from playwright.async_api import (
 import config
 import utils # PDF処理などで使用
 from playwright_finders import find_element_dynamically, find_all_elements_dynamically
-from playwright_helper_funcs import get_page_inner_text
+from playwright_helper_funcs import get_page_inner_text # get_page_inner_text は別途使用
 
 logger = logging.getLogger(__name__)
+
+# --- ▼▼▼ 追加: メールアドレス抽出用ヘルパー関数 ▼▼▼ ---
+# メールアドレス抽出用の正規表現 (一般的なもの)
+EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
+
+async def _extract_emails_from_page_async(context: BrowserContext, url: str, timeout: int) -> List[str]:
+    """
+    指定されたURLに新しいページでアクセスし、ページのinnerTextとmailtoリンクからメールアドレスを抽出する。
+    重複を含むメールアドレスのリストを返す。失敗時は空リストを返す。
+    """
+    page = None
+    emails_found: Set[str] = set() # ページ内での重複を避けるために Set を使用
+    start_time = time.monotonic()
+    # ページ遷移自体のタイムアウトも考慮
+    page_access_timeout = max(int(timeout * 0.8), 15000)
+    logger.info(f"URLからメール抽出開始: {url} (タイムアウト: {page_access_timeout}ms)")
+
+    try:
+        page = await context.new_page()
+        # ナビゲーションタイムアウトを設定
+        nav_timeout = max(int(page_access_timeout * 0.9), 10000)
+        logger.debug(f"  Navigating to {url} with timeout {nav_timeout}ms")
+        await page.goto(url, wait_until="load", timeout=nav_timeout)
+        logger.debug(f"  Navigation to {url} successful.")
+
+        # ページ全体のテキストを取得 (タイムアウトは残り時間で)
+        remaining_time_for_text = page_access_timeout - (time.monotonic() - start_time) * 1000
+        if remaining_time_for_text <= 1000: # 最低1秒は確保
+            raise PlaywrightTimeoutError(f"Not enough time left to get page text from {url}")
+        text_timeout = int(remaining_time_for_text)
+        logger.debug(f"  Getting page innerText with timeout {text_timeout}ms")
+        # bodyがない場合もあるので、ルート要素から取得を試みる
+        page_text = await page.locator(':root').inner_text(timeout=text_timeout)
+
+        # テキストからメールアドレスを抽出
+        if page_text:
+            found_in_text = EMAIL_REGEX.findall(page_text)
+            if found_in_text:
+                logger.debug(f"  Found {len(found_in_text)} potential emails in page text.")
+                emails_found.update(found_in_text) # Setに追加して重複排除
+
+        # mailto: リンクからメールアドレスを抽出
+        mailto_links = await page.locator("a[href^='mailto:']").all()
+        if mailto_links:
+            logger.debug(f"  Found {len(mailto_links)} mailto links.")
+            for link in mailto_links:
+                try:
+                    href = await link.get_attribute('href', timeout=500) # mailtoリンク取得は短時間で
+                    if href and href.startswith('mailto:'):
+                        # "mailto:" の部分と、?subject=...などのパラメータを除去
+                        email_part = href[len('mailto:'):].split('?')[0]
+                        if email_part:
+                             # URLデコードが必要な場合もあるが、まずはそのまま追加
+                             # 簡易バリデーション
+                             if EMAIL_REGEX.match(email_part):
+                                 emails_found.add(email_part)
+                                 logger.debug(f"    Extracted email from mailto: {email_part}")
+                             else:
+                                  logger.debug(f"    Skipping invalid mailto part: {email_part}")
+
+                except PlaywrightTimeoutError:
+                    logger.warning(f"  Timeout getting href from a mailto link on {url}")
+                except Exception as link_err:
+                    logger.warning(f"  Error processing a mailto link on {url}: {link_err}")
+
+        elapsed = (time.monotonic() - start_time) * 1000
+        logger.info(f"メール抽出完了 ({url})。ユニーク候補数: {len(emails_found)} ({elapsed:.0f}ms)")
+        return list(emails_found) # Set を List にして返す
+
+    except PlaywrightTimeoutError as e:
+        elapsed = (time.monotonic() - start_time) * 1000
+        logger.warning(f"メール抽出中のタイムアウト ({url}, {elapsed:.0f}ms): {e}")
+        return [] # タイムアウト時は空リスト
+    except Exception as e:
+        elapsed = (time.monotonic() - start_time) * 1000
+        # ネットワークエラーなど、ページアクセス自体が失敗した場合
+        if "net::ERR_" in str(e):
+             logger.warning(f"メール抽出中のネットワークエラー ({url}, {elapsed:.0f}ms): {type(e).__name__} - {e}")
+        else:
+             logger.error(f"メール抽出中に予期せぬエラー ({url}, {elapsed:.0f}ms): {type(e).__name__} - {e}", exc_info=False)
+             logger.debug(f"Detailed error during email extraction from {url}:", exc_info=True)
+        return [] # その他のエラーでも空リスト
+    finally:
+        if page and not page.is_closed():
+            try:
+                await page.close()
+                logger.debug(f"メール抽出用一時ページ ({url}) を閉じました。")
+            except Exception as close_e:
+                logger.warning(f"メール抽出用一時ページ ({url}) クローズ中にエラー (無視): {close_e}")
+# --- ▲▲▲ 追加 ▲▲▲ ---
+
 
 async def execute_actions_async(
     initial_page: Page,
@@ -332,20 +424,21 @@ async def execute_actions_async(
                     action_result_details["pdf_text"] = pdf_text_content # PDFテキストも結果に含める
                 results.append({"step": step_num, "status": "success", "action": action, **action_result_details})
 
+            # --- get_all_attributes 修正版 ---
             elif action == "get_all_attributes":
                 if not selector: raise ValueError("Action 'get_all_attributes' requires 'selector'.")
                 if not attribute_name: raise ValueError("Action 'get_all_attributes' requires 'attribute_name'.")
 
                 if not found_elements_list:
-                    logger.warning(f"動的探索で要素 '{selector}' が見つからなかったため、属性取得をスキップします。")
-                    action_result_details["attribute_list"] = [] # 空リストを結果として設定
-                    # href, pdf, content モードの場合も空リストを設定
-                    if attribute_name.lower() in ['href', 'pdf', 'content']:
+                    logger.warning(f"動的探索で要素 '{selector}' が見つからなかったため、属性/コンテンツ取得をスキップします。")
+                    action_result_details["results_count"] = 0 # 結果件数を0にする
+                    if attribute_name.lower() in ['href', 'pdf', 'content', 'mail']:
                         action_result_details["url_list"] = []
-                    if attribute_name.lower() == 'pdf':
-                        action_result_details["pdf_texts"] = []
-                    if attribute_name.lower() == 'content':
-                        action_result_details["scraped_texts"] = []
+                    if attribute_name.lower() == 'pdf': action_result_details["pdf_texts"] = []
+                    if attribute_name.lower() == 'content': action_result_details["scraped_texts"] = []
+                    if attribute_name.lower() == 'mail': action_result_details["extracted_emails"] = []
+                    if attribute_name.lower() not in ['href', 'pdf', 'content', 'mail']:
+                        action_result_details["attribute_list"] = []
                 else:
                     num_found = len(found_elements_list)
                     logger.info(f"動的探索で見つかった {num_found} 個の要素から属性/コンテンツ '{attribute_name}' を取得します。")
@@ -354,48 +447,53 @@ async def execute_actions_async(
                     url_list_for_file: List[Optional[str]] = []
                     pdf_texts_list_for_file: List[Optional[str]] = []
                     scraped_texts_list_for_file: List[Optional[str]] = []
+                    email_list_for_file: List[str] = [] # mailモード用 (ドメインユニーク)
                     generic_attribute_list_for_file: List[Optional[str]] = []
 
                     # --- 属性名に応じて処理を分岐 ---
-                    if attribute_name.lower() in ['href', 'pdf', 'content']:
-                        logger.info("href属性を取得し、絶対URLに変換、必要に応じてコンテンツを取得します...")
+                    # href, pdf, content モード (処理を共通化)
+                    if attribute_name.lower() in ['href', 'pdf', 'content', 'mail']: # <<< mail を追加
+                        logger.info(f"モード '{attribute_name.lower()}': href属性を取得し、絶対URLに変換、必要に応じてコンテンツを取得します...")
 
-                        # 同時実行数を制御するためのセマフォを作成 (同時実行数5)
-                        CONCURRENT_LIMIT = 5
+                        CONCURRENT_LIMIT = 5 # 同時実行数
                         semaphore = asyncio.Semaphore(CONCURRENT_LIMIT)
                         logger.info(f"URLアクセス/コンテンツ取得の同時実行数を {CONCURRENT_LIMIT} に制限します。")
 
-                        # 個々の要素から属性/コンテンツを取得する内部関数 (セマフォを受け取るように変更)
-                        async def process_single_element_for_href_content(
-                            locator: Locator, index: int, base_url: str, attr_mode: str, sem: asyncio.Semaphore # セマフォ引数を追加
-                        ) -> Tuple[Optional[str], Optional[str], Optional[str]]:
-                            """ 1要素のhrefを取得し、モードに応じてPDF/コンテンツも取得 (セマフォで同時実行制御) """
+                        # 個々の要素から属性/コンテンツを取得する内部関数
+                        async def process_single_element_for_href_related(
+                            locator: Locator, index: int, base_url: str, attr_mode: str, sem: asyncio.Semaphore
+                        ) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[List[str]]]: # <<< mail 用のリストを追加
+                            """ 1要素のhrefを取得し、モードに応じてPDF/コンテンツ/メールも取得 (セマフォで同時実行制御) """
                             original_href: Optional[str] = None
                             absolute_url: Optional[str] = None
                             pdf_text: Optional[str] = None
                             scraped_text: Optional[str] = None
+                            emails_from_page: Optional[List[str]] = None # <<< mail 用
 
-                            # セマフォを取得するまで待機し、処理ブロックを実行
-                            async with sem:
+                            async with sem: # セマフォで同時実行数を制御
                                 try:
-                                    logger.debug(f"  [{index+1}/{num_found}] Processing started (Semaphore acquired)...")
-                                    # href属性取得 (個々のタイムアウトは短めに調整)
+                                    logger.debug(f"  [{index+1}/{num_found}] Processing started ({attr_mode})...")
                                     href_timeout = max(500, action_wait_time // num_found if num_found > 5 else action_wait_time // 3)
-
                                     original_href = await locator.get_attribute("href", timeout=href_timeout)
+
                                     if original_href is None:
                                         logger.debug(f"  [{index+1}/{num_found}] href属性が見つかりません。")
-                                        return None, None, None # この要素の処理は終了
+                                        return None, None, None, None # URLなし
 
                                     # 絶対URL変換
                                     try:
                                         absolute_url = urljoin(base_url, original_href)
+                                        # URLスキーマが http/https でない場合はスキップ (javascript: mailto: など)
+                                        parsed_url = urlparse(absolute_url)
+                                        if parsed_url.scheme not in ['http', 'https']:
+                                            logger.debug(f"  [{index+1}/{num_found}] スキップ (非HTTP/HTTPS URL): {absolute_url}")
+                                            return absolute_url, None, None, None # URLは返す
                                     except Exception as url_conv_e:
                                          logger.warning(f"  [{index+1}/{num_found}] 絶対URL変換エラー ({original_href}): {url_conv_e}")
-                                         absolute_url = f"Error converting URL: {original_href}" # エラー情報を含める
+                                         return f"Error converting URL: {original_href}", None, None, None # エラーURL
 
                                     # pdf モードの場合
-                                    if attr_mode == 'pdf' and isinstance(absolute_url, str) and absolute_url.lower().endswith('.pdf'):
+                                    if attr_mode == 'pdf' and absolute_url.lower().endswith('.pdf'):
                                         pdf_start = time.monotonic()
                                         pdf_bytes = await utils.download_pdf_async(api_request_context, absolute_url)
                                         if pdf_bytes:
@@ -406,51 +504,82 @@ async def execute_actions_async(
                                         logger.info(f"  [{index+1}/{num_found}] PDF処理完了 ({pdf_elapsed:.0f}ms) URL: {absolute_url}")
 
                                     # content モードの場合 (PDF以外)
-                                    elif attr_mode == 'content' and isinstance(absolute_url, str) and not absolute_url.lower().endswith('.pdf'):
+                                    elif attr_mode == 'content' and not absolute_url.lower().endswith('.pdf'):
                                         content_start = time.monotonic()
-                                        # ページテキスト取得 (get_page_inner_textを使用, タイムアウトはアクション全体時間)
                                         success, content_or_error = await get_page_inner_text(current_context, absolute_url, action_wait_time)
                                         scraped_text = content_or_error
                                         content_elapsed = (time.monotonic() - content_start) * 1000
                                         logger.info(f"  [{index+1}/{num_found}] Content取得試行完了 ({content_elapsed:.0f}ms) URL: {absolute_url} Success: {success}")
 
-                                    logger.debug(f"  [{index+1}/{num_found}] Processing finished (Semaphore released). URL: {absolute_url}")
-                                    return absolute_url, pdf_text, scraped_text
+                                    # mail モードの場合 (PDFかどうかは問わない)
+                                    elif attr_mode == 'mail':
+                                         mail_start = time.monotonic()
+                                         # ヘルパー関数を呼び出し
+                                         emails_from_page = await _extract_emails_from_page_async(current_context, absolute_url, action_wait_time)
+                                         mail_elapsed = (time.monotonic() - mail_start) * 1000
+                                         logger.info(f"  [{index+1}/{num_found}] Mail抽出試行完了 ({mail_elapsed:.0f}ms) URL: {absolute_url} Found: {len(emails_from_page) if emails_from_page else 0}")
+
+                                    logger.debug(f"  [{index+1}/{num_found}] Processing finished. URL: {absolute_url}")
+                                    return absolute_url, pdf_text, scraped_text, emails_from_page # <<< mail 結果を返す
 
                                 except PlaywrightTimeoutError:
                                     logger.warning(f"  [{index+1}/{num_found}] href属性取得タイムアウト ({href_timeout}ms)。")
-                                    return f"Error: Timeout getting href", None, None
+                                    return f"Error: Timeout getting href", None, None, None
                                 except Exception as e:
-                                    logger.warning(f"  [{index+1}/{num_found}] href/コンテンツ取得中に予期せぬエラー: {type(e).__name__} - {e}", exc_info=True)
-                                    return f"Error: {type(e).__name__} - {e}", None, None
-                            # 'async with sem:' を抜けるとセマフォは自動的に解放される
+                                    logger.warning(f"  [{index+1}/{num_found}] href/コンテンツ/メール取得中に予期せぬエラー: {type(e).__name__} - {e}", exc_info=True)
+                                    return f"Error: {type(e).__name__} - {e}", None, None, None
 
-                        # --- 見つかった全要素に対して並行処理 (タスク作成時にセマフォを渡す) ---
+                        # --- 見つかった全要素に対して並行処理 ---
                         process_tasks = [
-                            process_single_element_for_href_content(loc, idx, current_base_url, attribute_name.lower(), semaphore)
+                            process_single_element_for_href_related(loc, idx, current_base_url, attribute_name.lower(), semaphore)
                             for idx, (loc, _) in enumerate(found_elements_list)
                         ]
-                        # asyncio.gather は全てのタスクが完了するのを待つ
                         results_tuples = await asyncio.gather(*process_tasks)
 
-                        # 結果をリストに格納
-                        for abs_url, pdf_content, scraped_content in results_tuples:
-                            url_list_for_file.append(abs_url)
-                            pdf_texts_list_for_file.append(pdf_content)
-                            scraped_texts_list_for_file.append(scraped_content)
+                        # 結果をリストに格納 & mailモードのドメイン重複排除
+                        all_extracted_emails_flat: List[str] = [] # mailモード用: 全メールアドレス（ドメイン重複排除前）
+                        processed_domains: Set[str] = set() # mailモード用: 処理済みドメイン
 
-                        logger.info(f"全 {num_found} 要素の href/コンテンツ処理が完了しました。")
+                        for abs_url, pdf_content, scraped_content, emails_list in results_tuples:
+                            url_list_for_file.append(abs_url) # URLは常に追加
+                            if attribute_name.lower() == 'pdf':
+                                pdf_texts_list_for_file.append(pdf_content)
+                            if attribute_name.lower() == 'content':
+                                scraped_texts_list_for_file.append(scraped_content)
+                            if attribute_name.lower() == 'mail' and emails_list:
+                                all_extracted_emails_flat.extend(emails_list) # まずフラットリストに追加
+
+                        # --- mail モードのドメイン重複排除処理 ---
+                        if attribute_name.lower() == 'mail':
+                            logger.info(f"メールアドレスのドメイン重複排除を開始 (候補総数: {len(all_extracted_emails_flat)})...")
+                            for email in all_extracted_emails_flat:
+                                if isinstance(email, str) and '@' in email:
+                                    try:
+                                        domain = email.split('@', 1)[1].lower() # ドメイン部分を小文字で取得
+                                        if domain and domain not in processed_domains:
+                                            email_list_for_file.append(email) # ユニークドメインのメールを最終リストへ
+                                            processed_domains.add(domain) # ドメインを処理済みセットへ
+                                            logger.debug(f"    Added unique domain email: {email}")
+                                        # else: logger.debug(f"    Skipping duplicate domain email: {email}")
+                                    except IndexError:
+                                        logger.warning(f"    Invalid email format skipped: {email}")
+                                else:
+                                     logger.debug(f"    Skipping invalid or non-string email entry: {email}")
+                            logger.info(f"ドメイン重複排除完了。ユニークドメインメールアドレス数: {len(email_list_for_file)}")
 
                         # 結果を action_result_details に格納
                         action_result_details["attribute"] = attribute_name
                         action_result_details["url_list"] = url_list_for_file # 常にURLリストを含める
+                        action_result_details["results_count"] = len(url_list_for_file) # 処理したURL数をカウント
                         if attribute_name.lower() == 'pdf':
                              action_result_details["pdf_texts"] = pdf_texts_list_for_file
                         if attribute_name.lower() == 'content':
                              action_result_details["scraped_texts"] = scraped_texts_list_for_file
-                        # hrefモードの場合は url_list が主要な結果
+                        if attribute_name.lower() == 'mail':
+                             action_result_details["extracted_emails"] = email_list_for_file # ドメインユニークなリスト
 
-                    else: # href, pdf, content 以外の通常の属性取得
+                    # --- href, pdf, content, mail 以外の通常の属性取得 ---
+                    else:
                         logger.info(f"指定された属性 '{attribute_name}' を取得します...")
                         # 属性値を取得する内部関数
                         async def get_single_attr(locator: Locator, attr_name: str, index: int) -> Optional[str]:
@@ -471,18 +600,23 @@ async def execute_actions_async(
                         ]
                         generic_attribute_list_for_file = await asyncio.gather(*attr_tasks)
 
-                        action_result_details.update({"attribute": attribute_name, "attribute_list": generic_attribute_list_for_file})
+                        action_result_details.update({
+                            "attribute": attribute_name,
+                            "attribute_list": generic_attribute_list_for_file,
+                            "results_count": len(generic_attribute_list_for_file)
+                        })
                         logger.info(f"取得した属性値リスト ({len(generic_attribute_list_for_file)}件)")
 
                 # 最後に結果を追加
                 results.append({"step": step_num, "status": "success", "action": action, **action_result_details})
-
+            # --- ここまで get_all_attributes の修正 ---
 
             elif action == "get_all_text_contents":
                 if not selector: raise ValueError("Action 'get_all_text_contents' requires 'selector'.")
                 text_list: List[Optional[str]] = []
                 if not found_elements_list:
                     logger.warning(f"動的探索で要素 '{selector}' が見つからなかったため、テキスト取得をスキップします。")
+                    action_result_details["results_count"] = 0
                 else:
                     num_found = len(found_elements_list)
                     logger.info(f"動的探索で見つかった {num_found} 個の要素から textContent を取得します。")
@@ -505,6 +639,7 @@ async def execute_actions_async(
                     ]
                     text_list = await asyncio.gather(*get_text_tasks)
                     logger.info(f"取得したテキストリスト ({len(text_list)}件)")
+                    action_result_details["results_count"] = len(text_list)
 
                 action_result_details["text_list"] = text_list
                 results.append({"step": step_num, "status": "success", "action": action, **action_result_details})
