@@ -1,7 +1,6 @@
-# --- ファイル: web_runner_mcp_client_core.py (ファイル出力修正版) ---
-
+# --- ファイル: web_runner_mcp_client_core.py (stdioエンコーディング修正) ---
 import asyncio
-import sys
+import sys,os
 import json
 from pathlib import Path
 import anyio
@@ -9,33 +8,27 @@ import platform
 import traceback
 from typing import Optional, Dict, Any, Tuple, Union, List
 import argparse
+import io # ★★★ io モジュールをインポート ★★★
 
 # MCP クライアントライブラリ
 from mcp import ClientSession, StdioServerParameters, types as mcp_types
 from mcp.client.stdio import stdio_client
 
-# --- ▼▼▼ 追加 ▼▼▼ ---
-# 設定ファイルとユーティリティ関数をインポート
 try:
     import config
-    import utils # ★★★ utils モジュールをインポート ★★★
+    import utils
     DEFAULT_OUTPUT_FILE = Path(config.MCP_CLIENT_OUTPUT_FILE)
 except ImportError:
-    print("Warning: config.py or utils.py not found. Using default output filename './output_web_runner.txt'")
-    DEFAULT_OUTPUT_FILE = Path("./output_web_runner.txt")
-    # utils がない場合は、ファイル書き込み部分でエラーになる可能性がある
-    utils = None # プレースホルダ
-# --- ▲▲▲ 追加 ▲▲▲ ---
+    print("Warning: config.py or utils.py not found. Using default output filename './output/web_runner_mcp.txt'")
+    DEFAULT_OUTPUT_FILE = Path("./output/web_runner_mcp.txt")
+    utils = None
 
-
-# 定数
 SERVER_SCRIPT = Path("./web_runner_mcp_server.py")
 DEFAULT_SLOW_MO = 0
 
-# --- コア関数: Web-RunnerをMCP経由で実行 ---
 async def execute_web_runner_via_mcp(
     input_json_data: Dict[str, Any],
-    headless: bool = False, # デフォルトをFalse (表示) に変更
+    headless: bool = False,
     slow_mo: int = DEFAULT_SLOW_MO
 ) -> Tuple[bool, Union[str, Dict[str, Any]]]:
     """
@@ -50,7 +43,6 @@ async def execute_web_runner_via_mcp(
         print(error_msg)
         return False, {"error": error_msg}
 
-    # --- サーバーに渡す引数を構築 ---
     tool_arguments = {
         "input_args": {
             "target_url": input_json_data.get("target_url"),
@@ -66,16 +58,25 @@ async def execute_web_runner_via_mcp(
          return False, {"error": error_msg}
 
     print("Preparing server parameters...")
+    # --- ▼▼▼ 修正箇所 ▼▼▼ ---
+    # 環境変数でPythonの標準入出力エンコーディングをUTF-8に強制する
+    server_env = os.environ.copy()
+    server_env["PYTHONIOENCODING"] = "utf-8"
+
     server_params = StdioServerParameters(
         command=sys.executable,
         args=[str(SERVER_SCRIPT), "--transport", "stdio", "--log-level", "INFO"],
+        env=server_env # ★★★ 環境変数を渡す ★★★
     )
+    # --- ▲▲▲ 修正箇所 ▲▲▲ ---
     print(f"Server command: {sys.executable} {SERVER_SCRIPT} --transport stdio --log-level INFO")
+    print(f"Server env: PYTHONIOENCODING=utf-8") # デバッグ用
 
     session: Optional[ClientSession] = None
     try:
         print("Connecting to server via stdio_client...")
         async with stdio_client(server_params) as streams:
+            # ...(以下、変更なし)...
             print("DEBUG: stdio_client context entered.")
             read_stream, write_stream = streams
             print("DEBUG: Got streams from stdio_client.")
@@ -83,8 +84,8 @@ async def execute_web_runner_via_mcp(
             async with ClientSession(read_stream, write_stream) as session:
                 print("DEBUG: ClientSession context entered.")
                 print("Initializing session...")
-                await session.initialize()
-                print("DEBUG: Initialization complete.")
+                await session.initialize() # ← ここで止まっていた
+                print("DEBUG: Initialization complete.") # ← ここまで進むはず
 
                 print("Calling 'execute_web_runner' tool...")
                 print(f"DEBUG: Calling tool with arguments: {str(tool_arguments)[:500]}...")
@@ -128,12 +129,22 @@ async def execute_web_runner_via_mcp(
         print(error_msg)
         print("--- Traceback ---")
         traceback.print_exc()
+        # UnicodeDecodeError の場合は、より具体的なエラーメッセージを返す
+        if isinstance(e, UnicodeDecodeError):
+             return False, {"error": f"MCP communication error: Failed to decode server output as UTF-8. Check server-side prints/logs.", "details": error_msg}
+        # ExceptionGroup の場合も詳細を含める
+        if isinstance(e, ExceptionGroup):
+             # ExceptionGroup の中身を展開して表示する方が親切かもしれない
+             # simplified_error = {"error": "MCP communication error: ExceptionGroup occurred.", "details": str(e)}
+             # return False, simplified_error
+             # ここでは元のエラーメッセージをそのまま返す
+             return False, {"error": f"MCP communication error: {error_msg}"}
+
         return False, {"error": f"MCP communication error: {error_msg}"}
     finally:
         print("--- Web Runner via MCP Finished ---")
 
-
-# --- このファイル単体でテストするための実行部分 ---
+# --- main 関数 (変更なし) ---
 async def main():
     """テスト用のJSONファイルを読み込んでコア関数を呼び出し、結果をファイルに出力"""
     parser = argparse.ArgumentParser(description="Test Web-Runner MCP Client Core")

@@ -2556,9 +2556,10 @@ async def generate_iframe_selector_async(iframe_locator: Locator) -> Optional[st
 - フォルダ名: .
 - ファイル名: playwright_launcher.py
 - 内容:
-# --- ファイル: playwright_launcher.py ---
+# --- ファイル: playwright_launcher.py (修正版) ---
 """
 Playwrightの起動、初期設定、アクション実行の呼び出し、終了処理を行います。
+ステルスモードエラー時のリトライ機能を追加。
 """
 import asyncio
 import logging
@@ -2569,18 +2570,67 @@ import warnings
 from playwright.async_api import (
     async_playwright,
     Page,
+    Browser, # Browser 型ヒント追加
     BrowserContext,
     TimeoutError as PlaywrightTimeoutError,
     Error as PlaywrightError,
 )
 from playwright_stealth import stealth_async
-from typing import List, Tuple, Dict, Any
+from typing import List, Tuple, Dict, Any, Optional # Optional を追加
 
 import config
 from playwright_actions import execute_actions_async # アクション実行関数をインポート
 
 logger = logging.getLogger(__name__)
 warnings.filterwarnings("ignore", category=ResourceWarning, message="unclosed transport") # Playwrightの既知の警告を抑制
+
+# --- ▼▼▼ 追加: ステルスモードエラー検出用 ▼▼▼ ---
+# 検出対象のエラーメッセージ（完全一致）
+STEALTH_ERROR_MESSAGE = "大変申し訳ありませんが、ページを正しく表示できませんでした。\n推奨されているブラウザであるかをご確認の上、時間をおいて再度お試しください。"
+# エラーメッセージが含まれる可能性のある要素のセレクター（例: body全体や特定のエラー表示領域）
+ERROR_MESSAGE_SELECTOR = "body"
+# --- ▲▲▲ 追加 ▲▲▲ ---
+
+
+# --- ▼▼▼ 追加: ブラウザとコンテキストを起動するヘルパー関数 ▼▼▼ ---
+async def _launch_browser_and_context(
+    playwright_instance,
+    headless_mode: bool,
+    slow_motion: int,
+    default_timeout: int,
+    apply_stealth: bool = True # ステルスモードを適用するかどうかのフラグ
+) -> Tuple[Browser, BrowserContext]:
+    """ブラウザとコンテキストを起動し、オプションでステルスモードを適用する"""
+    logger.info(f"ブラウザ起動 (Chromium, Headless: {headless_mode}, SlowMo: {slow_motion}ms)...")
+    browser = await playwright_instance.chromium.launch(
+        headless=headless_mode,
+        slow_mo=slow_motion,
+    )
+    logger.info("新しいブラウザコンテキストを作成します...")
+    context = await browser.new_context(
+        user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+        viewport={'width': 1920, 'height': 1080},
+        locale='ja-JP',
+        timezone_id='Asia/Tokyo',
+        java_script_enabled=True,
+        extra_http_headers={'Accept-Language': 'ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7'}
+    )
+    context.set_default_timeout(default_timeout)
+    logger.info(f"コンテキストのデフォルトタイムアウトを {default_timeout}ms に設定しました。")
+
+    if apply_stealth:
+        logger.info("Applying stealth mode to the context...")
+        try:
+            await stealth_async(context)
+            logger.info("Stealth mode applied successfully.")
+        except Exception as stealth_err:
+            logger.warning(f"Failed to apply stealth mode: {stealth_err}")
+    else:
+        logger.info("Stealth mode is disabled for this context.")
+
+    return browser, context
+# --- ▲▲▲ 追加 ▲▲▲ ---
+
 
 async def run_playwright_automation_async(
         target_url: str,
@@ -2591,122 +2641,147 @@ async def run_playwright_automation_async(
     ) -> Tuple[bool, List[Dict[str, Any]]]:
     """
     Playwright を非同期で初期化し、指定されたURLにアクセス後、一連のアクションを実行します。
-    ブラウザの起動、コンテキスト設定、ページ作成、アクション実行、クリーンアップを行います。
-    実行全体の成否 (bool) と、各ステップの結果詳細のリスト (List[dict]) を返します。
+    ステルスモードでエラーが発生した場合、ステルスモードなしでリトライします。
     """
     logger.info("--- Playwright 自動化開始 (非同期) ---")
     all_success = False
     final_results: List[Dict[str, Any]] = []
     playwright = None
-    browser = None
-    context: Optional[BrowserContext] = None # Optional に変更
-    page: Optional[Page] = None # Optional に変更
+    browser: Optional[Browser] = None # Optional に変更
+    context: Optional[BrowserContext] = None
+    page: Optional[Page] = None
+    initial_navigation_successful = False
+    retry_attempted = False # リトライフラグ
 
     try:
         playwright = await async_playwright().start()
-        logger.info(f"ブラウザ起動 (Chromium, Headless: {headless_mode}, SlowMo: {slow_motion}ms)...")
-        # 起動オプション (必要に応じて追加)
-        launch_options = {
-            "headless": headless_mode,
-            "slow_mo": slow_motion,
-            # "args": ["--disable-blink-features=AutomationControlled"] # Stealthで不要になる可能性
-        }
-        browser = await playwright.chromium.launch(**launch_options)
-        logger.info("新しいブラウザコンテキストを作成します...")
-        context = await browser.new_context(
-            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36', # 一般的なUA
-            viewport={'width': 1920, 'height': 1080}, # 一般的な解像度
-            locale='ja-JP', # 日本語ロケール
-            timezone_id='Asia/Tokyo', # 日本時間
-            # accept_downloads=True, # ファイルダウンロードを許可する場合
-            java_script_enabled=True, # JavaScript有効
-            # ページの読み込み戦略 (デフォルトは 'load')
-            # navigation_timeout= ..., # ナビゲーション全体のタイムアウト (デフォルトは30秒)
-            extra_http_headers={'Accept-Language': 'ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7'} # Accept-Languageヘッダ
-        )
-        # デフォルトタイムアウト設定 (コンテキスト全体)
         effective_default_timeout = default_timeout if default_timeout else config.DEFAULT_ACTION_TIMEOUT
-        context.set_default_timeout(effective_default_timeout)
-        logger.info(f"コンテキストのデフォルトタイムアウトを {effective_default_timeout}ms に設定しました。")
 
-        # --- Stealth モード適用 ---
-        logger.info("Applying stealth mode to the context...")
-        try:
-            await stealth_async(context)
-            logger.info("Stealth mode applied successfully.")
-        except Exception as stealth_err:
-             logger.warning(f"Failed to apply stealth mode: {stealth_err}")
-
-        # APIリクエスト用のコンテキスト (PDFダウンロード等で使用)
-        api_request_context = context.request
+        # --- 1回目の試行 (ステルスモードあり) ---
+        logger.info("--- Initial attempt (with Stealth Mode) ---")
+        apply_stealth_mode = True # 最初はステルスモードを適用
+        browser, context = await _launch_browser_and_context(
+            playwright, headless_mode, slow_motion, effective_default_timeout, apply_stealth=apply_stealth_mode
+        )
 
         logger.info("新しいページを作成します...")
         page = await context.new_page()
+        api_request_context = context.request # APIリクエストコンテキストはここで取得
 
         # 最初のページへのナビゲーション (タイムアウトを長めに設定)
-        initial_nav_timeout = max(effective_default_timeout * 3, 30000) # デフォルトの3倍か30秒の長い方
+        initial_nav_timeout = max(effective_default_timeout * 3, 30000)
         logger.info(f"最初のナビゲーション: {target_url} (タイムアウト: {initial_nav_timeout}ms)...")
-        # wait_until="load" は、load イベントが発火するまで待つ
-        # 他に "domcontentloaded", "networkidle" などがある
-        await page.goto(target_url, wait_until="load", timeout=initial_nav_timeout)
-        logger.info("最初のナビゲーション成功。アクションの実行を開始します...")
+        try:
+            await page.goto(target_url, wait_until="load", timeout=initial_nav_timeout)
+            initial_navigation_successful = True
+            logger.info("最初のナビゲーション成功。")
 
-        # --- アクション実行 (playwright_actions.pyの関数を呼び出し) ---
-        all_success, final_results = await execute_actions_async(
-            page, actions, api_request_context, effective_default_timeout
-        )
+            # --- ▼▼▼ エラーメッセージチェック ▼▼▼ ---
+            logger.info("Checking for stealth error message...")
+            try:
+                # エラーメッセージが表示されるまで少し待つ（必要に応じて調整）
+                await page.wait_for_timeout(1000)
+                # 指定されたセレクター内のテキストを取得
+                page_content = await page.locator(ERROR_MESSAGE_SELECTOR).inner_text(timeout=5000) # タイムアウト設定
+                # 改行も含めて完全一致で比較
+                if STEALTH_ERROR_MESSAGE in page_content:
+                     logger.warning(f"検出されたエラーメッセージ: \"{STEALTH_ERROR_MESSAGE}\"")
+                     logger.warning("Stealth mode may be blocked. Retrying without stealth mode...")
+                     retry_attempted = True
+                     initial_navigation_successful = False # リトライするので一旦失敗扱い
 
-        if all_success:
-            logger.info("すべてのステップが正常に完了しました。")
+                     # --- 現在のブラウザとコンテキストを閉じる ---
+                     logger.info("Closing current browser and context for retry...")
+                     if context: await context.close()
+                     if browser: await browser.close()
+                     browser, context, page = None, None, None # リセット
+
+                     # --- 2回目の試行 (ステルスモードなし) ---
+                     logger.info("--- Retry attempt (without Stealth Mode) ---")
+                     apply_stealth_mode = False # ステルスモードを無効化
+                     browser, context = await _launch_browser_and_context(
+                         playwright, headless_mode, slow_motion, effective_default_timeout, apply_stealth=apply_stealth_mode
+                     )
+                     logger.info("新しいページを作成します (リトライ)...")
+                     page = await context.new_page()
+                     api_request_context = context.request # APIリクエストコンテキストを再取得
+
+                     logger.info(f"再ナビゲーション: {target_url} (タイムアウト: {initial_nav_timeout}ms)...")
+                     await page.goto(target_url, wait_until="load", timeout=initial_nav_timeout)
+                     initial_navigation_successful = True # リトライ成功
+                     logger.info("再ナビゲーション成功。")
+                else:
+                    logger.info("Stealth error message not found.")
+            except PlaywrightTimeoutError:
+                 logger.warning(f"Timeout while checking for error message in '{ERROR_MESSAGE_SELECTOR}'. Assuming no error message found.")
+            except Exception as check_err:
+                logger.warning(f"Error checking for stealth message: {check_err}. Proceeding...", exc_info=True)
+            # --- ▲▲▲ エラーメッセージチェック ▲▲▲ ---
+
+        except (PlaywrightTimeoutError, PlaywrightError) as nav_error:
+            logger.error(f"最初のナビゲーションに失敗しました ({target_url}): {nav_error}")
+            # ナビゲーション失敗は致命的エラーとして扱う
+            raise nav_error # エラーを再送出して全体のエラーハンドリングに任せる
+
+        # --- ナビゲーション成功後、アクション実行 ---
+        if initial_navigation_successful and page:
+            logger.info("アクションの実行を開始します...")
+            all_success, final_results = await execute_actions_async(
+                page, actions, api_request_context, effective_default_timeout
+            )
+            if all_success:
+                logger.info("すべてのステップが正常に完了しました。")
+            else:
+                logger.error("自動化タスクの途中でエラーが発生しました。")
+        elif not initial_navigation_successful and retry_attempted:
+             # リトライ後のナビゲーションも失敗した場合
+             raise PlaywrightError(f"Navigation failed even after retrying without stealth mode for URL: {target_url}")
         else:
-            logger.error("自動化タスクの途中でエラーが発生しました。")
+             # 最初のナビゲーションが失敗し、リトライもされなかった場合（エラーチェック中のエラーなど）
+             raise PlaywrightError(f"Initial navigation failed and could not proceed for URL: {target_url}")
+
 
     # --- 全体的なエラーハンドリング ---
     except (PlaywrightTimeoutError, PlaywrightError, Exception) as e:
          error_msg_overall = f"Playwright 処理全体で予期せぬエラーが発生しました: {type(e).__name__} - {e}"
-         logger.error(error_msg_overall, exc_info=True) # スタックトレース付きログ
+         logger.error(error_msg_overall, exc_info=True)
          overall_error_screenshot_path = None
-         # エラー発生時のスクリーンショット (ページが存在すれば)
          if page and not page.is_closed():
               timestamp = time.strftime("%Y%m%d_%H%M%S")
               overall_error_ss_filename = f"error_overall_{timestamp}.png"
               overall_error_ss_path = os.path.join(config.DEFAULT_SCREENSHOT_DIR, overall_error_ss_filename)
               try:
                   os.makedirs(config.DEFAULT_SCREENSHOT_DIR, exist_ok=True)
-                  await page.screenshot(path=overall_error_ss_path, full_page=True, timeout=10000) # タイムアウト短め
+                  await page.screenshot(path=overall_error_ss_path, full_page=True, timeout=10000)
                   logger.info(f"全体エラー発生時のスクリーンショットを保存しました: {overall_error_ss_path}")
                   overall_error_screenshot_path = overall_error_ss_path
               except Exception as ss_e:
                   logger.error(f"全体エラー発生時のスクリーンショット保存に失敗しました: {ss_e}")
-         # 最終結果リストに全体エラー情報を追加 (既に追加されていなければ)
-         if not final_results or (isinstance(final_results[-1].get("status"), str) and final_results[-1].get("status") != "error") :
+         if not final_results or (isinstance(final_results[-1].get("status"), str) and final_results[-1].get("status") != "error"):
              error_details = {
-                 "step": "Overall Execution", # ステップ名を明確化
+                 "step": "Overall Execution",
                  "status": "error",
                  "message": str(e),
                  "full_error": error_msg_overall,
-                 "traceback": traceback.format_exc() # トレースバックも追加
+                 "traceback": traceback.format_exc()
              }
              if overall_error_screenshot_path:
                  error_details["error_screenshot"] = overall_error_screenshot_path
              final_results.append(error_details)
-         all_success = False # 全体エラーなので失敗扱い
+         all_success = False
 
     # --- クリーンアップ処理 ---
     finally:
         logger.info("クリーンアップ処理を開始します...")
-        # コンテキスト -> ブラウザ -> Playwright の順で閉じる
-        if context: # コンテキストが存在する場合のみ閉じる
+        if context:
             try:
                 await context.close()
                 logger.info("ブラウザコンテキストを閉じました。")
             except Exception as context_close_e:
-                # 既に閉じられている場合などのエラーは警告レベルに留める
-                # PlaywrightError: Context closed << などは無視して良い
                 if "closed" not in str(context_close_e).lower():
                     logger.warning(f"ブラウザコンテキストのクローズ中にエラーが発生しました (無視): {context_close_e}")
         else:
-             logger.debug("ブラウザコンテキストは存在しません (既に閉じられたか、作成されませんでした)。")
+             logger.debug("ブラウザコンテキストは存在しません。")
 
         if browser and browser.is_connected():
             try:
@@ -2723,8 +2798,6 @@ async def run_playwright_automation_async(
                 logger.info("Playwright を停止しました。")
             except Exception as playwright_stop_e:
                 logger.error(f"Playwright の停止中にエラーが発生しました: {playwright_stop_e}")
-
-        # イベントループのクリーンアップを促すための短い待機
         try:
             await asyncio.sleep(0.1)
         except Exception as sleep_e:
@@ -4602,29 +4675,27 @@ if __name__ == "__main__":
 
 
 - フォルダ名: .\json
-- ファイル名: cw_text.json
+- ファイル名: cw_all_content.json
 - 内容:
 {
   "target_url": "https://crowdworks.jp/public/jobs/search?category_id=228&order=new&page=1",
   "actions": [
     {
+      "memo": "表示待ち",
       "action": "wait_visible",
       "selector": "li[data-v-d4b91500]"
     },
     {
+      "memo": "href = url",
       "action": "get_all_attributes",
       "selector": "li a.wB71r",
       "attribute_name": "href"
     },
     {
+      "memo": "content = urlへアクセスしてbodyを取得",
       "action": "get_all_attributes",
       "selector": "li a.wB71r",
       "attribute_name": "content"
-    },
-    {
-      "action": "get_all_attributes",
-      "selector": "li a.wB71r",
-      "attribute_name": "pdf"
     }
   ]
 }
@@ -4640,11 +4711,13 @@ if __name__ == "__main__":
   "target_url": "https://crowdworks.jp/public/jobs/search?category_id=228&order=new&page=1",
   "actions": [
     {
+      "memo": "表示待ち",
       "action": "wait_visible",
       "selector": "li[data-v-d4b91500]",
       "wait_time_ms": 10000
     },
-    {
+    {      
+      "memo": "href = url",
       "action": "get_all_attributes",
       "selector": "li a.wB71r",
       "wait_time_ms": 5000,
@@ -4664,16 +4737,19 @@ if __name__ == "__main__":
   "target_url": "https://www.google.com/",
   "actions": [
     {
+      "memo": "検索ボックスに入力",
       "action": "input",
       "selector": "#APjFqb",
       "value": "meisenjp.com　会社概要"
     },
     {
+      "memo": "検索ボタンをクリック",
       "action": "click",
       "selector": "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b",
       "wait_time_ms": 5000
     },
     {
+      "memo": "content = urlに全てアクセスしてbodyの内容を取得する",
       "action": "get_all_attributes",
       "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
       "wait_time_ms": 5000,
@@ -4693,16 +4769,19 @@ if __name__ == "__main__":
   "target_url": "https://www.google.com/",
   "actions": [
     {
+      "memo": "検索ボックスに入力",
       "action": "input",
       "selector": "#APjFqb",
       "value": "bil.jp　会社概要"
     },
     {
+      "memo": "検索ボックス　クリック",
       "action": "click",
       "selector": "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b",
       "wait_time_ms": 5000
     },
     {
+      "memo": "content = 全てのurlにアクセスしてbodyを取得する",
       "action": "get_all_attributes",
       "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
       "wait_time_ms": 5000,
@@ -4722,21 +4801,25 @@ if __name__ == "__main__":
   "target_url": "https://www.google.com/",
   "actions": [
     {
+      "memo": "検索ボックスに入力",
       "action": "input",
       "selector": "#APjFqb",
       "value": "経済"
     },
     {
+      "memo": "検索　をクリック",
       "action": "click",
       "selector": "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b",
       "wait_time_ms": 5000
     },
     {
+      "memo": "検索結果の１件目をクリック",
       "action": "click",
       "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
       "wait_time_ms": 5000
     },
     {
+      "memo": "内容を取得",
       "action": "get_inner_text",
       "selector": "body",
       "wait_time_ms": 5000
@@ -4839,19 +4922,23 @@ if __name__ == "__main__":
   "target_url": "https://www.pmda.go.jp/PmdaSearch/iyakuSearch/",
   "actions": [
     {
+      "memo": "入力",
       "action": "input",
       "selector": "#txtName",
       "value": "パキシル"
     },
     {
+      "memo": "検索　クリック",
       "action": "click",
       "selector": "#ContentMainArea > div > div > p:nth-child(2) > span:nth-child(2) > input[type=image]"
     },
     {
+      "memo": "TEXT　クリック",
       "action": "click",
       "selector": "#ResultList > tbody > tr.TrColor01 > td:nth-child(4) > div > a:nth-child(2)"
     },
     {
+      "memo": "説明文を取得",
       "action": "get_inner_text",
       "selector": "#ResultSet > div:nth-child(2)"
     }
@@ -4869,6 +4956,7 @@ if __name__ == "__main__":
   "target_url": "https://qiita.com/",
   "actions": [
     {
+      "memo": "一覧の文字情報を取得",
       "action": "get_all_text_contents",
       "selector": "article h2 a"
     }
@@ -4880,28 +4968,42 @@ if __name__ == "__main__":
 
 
 - フォルダ名: .\json
-- ファイル名: sakai_inner-text.json
+- ファイル名: tdnet.json
 - 内容:
 {
-  "target_url": "https://duckduckgo.com/",
+  "target_url": "https://www.release.tdnet.info/index.html",
   "actions": [
     {
+      "action": "click",
+      "selector": "#searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)",
+      "wait_time_ms": 5000
+    },
+    {
+      "action": "select_option",
+      "selector": "#searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)",
+      "wait_time_ms": 5000,
+      "option_type": "index",
+      "option_value": 7
+    },
+    {
       "action": "input",
-      "selector": "#searchbox_input",
-      "value": "堺市　個人事業主"
+      "selector": "#freewordtxt",
+      "value": "不動産"
     },
     {
       "action": "click",
-      "selector": "#searchbox_homepage > div > div.searchbox_searchbox__bfbmv > div > button.iconButton_button__A_Uiu.searchbox_searchButton__LxebD > svg"
+      "selector": "#searchbtn > img"
     },
     {
-      "action": "click",
-      "selector": "#r1-0 > div.ikg2IXiCD14iVX7AdZo1 > h2 > a"
-    },
+      "action": "get_all_text_contents",
+      "selector": "tr td.title a"
+    },    
     {
-      "action": "get_inner_text",
-      "selector": "#basebgwrapall > div > div"
+      "action": "get_all_attributes",
+      "selector": ".title a",
+      "attribute_name": "href"
     }
+
   ]
 }
 
@@ -4947,6 +5049,50 @@ if __name__ == "__main__":
 
 
 - フォルダ名: .\json
+- ファイル名: tdnet_text url.json
+- 内容:
+{
+  "target_url": "https://www.release.tdnet.info/index.html",
+  "actions": [
+    {
+      "action": "click",
+      "selector": "#searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)",
+      "wait_time_ms": 5000
+    },
+    {
+      "action": "select_option",
+      "selector": "#searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)",
+      "wait_time_ms": 5000,
+      "option_type": "index",
+      "option_value": 7
+    },
+    {
+      "action": "input",
+      "selector": "#freewordtxt",
+      "value": "不動産"
+    },
+    {
+      "action": "click",
+      "selector": "#searchbtn > img"
+    },
+    {
+      "action": "get_all_text_contents",
+      "selector": "tr td.title a"
+    },    
+    {
+      "action": "get_all_attributes",
+      "selector": ".title a",
+      "attribute_name": "href"
+    }
+
+  ]
+}
+
+
+---
+
+
+- フォルダ名: .\json
 - ファイル名: tdnet_text.json
 - 内容:
 {
@@ -4977,48 +5123,6 @@ if __name__ == "__main__":
       "action": "get_all_text_contents",
       "selector": "tr td.title a"
     }
-  ]
-}
-
-
----
-
-
-- フォルダ名: .\json
-- ファイル名: tdnet_url.json
-- 内容:
-{
-  "target_url": "https://www.release.tdnet.info/index.html",
-  "actions": [
-    {
-      "action": "click",
-      "selector": "#searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)"
-    },
-    {
-      "action": "select_option",
-      "selector": "#searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)",
-      "option_type": "index",
-      "option_value": 7
-    },
-    {
-      "action": "input",
-      "selector": "#freewordtxt",
-      "value": "不動産"
-    },
-    {
-      "action": "click",
-      "selector": "#searchbtn > img"
-    },
-    {
-      "action": "get_inner_text",
-      "selector": "#maintable > tbody > tr:nth-child(1) > td.title > a"
-    },
-    {
-      "action": "get_all_attributes",
-      "selector": ".title a",
-      "attribute_name": "href"
-    }
-
   ]
 }
 

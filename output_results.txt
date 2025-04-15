@@ -1,0 +1,99 @@
+--- Web Runner 実行結果 ---
+
+--- Step 1: click (success) ---
+Selector: #searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)
+New page did not open within timeout.
+
+--- Step 2: select_option (success) ---
+Selector: #searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)
+Other Details:
+  option_type: index
+  option_value: 7
+
+--- Step 3: input (success) ---
+Selector: #freewordtxt
+Other Details:
+  value: 不動産
+
+--- Step 4: click (success) ---
+Selector: #searchbtn > img
+New page did not open within timeout.
+
+--- Step 5: get_all_text_contents (success) ---
+Selector: tr td.title a
+Result Text List (23 items):
+- コミットメントラインの契約期間延長に関するお知らせ
+- クラウドファンディングでのファンド組成に係る販売用不動産の取得に関するお知らせ
+- 資金の借入れに関するお知らせ
+- 2025年2月期　決算短信(REIT)
+- 2025年2月期（第23期）決算説明資料
+- 規約の一部変更及び役員の選任に関するお知らせ
+- （訂正）「住友林業株式会社による当社株式に対する公開買付けに関する意見表明のお知らせ」の一部訂正について
+- 販売用不動産取得のお知らせ
+- 販売用不動産の売却に関するお知らせ
+- 販売用不動産の売買契約の締結に関するお知らせ
+- 資金の借入れ（借換え）に関するお知らせ
+- 賃貸用不動産の保有目的の変更に関するお知らせ
+- 金利スワップ契約の締結に関するお知らせ
+- 資金の借入れに関するお知らせ
+- 国内資産の譲渡に関するお知らせ（ＨＦ東新宿レジデンス、ＨＦ東心斎橋レジデンス）
+- 本日付公表の適時開示に関する補足説明資料
+- 2025年5月期（第47期）及び2025年11月期（第48期）の運用状況の予想の修正に関するお知らせ
+- （訂正）「国内資産の取得及び譲渡に関するお知らせ」及び「本日付公表の適時開示に関する補足説明資料」の一部訂正に関するお知らせ
+- 国内不動産信託受益権の取得及び貸借並びに譲渡に関するお知らせ
+- 今後の成長戦略に関する説明資料
+- 子会社の事業の全部休止、開発用不動産の減損損失並びに株式交換関連費用の発生、及びこれらに伴う特別損失の計上に関するお知らせ
+- 販売用不動産の売却に関するお知らせ
+- 投資法人債（グリーンボンド）の発行に関するお知らせ
+
+--- Step 6: get_all_attributes (success) ---
+Selector: .title a
+Requested Attribute/Content: href
+Results (23 items found):
+  [1]
+    URL: https://www.release.tdnet.info/inbs/140120250415516016.pdf
+  [2]
+    URL: https://www.release.tdnet.info/inbs/140120250411513862.pdf
+  [3]
+    URL: https://www.release.tdnet.info/inbs/140120250415515850.pdf
+  [4]
+    URL: https://www.release.tdnet.info/inbs/140120250414514976.pdf
+  [5]
+    URL: https://www.release.tdnet.info/inbs/140120250414515595.pdf
+  [6]
+    URL: https://www.release.tdnet.info/inbs/140120250414515589.pdf
+  [7]
+    URL: https://www.release.tdnet.info/inbs/140120250414515451.pdf
+  [8]
+    URL: https://www.release.tdnet.info/inbs/140120250411513609.pdf
+  [9]
+    URL: https://www.release.tdnet.info/inbs/140120250410513021.pdf
+  [10]
+    URL: https://www.release.tdnet.info/inbs/140120250411513381.pdf
+  [11]
+    URL: https://www.release.tdnet.info/inbs/140120250411513190.pdf
+  [12]
+    URL: https://www.release.tdnet.info/inbs/140120250411513651.pdf
+  [13]
+    URL: https://www.release.tdnet.info/inbs/140120250411513868.pdf
+  [14]
+    URL: https://www.release.tdnet.info/inbs/140120250411513346.pdf
+  [15]
+    URL: https://www.release.tdnet.info/inbs/140120250410512822.pdf
+  [16]
+    URL: https://www.release.tdnet.info/inbs/140120250410512824.pdf
+  [17]
+    URL: https://www.release.tdnet.info/inbs/140120250410512830.pdf
+  [18]
+    URL: https://www.release.tdnet.info/inbs/140120250410512832.pdf
+  [19]
+    URL: https://www.release.tdnet.info/inbs/140120250409511912.pdf
+  [20]
+    URL: https://www.release.tdnet.info/inbs/140120250409511914.pdf
+  [21]
+    URL: https://www.release.tdnet.info/inbs/140120250410512673.pdf
+  [22]
+    URL: https://www.release.tdnet.info/inbs/140120250410512662.pdf
+  [23]
+    URL: https://www.release.tdnet.info/inbs/140120250409511555.pdf
+

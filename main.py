@@ -21,7 +21,10 @@ import playwright_launcher
 # --- エントリーポイント ---
 if __name__ == "__main__":
     # --- 1. ロギング設定 (単体実行用) ---
-    utils.setup_logging_for_standalone(config.LOG_FILE)
+    # --- ▼▼▼ 修正 ▼▼▼ ---
+    # ログファイルのパスを MCP_SERVER_LOG_FILE に変更
+    utils.setup_logging_for_standalone(config.MCP_SERVER_LOG_FILE)
+    # --- ▲▲▲ 修正 ▲▲▲ ---
 
     # --- 2. コマンドライン引数解析 ---
     parser = argparse.ArgumentParser(

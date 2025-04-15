@@ -1,16 +1,13 @@
-# --- ファイル: utils.py (修正版) ---
-"""
-JSON読み込み、PDF処理、ロギング設定などの汎用ヘルパー関数。
-Playwrightに直接依存しない関数群。
-"""
+# --- ファイル: utils.py (修正・テストコード追加版) ---
 import json
 import logging
-import os
+import os # ★★★ os モジュールをインポート ★★★
 import sys
 import asyncio
 import time
+import traceback # ★★★ traceback をインポート ★★★
 import fitz  # PyMuPDF
-from playwright.async_api import APIRequestContext, TimeoutError as PlaywrightTimeoutError # download_pdf_async のため必要
+from playwright.async_api import APIRequestContext, TimeoutError as PlaywrightTimeoutError
 from typing import Optional, Dict, Any, List
 from urllib.parse import urljoin
 
@@ -20,37 +17,73 @@ logger = logging.getLogger(__name__)
 
 def setup_logging_for_standalone(log_file_path: str = config.LOG_FILE):
     """Web-Runner単体実行用のロギング設定を行います。"""
-    # 既存のハンドラをすべて削除 (他のライブラリが追加したハンドラも消す)
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
+    log_level = logging.INFO # デフォルトレベル
 
-    # 出力ディレクトリがなければ作成
-    log_dir = os.path.dirname(log_file_path)
-    if log_dir and not os.path.exists(log_dir):
-        try:
-            os.makedirs(log_dir, exist_ok=True)
-        except Exception as e:
-            print(f"警告: ログディレクトリの作成に失敗しました ({log_dir}): {e}", file=sys.stderr)
+    # ルートロガーを取得
+    root_logger = logging.getLogger()
+    # 既存のハンドラをすべて削除
+    for handler in root_logger.handlers[:]:
+        root_logger.removeHandler(handler)
 
-    # 新しいハンドラを設定 (ファイルとコンソール)
-    handlers = [logging.StreamHandler()] # まずコンソールハンドラ
+    # フォーマッタ
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    # コンソールハンドラ
+    console_handler = logging.StreamHandler(sys.stdout) # 標準出力へ
+    console_handler.setFormatter(formatter)
+    handlers = [console_handler]
+    log_target = "Console"
+
+    # ファイルハンドラ
+    file_handler = None # ★★★ 初期化 ★★★
     try:
-        # ファイルハンドラを追加（エラー発生時はコンソールのみ）
+        log_dir = os.path.dirname(log_file_path)
+        if log_dir: # ディレクトリパスが空でない場合のみ処理
+            if not os.path.exists(log_dir):
+                try:
+                    os.makedirs(log_dir, exist_ok=True)
+                    print(f"DEBUG [utils]: Created directory '{log_dir}'") # デバッグ出力
+                except Exception as e:
+                    print(f"警告 [utils]: ログディレクトリ '{log_dir}' の作成に失敗しました: {e}", file=sys.stderr)
+                    # ディレクトリ作成失敗時はファイルログを諦める
+                    raise # エラーを再送出して try ブロックを抜ける
+            else:
+                print(f"DEBUG [utils]: Directory '{log_dir}' already exists.") # デバッグ出力
+
+        # ★★★ ファイルが開けるか先にテスト ★★★
+        try:
+            with open(log_file_path, 'a') as f:
+                print(f"DEBUG [utils]: Successfully opened (or created) '{log_file_path}' for appending.")
+        except Exception as e:
+             print(f"警告 [utils]: ログファイル '{log_file_path}' を開けません（権限確認）: {e}", file=sys.stderr)
+             raise # ファイルが開けない場合はハンドラ設定に進まない
+
         file_handler = logging.FileHandler(log_file_path, encoding='utf-8', mode='a') # 追記モード
-        file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+        file_handler.setFormatter(formatter)
         handlers.append(file_handler)
+        log_target += f" and File ('{log_file_path}')"
+        print(f"DEBUG [utils]: FileHandler created for '{log_file_path}'") # デバッグ出力
     except Exception as e:
-        print(f"警告: ログファイル '{log_file_path}' の設定に失敗しました: {e}", file=sys.stderr)
+        print(f"警告 [utils]: ログファイル '{log_file_path}' のハンドラ設定に失敗しました: {e}", file=sys.stderr)
+        # ファイル設定失敗時はコンソールのみで続行
 
+    # basicConfig を使ってハンドラとレベルを設定 (force=True で再設定可能に)
     logging.basicConfig(
-        level=logging.INFO, # INFOレベル以上を記録
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', # ログフォーマット
-        handlers=handlers
+        level=log_level,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', # basicConfig でのフォーマット指定も念のため
+        handlers=handlers,
+        force=True # ★★★ 既存設定を強制上書き ★★★
     )
-    # Playwrightの冗長なログを抑制 (必要に応じて調整)
+    # Playwrightの冗長なログを抑制
     logging.getLogger('playwright').setLevel(logging.WARNING)
-    logger.info(f"Standalone ロガー設定完了。ログファイル: {log_file_path if len(handlers) > 1 else 'コンソールのみ'}")
+    # ログ設定完了メッセージを出力（ハンドラ設定後なのでログに出力されるはず）
+    # getLogger(__name__) で utils ロガーを取得して出力
+    current_logger = logging.getLogger(__name__)
+    current_logger.info(f"Standalone logger setup complete. Level: {logging.getLevelName(log_level)}. Target: {log_target}")
+    print(f"DEBUG [utils]: Logging setup finished. Root handlers: {logging.getLogger().handlers}") # デバッグ出力
 
+# --- load_input_from_json, extract_text_from_pdf_sync, download_pdf_async, write_results_to_file は変更なし ---
+# (これらの関数は省略)
 def load_input_from_json(filepath: str) -> Dict[str, Any]:
     """指定されたJSONファイルから入力データを読み込む。"""
     logger.info(f"入力ファイル '{filepath}' の読み込みを開始します...")
@@ -344,3 +377,40 @@ def write_results_to_file(results: List[Dict[str, Any]], filepath: str):
         logger.error(f"結果ファイル '{filepath}' の書き込み中にIOエラーが発生しました: {e}")
     except Exception as e:
         logger.error(f"結果の処理またはファイル書き込み中に予期せぬエラーが発生しました: {e}", exc_info=True)
+
+
+# --- ▼▼▼ utils.py のテスト用コード（デバッグ目的で追加） ▼▼▼ ---
+if __name__ == "__main__":
+    print("--- Testing logging setup from utils.py ---")
+    # ★★★ テスト用のログファイルパスを MCP_SERVER_LOG_FILE に合わせる ★★★
+    TEST_LOG_FILE = config.MCP_SERVER_LOG_FILE
+    print(f"Test log file path: {TEST_LOG_FILE}")
+
+    # 既存のテストログファイルがあれば削除（追記モードなので必須ではないが、クリーンなテストのため）
+    if os.path.exists(TEST_LOG_FILE):
+        try:
+            os.remove(TEST_LOG_FILE)
+            print(f"Removed existing test log file: {TEST_LOG_FILE}")
+        except Exception as e:
+            print(f"Could not remove existing test log file: {e}")
+
+    # setup_logging_for_standalone をテストログファイルで呼び出す
+    try:
+        setup_logging_for_standalone(log_file_path=TEST_LOG_FILE)
+
+        # ロギングが機能するかテスト
+        test_logger = logging.getLogger("utils_test")
+        print("\nAttempting to log messages...")
+        test_logger.info("INFO message from utils_test.")
+        test_logger.warning("WARNING message from utils_test.")
+        test_logger.error("ERROR message from utils_test.")
+
+        print(f"\nLogging test complete.")
+        print(f"Please check the console output above and the content of the file: {os.path.abspath(TEST_LOG_FILE)}") # 絶対パス表示
+        print(f"Root logger handlers: {logging.getLogger().handlers}")
+
+    except Exception as e:
+        print(f"\n--- Error during logging test ---")
+        print(f"{type(e).__name__}: {e}")
+        traceback.print_exc()
+# --- ▲▲▲ utils.py のテスト用コード ▲▲▲ ---

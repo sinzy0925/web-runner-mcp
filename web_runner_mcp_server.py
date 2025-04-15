@@ -128,13 +128,19 @@ async def execute_web_runner(
         raise ToolError(f"Unhandled server error during execution. Details: {error_json}")
 
 # --- サーバー起動設定 (変更なし) ---
-if __name__ == "__main__":
-    import typer
+# --- サーバー起動設定 (ロギング修正版) ---
+# --- ファイル: web_runner_mcp_server.py (インデント確認・修正案) ---
 
-    cli_app = typer.Typer()
+# ... (ファイル前半の import 文やクラス定義など) ...
 
-    @cli_app.command()
-    def main(
+# --- サーバー起動設定 (ロギング修正版) ---
+if __name__ == "__main__":  # ← インデントレベル 0
+    import typer          # ← インデントレベル 1
+
+    cli_app = typer.Typer() # ← インデントレベル 1 であることを確認 ★
+
+    @cli_app.command()    # ← インデントレベル 1 であることを確認 ★
+    def main(             # ← インデントレベル 1
         transport: str = typer.Option(
             "stdio", "--transport", "-t",
             help="Transport protocol (stdio or sse)",
@@ -148,8 +154,10 @@ if __name__ == "__main__":
         log_level: str = typer.Option(
             "INFO", "--log-level", help="Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)"
         )
-    ):
+    ):                    # ← インデントレベル 1
         """Web-Runner MCP Server"""
+        # --- main 関数の実装 ---
+        # (引数バリデーション)
         transport_lower = transport.lower()
         if transport_lower not in ["stdio", "sse"]:
             print(f"エラー: 無効なトランスポートタイプ '{transport}'。'stdio' または 'sse' を指定してください。", file=sys.stderr)
@@ -161,31 +169,15 @@ if __name__ == "__main__":
             print(f"エラー: 無効なログレベル '{log_level}'。{valid_log_levels} のいずれかを指定してください。", file=sys.stderr)
             raise typer.Exit(code=1)
 
-        # --- MCPログ設定 (ファイル出力有効化) ---
-        mcp.settings.log_level = log_level_upper # type: ignore
-        configure_logging(mcp.settings.log_level)
-
-        # ファイルハンドラを追加
+        # (ロギング設定)
         try:
-            # 出力ディレクトリがなければ作成
-            log_dir = os.path.dirname(config.MCP_SERVER_LOG_FILE)
-            if log_dir and not os.path.exists(log_dir):
-                os.makedirs(log_dir, exist_ok=True)
-
-            file_handler = logging.FileHandler(config.MCP_SERVER_LOG_FILE, encoding='utf-8', mode='a') # 追記モード
-            # フォーマットを少し詳細に
-            file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - [%(process)d:%(threadName)s] %(name)s - %(message)s')
-            file_handler.setFormatter(file_formatter)
-            # ルートロガーに追加することで、すべてのロガーの出力がファイルに行くようにする
-            logging.getLogger().addHandler(file_handler)
-            # ルートロガーのレベルも設定 (これが全体の閾値になる)
+            print(f"DEBUG [server]: Attempting to set up logging using utils.setup_logging_for_standalone for {config.MCP_SERVER_LOG_FILE}")
+            utils.setup_logging_for_standalone(log_file_path=config.MCP_SERVER_LOG_FILE)
             logging.getLogger().setLevel(log_level_upper)
-            logger.info(f"ファイルロギングを有効化しました: {config.MCP_SERVER_LOG_FILE}")
-        except Exception as log_file_err:
-             logger.error(f"ファイルロギングの設定に失敗しました ({config.MCP_SERVER_LOG_FILE}): {log_file_err}")
-
-        logger.info(f"MCPロガーを設定しました。レベル: {log_level_upper}")
-        # --- ▲▲▲ MCPログ設定 (ファイル出力有効化) ▲▲▲ ---
+            logger.info(f"MCP Server logging configured via utils. Level: {log_level_upper}. File: {config.MCP_SERVER_LOG_FILE}")
+        except Exception as log_setup_err:
+            print(f"緊急エラー: サーバーのロギング設定に失敗しました: {log_setup_err}", file=sys.stderr)
+            raise typer.Exit(code=1)
 
         logger.info(f"Web-Runner MCP サーバーを {transport_lower} トランスポートで起動します...")
         if transport_lower == "sse":
@@ -194,6 +186,7 @@ if __name__ == "__main__":
              logger.info(f"SSEサーバーが http://{host}:{port} で待機します")
         # MCPサーバーを実行
         mcp.run(transport=transport_lower) # type: ignore
+        # --- main 関数の実装ここまで ---
 
     # Typerアプリケーションを実行
-    cli_app()
+    cli_app()             # ← インデントレベル 1 であることを確認 ★
