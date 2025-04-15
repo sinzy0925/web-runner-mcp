@@ -2,16 +2,19 @@
   "target_url": "https://www.google.com/",
   "actions": [
     {
+      "memo": "検索ボックスに入力",
       "action": "input",
       "selector": "#APjFqb",
       "value": "bil.jp　会社概要"
     },
     {
+      "memo": "検索ボックス　クリック",
       "action": "click",
       "selector": "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b",
       "wait_time_ms": 5000
     },
     {
+      "memo": "content = 全てのurlにアクセスしてbodyを取得する",
       "action": "get_all_attributes",
       "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
       "wait_time_ms": 5000,

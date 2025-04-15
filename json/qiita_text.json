@@ -2,6 +2,7 @@
   "target_url": "https://qiita.com/",
   "actions": [
     {
+      "memo": "一覧の文字情報を取得",
       "action": "get_all_text_contents",
       "selector": "article h2 a"
     }

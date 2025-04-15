@@ -2,21 +2,25 @@
   "target_url": "https://www.google.com/",
   "actions": [
     {
+      "memo": "検索ボックスに入力",
       "action": "input",
       "selector": "#APjFqb",
       "value": "経済"
     },
     {
+      "memo": "検索　をクリック",
       "action": "click",
       "selector": "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b",
       "wait_time_ms": 5000
     },
     {
+      "memo": "検索結果の１件目をクリック",
       "action": "click",
       "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
       "wait_time_ms": 5000
     },
     {
+      "memo": "内容を取得",
       "action": "get_inner_text",
       "selector": "body",
       "wait_time_ms": 5000

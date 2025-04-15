@@ -2,23 +2,21 @@
   "target_url": "https://crowdworks.jp/public/jobs/search?category_id=228&order=new&page=1",
   "actions": [
     {
+      "memo": "表示待ち",
       "action": "wait_visible",
       "selector": "li[data-v-d4b91500]"
     },
     {
+      "memo": "href = url",
       "action": "get_all_attributes",
       "selector": "li a.wB71r",
       "attribute_name": "href"
     },
     {
+      "memo": "content = urlへアクセスしてbodyを取得",
       "action": "get_all_attributes",
       "selector": "li a.wB71r",
       "attribute_name": "content"
-    },
-    {
-      "action": "get_all_attributes",
-      "selector": "li a.wB71r",
-      "attribute_name": "pdf"
     }
   ]
 }

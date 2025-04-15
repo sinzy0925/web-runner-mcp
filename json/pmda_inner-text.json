@@ -2,19 +2,23 @@
   "target_url": "https://www.pmda.go.jp/PmdaSearch/iyakuSearch/",
   "actions": [
     {
+      "memo": "入力",
       "action": "input",
       "selector": "#txtName",
       "value": "パキシル"
     },
     {
+      "memo": "検索　クリック",
       "action": "click",
       "selector": "#ContentMainArea > div > div > p:nth-child(2) > span:nth-child(2) > input[type=image]"
     },
     {
+      "memo": "TEXT　クリック",
       "action": "click",
       "selector": "#ResultList > tbody > tr.TrColor01 > td:nth-child(4) > div > a:nth-child(2)"
     },
     {
+      "memo": "説明文を取得",
       "action": "get_inner_text",
       "selector": "#ResultSet > div:nth-child(2)"
     }

@@ -2,11 +2,13 @@
   "target_url": "https://crowdworks.jp/public/jobs/search?category_id=228&order=new&page=1",
   "actions": [
     {
+      "memo": "表示待ち",
       "action": "wait_visible",
       "selector": "li[data-v-d4b91500]",
       "wait_time_ms": 10000
     },
-    {
+    {      
+      "memo": "href = url",
       "action": "get_all_attributes",
       "selector": "li a.wB71r",
       "wait_time_ms": 5000,
