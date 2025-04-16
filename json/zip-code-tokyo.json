@@ -1,0 +1,33 @@
+{
+  "target_url": "https://www.post.japanpost.jp/zipcode/",
+  "actions": [
+    {
+      "memo": "表示待ち",
+      "action": "wait_visible",
+      "selector": "#zipcode > div.wrapper > div.contWrap > div > div > div.inner > div.areaTxt.sp-t30 > ul > li:nth-child(3) > a:nth-child(1)",
+      "wait_time_ms": 10000
+    },
+    {
+      "memo": "東京をクリック",
+      "action": "click",
+      "selector": "#zipcode > div.wrapper > div.contWrap > div > div > div.inner > div.areaTxt.sp-t30 > ul > li:nth-child(3) > a:nth-child(1)",
+      "wait_time_ms": 5000
+    },
+    {
+      "memo": "昭島市をクリック",
+      "action": "click",
+      "selector": "#main-box > div > div:nth-child(9) > table > tbody > tr:nth-child(2) > th > a",
+      "wait_time_ms": 5000
+    },
+
+
+    {      
+      "memo": "href = url",
+      "action": "get_all_text_contents",
+      "selector": "table.prefList",
+      "wait_time_ms": 5000,
+      "attribute_name": "content"
+
+    }
+  ]
+}

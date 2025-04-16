@@ -1,0 +1,99 @@
+--- Web Runner 実行結果 ---
+
+--- Step 1: input (success) ---
+Selector: #APjFqb
+Other Details:
+  value: 東京都　昭島市　朝日町　会社概要
+
+--- Step 2: click (success) ---
+Selector: body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b
+New page did not open within timeout.
+
+--- Step 3: sleep (success) ---
+Other Details:
+  duration_sec: 2.0
+
+--- Step 4: get_all_attributes (success) ---
+Selector: #rso div.kb0PBd.A9Y9g.jGGQ5e span a
+Requested Attribute/Content: mail
+Results (10 items processed):
+  Extracted Emails (Unique Domains for this step):
+  - info@dilemma.co.jp
+  - info@realty-akishima.com
+  - info@tatsuki-k.com
+
+--- Step 5: click (success) ---
+Selector: #pnnext > span.oeN89d
+New page did not open within timeout.
+
+--- Step 6: sleep (success) ---
+Other Details:
+  duration_sec: 2.0
+
+--- Step 7: get_all_attributes (success) ---
+Selector: #rso div.kb0PBd.A9Y9g.jGGQ5e span a
+Requested Attribute/Content: mail
+Results (10 items processed):
+  Extracted Emails (Unique Domains for this step):
+  - info@artplancorp.jp
+  - asbestos@pandecon.net
+
+--- Step 8: click (success) ---
+Selector: #pnnext > span.oeN89d
+New page did not open within timeout.
+
+--- Step 9: sleep (success) ---
+Other Details:
+  duration_sec: 2.0
+
+--- Step 10: get_all_attributes (success) ---
+Selector: #rso div.kb0PBd.A9Y9g.jGGQ5e span a
+Requested Attribute/Content: mail
+Results (10 items processed):
+  Extracted Emails (Unique Domains for this step):
+    (No unique domain emails found for this step)
+
+--- Step 11: click (success) ---
+Selector: #pnnext > span.oeN89d
+New page did not open within timeout.
+
+--- Step 12: sleep (success) ---
+Other Details:
+  duration_sec: 2.0
+
+--- Step 13: get_all_attributes (success) ---
+Selector: #rso div.kb0PBd.A9Y9g.jGGQ5e span a
+Requested Attribute/Content: mail
+Results (10 items processed):
+  Extracted Emails (Unique Domains for this step):
+    (No unique domain emails found for this step)
+
+--- Step 14: click (success) ---
+Selector: #pnnext > span.oeN89d
+New page did not open within timeout.
+
+--- Step 15: sleep (success) ---
+Other Details:
+  duration_sec: 2.0
+
+--- Step 16: get_all_attributes (success) ---
+Selector: #rso div.kb0PBd.A9Y9g.jGGQ5e span a
+Requested Attribute/Content: mail
+Results (10 items processed):
+  Extracted Emails (Unique Domains for this step):
+  - contact@jrd.jp
+  - info-b@ouchi.co.jp
+
+--- Final Aggregated Summary ---
+
+Final Unique Domain Emails:
+[
+  "asbestos@pandecon.net",
+  "contact@jrd.jp",
+  "info-b@ouchi.co.jp",
+  "info@artplancorp.jp",
+  "info@dilemma.co.jp",
+  "info@realty-akishima.com",
+  "info@tatsuki-k.com"
+]
+

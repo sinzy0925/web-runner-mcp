@@ -578,6 +578,10 @@ async def execute_actions_async(
                         if attribute_name.lower() == 'mail':
                              action_result_details["extracted_emails"] = email_list_for_file # ドメインユニークなリスト
 
+                        if len(email_list_for_file) > 0:
+                            with open("output/server_mails.txt", "a", encoding="utf-8") as f:
+                                f.write('\n'.join(email_list_for_file) + '\n')  # 各要素を改行で結合して書き込む
+
                     # --- href, pdf, content, mail 以外の通常の属性取得 ---
                     else:
                         logger.info(f"指定された属性 '{attribute_name}' を取得します...")

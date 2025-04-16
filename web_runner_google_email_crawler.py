@@ -144,7 +144,10 @@ def process_results(
                     if isinstance(email, str) and '@' in email:
                         try:
                             domain = email.split('@', 1)[1].lower()
-                            if domain and domain not in processed_domains: collected_emails.append(email); processed_domains.add(domain); added_count += 1
+                            if domain and domain not in processed_domains: 
+                                collected_emails.append(email)
+                                processed_domains.add(domain)
+                                added_count += 1
                         except IndexError: pass
                 if added_count > 0: print(f"     -> うち {added_count} 件を最終リストに追加。")
             else: print("  -> このステップではメールアドレスは見つかりませんでした。")
@@ -193,6 +196,8 @@ async def main():
         try:
             output_path = Path(args.output_result); output_path.parent.mkdir(parents=True, exist_ok=True)
             final_summary = {"Final Unique Domain Emails": sorted(final_unique_emails)}
+            #with open("output_mail.txt", "a", encoding="utf-8") as f:
+            #    f.write('\n'.join(final_unique_emails) + '\n')  # 各要素を改行で結合して書き込む
             utils.write_results_to_file(all_steps_results_list, str(output_path), final_summary_data=final_summary)
             print("結果ファイルの書き込みが完了しました。")
         except Exception as e: print(f"[エラー] 結果ファイルの書き込みに失敗しました: {e}"); traceback.print_exc()
