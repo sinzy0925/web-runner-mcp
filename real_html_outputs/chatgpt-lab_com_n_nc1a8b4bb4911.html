@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html data-n-head="%7B%22lang%22:%7B%22ssr%22:%22ja-JP%22%7D%7D" data-n-head-ssr="" lang="ja-JP">
+ <head>
+  <title>
+   AIエージェント構築フレームワーク「Mastra」基本的な使い方を徹底解説！｜ChatGPT研究所
+  </title>
+ </head>
+ <body data-n-head="%7B%22style%22:%7B%22ssr%22:%22%22%7D%7D" style="">
+  <div data-server-rendered="true" id="__nuxt">
+   <div id="__layout">
+    <div>
+     <div>
+      <div class="o-navbarMessage" data-v-6e9284f6="">
+      </div>
+      <div data-fetch-key="data-v-7f26520d:0" data-v-7a3ab06c="" data-v-7f26520d="">
+       <div class="o-cautionBar" data-v-7f26520d="" data-v-ec3f6504="">
+       </div>
+       <main class="p-article" data-v-7f26520d="" data-v-8a71fdf2="">
+        <div class="p-article__articleWrapper" data-v-8a71fdf2="">
+         <article class="p-article__body" data-v-8a71fdf2="">
+          <div class="p-article__content" data-v-8a71fdf2="">
+           <div data-note-id="107544521" data-note-key="nc1a8b4bb4911" data-v-8a71fdf2="">
+            <div class="o-noteContentText o-noteContentText--font_sansserif o-noteContentText--device_windows" data-v-b824d214="">
+             <figure class="o-noteEyecatch" data-v-6cfcce9a="" data-v-b824d214="">
+              <img alt="見出し画像" class="a-image o-noteEyecatch__image" data-v-50e2377b="" data-v-6cfcce9a="" height="1005" src="https://assets.st-note.com/production/uploads/images/179800374/rectangle_large_type_2_42babf790237cc623002689480d9c05a.png?width=1200" width="1920"/>
+             </figure>
+             <div class="o-noteContentHeader o-noteContentText__header" data-v-05995860="" data-v-b824d214="">
+              <div class="o-noteContentHeader__titleContainer o-noteContentHeader__titleContainer--font_sansserif o-noteContentHeader__titleContainer--device_windows" data-v-05995860="">
+               <h1 class="o-noteContentHeader__title" data-v-05995860="">
+                AIエージェント構築フレームワーク「Mastra」基本的な使い方を徹底解説！
+               </h1>
+               <div class="o-noteContentHeader__titleAttachment" data-v-05995860="">
+                <div class="flex" data-v-05995860="">
+                 <span class="o-noteLikeV3" data-v-05995860="" data-v-5b0bbae8="">
+                  <span class="o-noteLikeV3__iconContainer" data-v-5b0bbae8="">
+                   <span class="o-noteLikeV3__iconContainerInner" data-v-5b0bbae8="">
+                    <button aria-label="スキ" aria-pressed="false" class="o-noteLikeV3__iconButton leading-none flex items-center" data-v-5b0bbae8="">
+                     <i class="o-noteLikeV3__icon a-icon a-icon--heart a-icon--size_mediumSmall" data-disable-focus="true" data-fill="lightGray" data-tooltip="スキ" data-v-5b0bbae8="">
+                     </i>
+                    </button>
+                   </span>
+                  </span>
+                  <button aria-label="64スキ この記事にスキをつけたユーザーを見る" class="text-text-secondary o-noteLikeV3__count o-noteLikeV3__count--mediumSmall" data-v-5b0bbae8="">
+                   64
+                  </button>
+                 </span>
+                </div>
+                <div class="flex items-center gap-2 justify-center flex-wrap shrink grow-0" data-v-05995860="">
+                </div>
+               </div>
+              </div>
+              <div class="o-noteContentHeader__creatorInfo" data-v-05995860="">
+               <a class="o-noteContentHeader__avatar a-link" data-v-05995860="" data-v-43e40ddc="" href="/">
+                <div class="m-avatar m-avatar--medium" data-v-05995860="" data-v-5c1c7fdc="">
+                 <img alt="ChatGPT研究所" class="a-image m-avatar__image lazyload" data-src="https://assets.st-note.com/production/uploads/images/108924588/profile_857ed2f48b992cf580d038cecb69d54f.png?width=60" data-v-50e2377b="" data-v-5c1c7fdc="" height="56" src="data:image/svg+xml;charset=utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22a%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2233%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23fff%22%2F%3E%3Cstop%20offset%3D%2267%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3CanimateTransform%20attributeName%3D%22gradientTransform%22%20type%3D%22translate%22%20from%3D%22-1%200%22%20to%3D%221%200%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath%20class%3D%22rect%22%20fill%3D%22url(%23a)%22%20d%3D%22M-100-100h300v300h-300z%22%2F%3E%3C%2Fsvg%3E" width="56"/>
+                </div>
+               </a>
+               <div class="o-noteContentHeader__info" data-v-05995860="">
+                <div class="o-noteContentHeader__name" data-v-05995860="">
+                 <a class="a-link" data-v-05995860="" data-v-43e40ddc="" href="/">
+                  ChatGPT研究所
+                 </a>
+                </div>
+                <span class="o-noteContentHeader__date" data-v-05995860="">
+                 <time data-v-05995860="" datetime="2025-03-21T14:40:19.000+09:00">
+                  2025年3月21日 14:40
+                 </time>
+                </span>
+               </div>
+               <div class="o-noteContentHeader__status" data-v-05995860="">
+               </div>
+              </div>
+             </div>
+             <div class="note-common-styles__textnote-body" data-name="body" data-v-b824d214="">
+              <h2 id="86a95b8c-f9ee-4a1d-b3db-08ece052de76" name="86a95b8c-f9ee-4a1d-b3db-08ece052de76">
+               はじめに
+              </h2>
+              <p id="291aed98-3da7-4f14-a743-d577542f7e38" name="291aed98-3da7-4f14-a743-d577542f7e38">
+               AI技術の進化が加速するなか、「AIエージェント」に注目が集まっています。
+               <br/>
+               AIエージェントとは、必要なタスクを自律的にこなし、業務やサービスを効率化する仕組みです。
+              </p>
+              <p id="12a0ca04-2519-4329-bc26-14b74f7e1bd5" name="12a0ca04-2519-4329-bc26-14b74f7e1bd5">
+               本記事では、そのAIエージェント構築のためのオープンソースフレームワーク「Mastra」を取り上げ、その概要や特長、具体的な使い方について解説します。
+              </p>
+              <table-of-contents id="02862c94-ce06-478e-9dfc-294e263f9745" name="02862c94-ce06-478e-9dfc-294e263f9745">
+               <br/>
+              </table-of-contents>
+              <h2 id="5285a93c-b01d-4006-a3ec-62c8099f4839" name="5285a93c-b01d-4006-a3ec-62c8099f4839">
+               Mastraとは？
+              </h2>
+              <p id="3b55201e-f4cc-4a59-b436-33b81a683b44" name="3b55201e-f4cc-4a59-b436-33b81a683b44">
+               Mastraは、TypeScriptベースで開発されたオープンソースのAIエージェント構築フレームワークです。
+              </p>
+              <figure id="be7a2e08-59e2-4489-a33e-13d303be8949" name="be7a2e08-59e2-4489-a33e-13d303be8949">
+               <img alt="" height="321" src="https://assets.st-note.com/img/1742377744-M9n0wyzBTfE4Ahloau8VSstR.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="5856098f-b5e8-43ca-8e80-4a98aef10b0c" name="5856098f-b5e8-43ca-8e80-4a98aef10b0c">
+               LLMを活用して、対話型のAIアプリケーションや業務の自動化を比較的手軽に実装できます。
+              </p>
+              <p id="b65bd91b-656a-4b58-9527-e6e26f76bfac" name="b65bd91b-656a-4b58-9527-e6e26f76bfac">
+               主な特長として、以下の点が挙げられます。
+              </p>
+              <ul id="8c4ff379-270b-4574-948e-2a1c5f776e53" name="8c4ff379-270b-4574-948e-2a1c5f776e53">
+               <li>
+                <p id="cbf79c4b-edd8-42c5-a22f-8007d851dfed" name="cbf79c4b-edd8-42c5-a22f-8007d851dfed">
+                 <strong>
+                  多彩な機能を標準提供
+                 </strong>
+                 <br/>
+                 エージェント、ワークフロー、RAG、評価機能といったAIアプリ構築に必要な要素がまとまっています。
+                </p>
+               </li>
+               <li>
+                <p id="01dc4bf1-b2e3-43ae-b2c7-d04fabc9131a" name="01dc4bf1-b2e3-43ae-b2c7-d04fabc9131a">
+                 <strong>
+                  複数のLLMに対応
+                 </strong>
+                 <br/>
+                 GPT、Claude、Geminiなど、さまざまなAIモデルを簡単に切り替えられます。設定の変更だけで、複数のプロバイダを活用できます。
+                </p>
+               </li>
+               <li>
+                <p id="0108286a-6b72-4dbf-8feb-39cd4a0c1343" name="0108286a-6b72-4dbf-8feb-39cd4a0c1343">
+                 <strong>
+                  TypeScript環境との親和性
+                 </strong>
+                 <br/>
+                 Node.js上で動作するためWebサービスとの連携がしやすく、既存のJavaScriptライブラリやAPIと組み合わせる事例も増えています。
+                </p>
+               </li>
+               <li>
+                <p id="f3ff08fd-1763-479d-981b-949b7fa8a52f" name="f3ff08fd-1763-479d-981b-949b7fa8a52f">
+                 <strong>
+                  直感的なCLIセットアップ
+                 </strong>
+                 <br/>
+                 コマンドを使うと、プロジェクトの雛形が対話形式で生成されます。APIキーの設定やサンプルエージェントの起動まで、短時間で試せる点が初心者に向いています。
+                </p>
+               </li>
+              </ul>
+              <figure id="49f12394-cca4-481b-9ff5-161271ca48c1" name="49f12394-cca4-481b-9ff5-161271ca48c1">
+               <img alt="" height="783" src="https://assets.st-note.com/img/1742379301-msx4qAEKXhYybngprHGZlM8o.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="641112df-18a7-4472-903a-6c22ea8bfc40" name="641112df-18a7-4472-903a-6c22ea8bfc40">
+               Mastraを導入することで、プログラミングの専門知識がなくても、比較的少ないステップでAIエージェントを開発できます。
+              </p>
+              <h2 id="aa19e04d-2330-4f61-b125-f9fcc1dd368c" name="aa19e04d-2330-4f61-b125-f9fcc1dd368c">
+               Mastraの機能
+              </h2>
+              <p id="635cc65e-d6a5-4859-9234-ace3dd5de888" name="635cc65e-d6a5-4859-9234-ace3dd5de888">
+               Mastraには、AIエージェント開発を支援する複数の機能がまとめられています。主な機能は次のとおりです。
+              </p>
+              <p id="948f47ad-e29b-4dec-8308-c52bfce86c91" name="948f47ad-e29b-4dec-8308-c52bfce86c91">
+               <strong>
+                ① エージェント（Agents）
+               </strong>
+               <br/>
+               テキスト生成モデルへの指示（プロンプト）や外部ツールとの連携を一元管理する仕組みです。ユーザーからの入力に対して、適切な回答やアクションを起こす役割を担います。
+              </p>
+              <p id="fc2a6029-b748-46f0-82c0-761511fe40db" name="fc2a6029-b748-46f0-82c0-761511fe40db">
+               <strong>
+                ② ツール（Tools）
+                <br/>
+               </strong>
+               外部のAPIやサービスを呼び出すための拡張機能です。例えば、計算処理ツールやデータベースアクセス機能などを用意し、必要に応じてエージェントに持たせることができます。
+              </p>
+              <p id="f1b8a7ae-50be-420e-ba2b-cf10856de25a" name="f1b8a7ae-50be-420e-ba2b-cf10856de25a">
+               <strong>
+                ③ ワークフロー（Workflows）
+               </strong>
+               <br/>
+               複数ステップで構成される業務の流れをあらかじめ定義し、エージェントが自動で実行できるようにします。RPA（ロボティック・プロセス・オートメーション）のように、一連の作業を効率化できます。
+              </p>
+              <p id="2346fa3b-6b4e-4bc0-a633-17e5a1067e39" name="2346fa3b-6b4e-4bc0-a633-17e5a1067e39">
+               <strong>
+                ④ RAG（Retrieval Augmented Generation）
+                <br/>
+               </strong>
+               社内FAQやドキュメントなどの情報源を検索し、回答文を生成するときに参照させる機能です。エージェントが自社独自の知識を活用する際に役立ちます。
+              </p>
+              <p id="a80b6e1c-1d63-4149-8861-3bb1eec4b3d9" name="a80b6e1c-1d63-4149-8861-3bb1eec4b3d9">
+               <strong>
+                ⑤ Evals（評価機能）
+               </strong>
+               <br/>
+               エージェントの回答や動作を客観的に評価する仕組みです。改善点を見つけたり、品質を一定水準に保つ目的で利用します。
+              </p>
+              <p id="1818a233-fc33-408b-9088-d12930c89170" name="1818a233-fc33-408b-9088-d12930c89170">
+               これらの機能を組み合わせることで、Mastraはチャットボットや業務支援AIなど、さまざまな分野に対応するAIエージェントを開発しやすくしています。
+              </p>
+              <p id="3b2a36d3-62cb-48bb-885b-b739a0bfdd27" name="3b2a36d3-62cb-48bb-885b-b739a0bfdd27">
+               AIモデルの能力を引き出すうえで、無理なく必要な機能を追加できる点が特長です。
+              </p>
+              <h2 id="82502d29-eb5d-4134-91fd-16a3909b1f5a" name="82502d29-eb5d-4134-91fd-16a3909b1f5a">
+               Mastraの特徴
+              </h2>
+              <p id="ea0b769f-dffc-44e8-a7c5-151e00a564d3" name="ea0b769f-dffc-44e8-a7c5-151e00a564d3">
+               以下では、他のフレームワークと比較しながら、Mastraの特長を4つの視点でまとめてみました。比較対象は「
+               <a href="https://chatgpt-lab.com/n/n371b4d5c9bdd" rel="noopener" target="_blank">
+                Vercel AI SDK
+               </a>
+               」「
+               <a href="https://chatgpt-lab.com/n/n93babbe7d066" rel="noopener" target="_blank">
+                OpenAI Agents SDK
+               </a>
+               」「
+               <a href="https://chatgpt-lab.com/n/naadddbed7ba4" rel="noopener" target="_blank">
+                LangChain
+               </a>
+               」です。
+              </p>
+              <figure id="59100f52-119f-47ab-8198-872fb60fe33f" name="59100f52-119f-47ab-8198-872fb60fe33f">
+               <img alt="" height="423" src="https://assets.st-note.com/img/1742376623-P4wYCzyb6gpnM05vOo2WQGU1.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <h3 id="61b25b28-1390-46dd-b12e-1267c510b38d" name="61b25b28-1390-46dd-b12e-1267c510b38d">
+               ポイントのまとめ
+              </h3>
+              <ul id="d31d8390-c7bd-4900-9e31-cae112989f9c" name="d31d8390-c7bd-4900-9e31-cae112989f9c">
+               <li>
+                <p id="a7cb81dd-d6dc-4093-8b89-b386c7b82f97" name="a7cb81dd-d6dc-4093-8b89-b386c7b82f97">
+                 <strong>
+                  Mastra
+                 </strong>
+                 は TypeScript を使った開発体験のしやすさと機能のまとまりが特長で、Webサービスとの相性が良いです。
+                </p>
+               </li>
+               <li>
+                <p id="cdd22be9-bac1-47ba-88b3-7574f4b2ab8a" name="cdd22be9-bac1-47ba-88b3-7574f4b2ab8a">
+                 <strong>
+                  Vercel AI SDK
+                 </strong>
+                 はフロントエンドを中心とするWeb開発者に好まれ、UI構築やサーバーレス連携がスムーズです。
+                </p>
+               </li>
+               <li>
+                <p id="db312d39-2246-4ec1-83d7-2ab5cbfda8e6" name="db312d39-2246-4ec1-83d7-2ab5cbfda8e6">
+                 <strong>
+                  OpenAI Agents SDK
+                 </strong>
+                 はOpenAIの機能を最大限活用したい場合に向いています。Pythonを基盤に手軽にエージェントを組めます。
+                </p>
+               </li>
+               <li>
+                <p id="790b3319-acdc-4c09-8c4b-18079925c75d" name="790b3319-acdc-4c09-8c4b-18079925c75d">
+                 <strong>
+                  LangChain
+                 </strong>
+                 は機能数が多く、幅広いサービスとの統合がしやすい反面、全体像を理解するのにやや学習時間を要します。
+                </p>
+               </li>
+              </ul>
+              <p id="d4ac8515-0ae7-4d78-844e-b161d8e586d0" name="d4ac8515-0ae7-4d78-844e-b161d8e586d0">
+               導入時の目的や既存の開発環境に合わせて、最適なフレームワークを選ぶとよいでしょう。Mastraの場合、プロジェクトの規模が大きくない段階から試しやすい点が魅力です。
+              </p>
+              <h2 id="29650d06-ea62-41b3-b1c3-36799ea01999" name="29650d06-ea62-41b3-b1c3-36799ea01999">
+               Mastraの使い方
+              </h2>
+              <p id="f7b8bc91-729d-459d-bf82-ad92816e0a97" name="f7b8bc91-729d-459d-bf82-ad92816e0a97">
+               Mastraを使ってAIエージェントを開発する際、基本的には以下の流れを踏みます。ここでは主な手順を4つに絞って紹介します。
+              </p>
+              <h3 id="79802981-6853-4200-b693-95d402c0f420" name="79802981-6853-4200-b693-95d402c0f420">
+               1. 前提条件
+              </h3>
+              <ul id="5e28d543-5c7a-41e8-9daa-542b11b87260" name="5e28d543-5c7a-41e8-9daa-542b11b87260">
+               <li>
+                <p id="c299b0d0-6fc5-4936-b08e-2341de63a990" name="c299b0d0-6fc5-4936-b08e-2341de63a990">
+                 <strong>
+                  Node.js（v20以上）のインストール
+                 </strong>
+                 <br/>
+                 あらかじめパソコンにNode.jsを入れておいてください。
+                </p>
+               </li>
+               <li>
+                <p id="8766cda3-c528-440c-ac2f-d1c04c00d621" name="8766cda3-c528-440c-ac2f-d1c04c00d621">
+                 <strong>
+                  利用するAIモデルのAPIキー
+                 </strong>
+                 <br/>
+                 例：OpenAIやAnthropicなど。事前にアカウントを作り、APIキーを取得しておく必要があります。
+                </p>
+               </li>
+              </ul>
+              <h3 id="d16080a3-e8b2-44bc-aba7-769469be21e9" name="d16080a3-e8b2-44bc-aba7-769469be21e9">
+               2. プロジェクトの作成
+              </h3>
+              <ul id="5ba5e35e-786e-4190-82b4-92f5089aaff4" name="5ba5e35e-786e-4190-82b4-92f5089aaff4">
+               <li>
+                <p id="bfa36bfc-65b6-4d87-91b1-8ba63de050db" name="bfa36bfc-65b6-4d87-91b1-8ba63de050db">
+                 <strong>
+                  npx create-mastra@latest の実行
+                 </strong>
+                </p>
+               </li>
+              </ul>
+              <p id="95ee5bb0-1751-45c5-abf7-7a5c863dc736" name="95ee5bb0-1751-45c5-abf7-7a5c863dc736">
+               ターミナルでコマンドを打つと、対話形式で設定を確認しながらプロジェクトの雛形を自動生成できます。
+              </p>
+              <pre data-name="preCode" id="67749972-8c65-4fba-bce0-df4e72397837" name="67749972-8c65-4fba-bce0-df4e72397837"><code class="hljs java" data-name="code">npx create-mastra<span class="hljs-meta">@latest</span></code></pre>
+              <p id="0234741b-e74c-41c6-b865-b0435a2f0270" name="0234741b-e74c-41c6-b865-b0435a2f0270">
+               最初にプロジェクトフォルダの名前を設定します。
+              </p>
+              <figure id="c4bd00e9-80e6-467d-b4a8-2f45ee083054" name="c4bd00e9-80e6-467d-b4a8-2f45ee083054">
+               <img alt="" height="166" src="https://assets.st-note.com/img/1742380129-xFwedvJLzg5RuboMfI28EjiG.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="ff7d875c-b78e-4963-bf7a-ad779cbd805c" name="ff7d875c-b78e-4963-bf7a-ad779cbd805c">
+               設定すると、プロジェクトの作成と必要なツールのインストールが行われます。
+              </p>
+              <figure id="6819999e-0a01-42bf-ae0f-0c15d1885282" name="6819999e-0a01-42bf-ae0f-0c15d1885282">
+               <img alt="" height="485" src="https://assets.st-note.com/img/1742380197-Qb6LvTjMJn2zuW1hDxESwg08.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="7575cc9a-9690-4c74-b66d-59afbe4c8aae" name="7575cc9a-9690-4c74-b66d-59afbe4c8aae">
+               Mastraのテンプレートファイルの格納場所を聞かれるので、特にこだわりがない場合は、デフォルトのsrc/を入力します。
+              </p>
+              <figure id="d41d80ef-6f0c-43a5-b0dd-f4e23b6ec856" name="d41d80ef-6f0c-43a5-b0dd-f4e23b6ec856">
+               <img alt="" height="143" src="https://assets.st-note.com/img/1742380251-XuThMIbkF0UxjdaDQ5wB1EtK.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="69c08a50-dc21-4901-916a-a5ec27ac241e" name="69c08a50-dc21-4901-916a-a5ec27ac241e">
+               途中、選択が必要な箇所では、矢印キーで移動して、スペースキーをクリックすることで選択することができます。今回はAgentsを選択します。
+              </p>
+              <figure id="a3e9aa36-505d-4587-9197-72417fe21b44" name="a3e9aa36-505d-4587-9197-72417fe21b44">
+               <img alt="" height="259" src="https://assets.st-note.com/img/1742379716-s98MAbp2WFaYzxXK0OuojSiG.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="b6d3afce-e3b1-4048-8311-19de7746a902" name="b6d3afce-e3b1-4048-8311-19de7746a902">
+               Add tools?もYesと回答します。
+              </p>
+              <figure id="8f704b74-0c77-4f39-918c-6114c214b606" name="8f704b74-0c77-4f39-918c-6114c214b606">
+               <img alt="" height="150" src="https://assets.st-note.com/img/1742380358-shoGIbZR1f6qQCyzcxYmeLKE.png" width="300"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="7f34b7dd-b62f-45c8-aeb8-98af4f009079" name="7f34b7dd-b62f-45c8-aeb8-98af4f009079">
+               ご自身が使いたいLLMプロバイダを選択します。
+              </p>
+              <figure id="e92bd9e3-ae69-4329-b57c-82a63c02ce7a" name="e92bd9e3-ae69-4329-b57c-82a63c02ce7a">
+               <img alt="" height="248" src="https://assets.st-note.com/img/1742380383-7RJKUcmaDXqTfL9e6W3wlivM.png" width="446"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="61b03151-e405-429e-a11a-32bff31275f2" name="61b03151-e405-429e-a11a-32bff31275f2">
+               APIキーの入力では、後から環境変数として設定することも可能なので、ご自身の状況に合わせて選択して下さい。
+              </p>
+              <p id="267c3a63-fcff-4334-9c46-270360245885" name="267c3a63-fcff-4334-9c46-270360245885">
+               環境変数としてAPIキーを設定する手順も後述しますので、Skip for nowを選択された方もご安心ください。
+              </p>
+              <figure id="5a35f915-5e9b-4927-b823-7b3efffa9d4a" name="5a35f915-5e9b-4927-b823-7b3efffa9d4a">
+               <img alt="" height="262" src="https://assets.st-note.com/img/1742379811-xdMPqgaUeSuc3s8FYZfH0bCD.png" width="510"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="2da69b52-1ead-4fad-9ee9-24b025441d92" name="2da69b52-1ead-4fad-9ee9-24b025441d92">
+               こちらはサンプルを見ながら実装したい方はYes、サンプルは必要ないよという方はNoを選択します。
+              </p>
+              <figure id="7a115eda-612a-4e67-a49e-12c6c65cd261" name="7a115eda-612a-4e67-a49e-12c6c65cd261">
+               <img alt="" height="154" src="https://assets.st-note.com/img/1742380767-4oYFsGqfTr08y2IxwRZ1AVmi.png" width="350"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="a5d3f439-85b1-4b7a-b79d-c505712a71e9" name="a5d3f439-85b1-4b7a-b79d-c505712a71e9">
+               CursorかWindsurfにMastra docs MCPサーバーをインストールするか質問されますが、ご自身の状況に合わせて選択ください。今回はデフォルトのSkip for nowを選択してインストールせず進みます。
+              </p>
+              <figure id="cf3f8a5d-ebdf-4c3f-80d0-657d617aa12b" name="cf3f8a5d-ebdf-4c3f-80d0-657d617aa12b">
+               <img alt="" height="100" src="https://assets.st-note.com/img/1742381032-6CFhNQXdGVDnc8aeuvzxJRW9.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="57378494-6d2a-4f73-8e64-56915541e813" name="57378494-6d2a-4f73-8e64-56915541e813">
+               上記まで質問に答えると、Mastraのインストールが完了します。
+              </p>
+              <figure id="666b8634-5b4e-4025-9112-07ad15279df7" name="666b8634-5b4e-4025-9112-07ad15279df7">
+               <img alt="" height="381" src="https://assets.st-note.com/img/1742381056-UYISeP572avAJGt8ji0LVXEW.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <ul id="9eb562c3-3e0c-4722-a5c7-4618ad01effa" name="9eb562c3-3e0c-4722-a5c7-4618ad01effa">
+               <li>
+                <p id="b1b14dff-919d-4ff4-a087-6ba4b813ce9a" name="b1b14dff-919d-4ff4-a087-6ba4b813ce9a">
+                 <strong>
+                  雛形に含まれるファイルの確認
+                 </strong>
+                </p>
+               </li>
+              </ul>
+              <p id="368746c8-9c9a-427d-9cd2-70ad4f7aa8cf" name="368746c8-9c9a-427d-9cd2-70ad4f7aa8cf">
+               生成されたフォルダを開くと、src/mastra/agents/ などのディレクトリがあり、エージェントのコードを書きやすい構成になっています。
+              </p>
+              <figure id="02a4ee16-d1eb-4621-ae6f-2890d2fae117" name="02a4ee16-d1eb-4621-ae6f-2890d2fae117">
+               <img alt="" height="439" src="https://assets.st-note.com/img/1742381112-JzKrnCRvDHh5i28cGu9SWAON.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <h3 id="9e1f0879-ad6a-4b9b-a7bf-0a7cfb9d8d14" name="9e1f0879-ad6a-4b9b-a7bf-0a7cfb9d8d14">
+               3. APIキーの設定
+              </h3>
+              <ul id="0119857d-417a-40b8-9e4a-1bc40d30f0a3" name="0119857d-417a-40b8-9e4a-1bc40d30f0a3">
+               <li>
+                <p id="b66c25d5-fa8c-46cf-aa81-f22e9206a0b3" name="b66c25d5-fa8c-46cf-aa81-f22e9206a0b3">
+                 <strong>
+                  .env ファイルの編集
+                 </strong>
+                </p>
+               </li>
+              </ul>
+              <p id="de61a0c2-0e9c-4d5c-900d-172f77ee6f67" name="de61a0c2-0e9c-4d5c-900d-172f77ee6f67">
+               プロジェクト直下にある（あるいは新規作成した）.env.development に、取得したAPIキーを書き込みます。今回はGoogleのGeminiを使っていきます。
+              </p>
+              <figure id="0dabb3db-86c4-411e-a2e7-a39e362ef977" name="0dabb3db-86c4-411e-a2e7-a39e362ef977">
+               <img alt="" height="408" src="https://assets.st-note.com/img/1742381269-T8xnM1XOJWvAuHD5mLhewkYp.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <figure id="20fdc1c2-572c-4b7c-a05a-555f9167eb46" name="20fdc1c2-572c-4b7c-a05a-555f9167eb46">
+               <blockquote>
+                <p id="c99ce989-fbc1-4149-a006-19d04ee41947" name="c99ce989-fbc1-4149-a006-19d04ee41947">
+                 <strong>
+                  ※他のモデルを使う場合
+                  <br/>
+                 </strong>
+                 AnthropicやOpenAIなどを使うなら、対応するキーや設定値を追記します。
+                </p>
+               </blockquote>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <h3 id="ac45ef19-919e-43a5-bd28-c8ce0fa9307a" name="ac45ef19-919e-43a5-bd28-c8ce0fa9307a">
+               4. 開発サーバーの起動とテスト
+              </h3>
+              <ul id="726f223f-ebc8-4bc7-82ef-3f8155a00888" name="726f223f-ebc8-4bc7-82ef-3f8155a00888">
+               <li>
+                <p id="547161c1-d9b2-4122-9751-9294ddce985c" name="547161c1-d9b2-4122-9751-9294ddce985c">
+                 <strong>
+                  npm run dev の実行
+                 </strong>
+                </p>
+               </li>
+              </ul>
+              <p id="3cabc450-9455-4db8-850e-b02240393949" name="3cabc450-9455-4db8-850e-b02240393949">
+               コマンドを打つと、Mastra専用のサーバーが起動します。コンソールに表示されるURLがエージェントとの通信窓口です。
+              </p>
+              <pre data-name="preCode" id="ad02fdd0-23a0-4697-b22a-dbedf59ddfa3" name="ad02fdd0-23a0-4697-b22a-dbedf59ddfa3"><code class="hljs javascript" data-name="code">cd <span class="hljs-string">"あなたが設定したプロジェクトフォルダ"</span>
+npm run dev</code></pre>
+              <p id="884a5801-1076-4df2-b41d-14c6fcf7ac87" name="884a5801-1076-4df2-b41d-14c6fcf7ac87">
+               写真のように先ほどのターミナルに記載されています。
+              </p>
+              <figure id="70dc07ac-5cd9-4686-8596-be384f826740" name="70dc07ac-5cd9-4686-8596-be384f826740">
+               <img alt="" height="182" src="https://assets.st-note.com/img/1742381342-kRaoe9D2HCXjg8TOF1Bz0Ld5.png" width="478"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="06205706-807f-40fd-8390-9ee925a942e7" name="06205706-807f-40fd-8390-9ee925a942e7">
+               コマンドを実行すると、サーバーが起動します。
+              </p>
+              <figure id="dbc088c7-f777-401a-8a28-41f951472f3b" name="dbc088c7-f777-401a-8a28-41f951472f3b">
+               <img alt="" height="399" src="https://assets.st-note.com/img/1742381403-XrwJqHu3xa9Vvin6AWBZNL81.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="cea27788-ff22-4ded-8ffe-5e2704d9e2df" name="cea27788-ff22-4ded-8ffe-5e2704d9e2df">
+               上記の写真に記載されている、http://localhost:4111を開くと、サンプルでインストールされたWeather Agentsのチャットインターフェースが開きます。
+              </p>
+              <figure id="1cfce6f4-dd0a-46c5-809f-79de34f96e5e" name="1cfce6f4-dd0a-46c5-809f-79de34f96e5e">
+               <img alt="" height="432" src="https://assets.st-note.com/img/1742381606-b2M5gDEstUQvJp6fYRemAkSX.png?width=1200" width="620"/>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <p id="67301a80-57da-4405-8811-e3d69da78e46" name="67301a80-57da-4405-8811-e3d69da78e46">
+               以上の4つのステップを踏めば、基本的なAIエージェント開発環境は整います。
+              </p>
+              <p id="fb318229-4aab-4e4a-967b-0c98545c5b2d" name="fb318229-4aab-4e4a-967b-0c98545c5b2d">
+               実際の業務に合わせてエージェントのコードやワークフローをカスタマイズし、必要なら外部のAPIツールを組み込むことで、より複雑な処理も自動化できます。
+              </p>
+              <figure id="d1d0a593-6259-422e-8cb4-163303d39473" name="d1d0a593-6259-422e-8cb4-163303d39473">
+               <a href="https://chatgpt-lab.com/membership?from=self" rel="noopener" target="_blank">
+                <img alt="" height="324" src="https://assets.st-note.com/img/1742534858-PU2SV7jcoOT31JYmnetLfR8w.png?width=1200" width="620"/>
+               </a>
+               <figcaption>
+               </figcaption>
+              </figure>
+              <h2 id="1031a403-6f58-48d9-a0db-3ec90211b4d2" name="1031a403-6f58-48d9-a0db-3ec90211b4d2">
+               MastraでAIエージェントを作成
+              </h2>
+              <p id="e50d600f-744b-429c-9ed8-cae760f04248" name="e50d600f-744b-429c-9ed8-cae760f04248">
+               ユーザーの質問に対して、クエリを生成、Firecrawlで検索して情報を収集してユーザーの質問に回答するAIエージェントを例として取り上げます。
+              </p>
+             </div>
+             <div data-v-b824d214="" style="display:none;">
+              <button class="a-button" data-disable-focus="false" data-file-widget="fileDownloadButton" data-size="small" data-type="primary" data-v-76f5188b="" data-width="fit" type="button" undefined="">
+               <div class="a-button__inner" data-v-76f5188b="">
+                <i class="a-icon a-icon--fileDownload a-icon--size_small">
+                </i>
+                ダウンロード
+               </div>
+              </button>
+             </div>
+             <button aria-label="コードをコピー" class="a-button m-copyCodeButton m-iconButton" data-disable-focus="false" data-size="small" data-type="none" data-v-1f4b2e10="" data-v-76f5188b="" style="display:none;" type="button">
+              <div class="a-button__inner" data-v-76f5188b="">
+               <span data-v-1f4b2e10="">
+                <span class="visually-hidden" data-v-1f4b2e10="">
+                 copy
+                </span>
+                <i class="a-icon a-icon--copy a-icon--size_small" data-v-1f4b2e10="">
+                </i>
+               </span>
+              </div>
+             </button>
+            </div>
+           </div>
+           <div class="relative" data-v-8a71fdf2="">
+            <div class="absolute pointer-events-none bottom-0 z-[1] w-full h-12 block p-article__gradient" data-v-8a71fdf2="">
+            </div>
+           </div>
+          </div>
+          <div class="p-article__paywall" data-v-8a71fdf2="">
+           <div class="o-paywall" data-fetch-key="0" data-v-8a71fdf2="">
+            <div class="o-accordionPaywall" data-v-3ca0bd99="">
+             <div data-v-3ca0bd99="" data-v-ca14f772="">
+              <h2 class="text-base font-bold mb-4 text-center after:block after:w-full after:h-px after:-mt-3 after:content-[''] after:border-t after:border-dashed after:border-border-strong" data-v-ca14f772="">
+               <span class="m-paywallHeader__label" data-v-ca14f772="">
+                ここから先は
+               </span>
+              </h2>
+              <div class="text-center py-2" data-v-ca14f772="">
+               <div class="text-text-secondary text-xs" data-v-ca14f772="">
+                5,657字
+                <span class="mx-1">
+                 /
+                </span>
+                3画像
+               </div>
+              </div>
+             </div>
+             <div class="o-accordionPaywall__body" data-v-3ca0bd99="">
+              <section class="o-accordionPaywall__item is-active" data-v-3ca0bd99="">
+               <h3 class="o-accordionPaywall__itemHeaderWrapper" data-v-3ca0bd99="">
+                <button aria-expanded="true" aria-owns="membershipNote" class="o-accordionPaywall__itemHeader" data-v-3ca0bd99="" type="button">
+                 <span class="o-accordionPaywall__itemHeaderInner" data-v-3ca0bd99="">
+                  <span class="o-accordionPaywall__title" data-v-3ca0bd99="">
+                   メンバーシップ
+                  </span>
+                  <span class="o-accordionPaywall__price" data-v-3ca0bd99="">
+                   <span data-v-3ca0bd99="">
+                    ¥
+                   </span>
+                   <span class="o-accordionPaywall__priceValue" data-v-3ca0bd99="">
+                    3,980~
+                   </span>
+                   <span data-v-3ca0bd99="">
+                    /月
+                   </span>
+                  </span>
+                  <i class="o-accordionPaywall__arrow a-icon a-icon--expandmore a-icon--size_medium" data-v-3ca0bd99="">
+                  </i>
+                 </span>
+                </button>
+               </h3>
+               <div class="o-accordionPaywall__itemBody" data-v-3ca0bd99="" id="membershipNote">
+                <div class="o-accordionPaywall__itemSelect" data-v-3ca0bd99="">
+                 <p class="o-accordionPaywall__description mb-2" data-v-3ca0bd99="">
+                  ■ AGIラボとは？
+AGIラボは、GPTs、Dify、Createなどの最先端AI技術に特化したメ…
+                 </p>
+                 <div class="mb-2" data-v-3ca0bd99="">
+                  <a class="a-button fn" data-disable-focus="false" data-size="small" data-type="basic" data-v-3ca0bd99="" data-v-4fdab92e="" href="https://chatgpt-lab.com/membership/join" rel="noopener" target="_blank">
+                   <div class="a-button__inner" data-v-3ca0bd99="" data-v-4fdab92e="">
+                    このメンバーシップの詳細
+                   </div>
+                  </a>
+                 </div>
+                 <div data-v-3ca0bd99="">
+                  <div class="m-membershipSummary first-of-type:mt-0 mt-2 p-4 border border-border-default rounded-[4px]" data-v-471ab6b9="">
+                   <div class="m-membershipSummary__header" data-v-471ab6b9="">
+                    <h4 class="m-membershipSummary__headerTitle" data-v-471ab6b9="">
+                     AGIラボ
+                    </h4>
+                   </div>
+                   <div class="m-membershipSummary__body" data-v-471ab6b9="">
+                    <a aria-label="ChatGPT研究所 AGIラボ 月額3980円" class="m-membershipSummary__link a-link" data-v-43e40ddc="" data-v-471ab6b9="" href="/membership/join">
+                    </a>
+                    <div aria-label="月額3980円" class="flex items-start mb-2 gap-2" data-v-471ab6b9="">
+                     <span class="text-sm font-bold text-text-success whitespace-nowrap" data-v-471ab6b9="">
+                      ¥3,980 / 月
+                     </span>
+                     <div class="flex flex-wrap gap-2 self-center" data-v-471ab6b9="">
+                     </div>
+                    </div>
+                    <div class="m-readMoreContainer" data-v-36484ca0="" data-v-471ab6b9="" style="--max-height:240px;--sp-max-height:40px;">
+                     <div class="m-readMoreContainer__detail overflow-hidden transition-all duration-400 ease-inOut" data-v-36484ca0="">
+                      <p class="m-membershipSummary__description" data-v-36484ca0="" data-v-471ab6b9="">
+                       300以上の過去記事から最新の記事まで全て読み放題。AGIラボはGPTs  Difyなど、最前線のAI活用情報に特化したマガジン・コミュニティです。実践的なAI活用術を含む記事で得られる知見で業務の効率化、自動化から創造的なタスクまですぐに活用可能。生成AI革命の最前線をお届け。
+                      </p>
+                      <ul aria-label="特典一覧" class="mb-4 m-BenefitAppealTexts flex flex-col gap-[0.125rem]" data-v-471ab6b9="">
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         メンバー限定コミュニティに参加できます
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         300以上のオリジナル過去記事へのアクセス
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         メンバー限定の会員証が発行されます
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         活動期間に応じたバッジを表示
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         メンバー限定掲示板を閲覧できます
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         メンバー特典記事を閲覧できます
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         メンバー特典マガジンを閲覧できます
+                        </span>
+                       </li>
+                      </ul>
+                     </div>
+                    </div>
+                    <div class="m-membershipSummary__footer mt-4" data-v-471ab6b9="">
+                     <div class="m-membershipPurchasingButton" data-v-471ab6b9="" data-v-898fecf0="">
+                      <div data-v-898fecf0="">
+                       <div class="m-before-purchasing-button" data-v-4e9f5e66="" data-v-898fecf0="">
+                        <button class="a-button" data-disable-focus="false" data-size="medium" data-type="primary" data-v-4e9f5e66="" data-v-76f5188b="" data-width="fit" type="button">
+                         <div class="a-button__inner" data-v-76f5188b="">
+                          参加手続きへ
+                         </div>
+                        </button>
+                       </div>
+                      </div>
+                     </div>
+                    </div>
+                   </div>
+                  </div>
+                  <div class="m-membershipSummary first-of-type:mt-0 mt-2 p-4 border border-border-default rounded-[4px]" data-v-471ab6b9="">
+                   <div class="m-membershipSummary__header" data-v-471ab6b9="">
+                    <h4 class="m-membershipSummary__headerTitle" data-v-471ab6b9="">
+                     AGIラボPRO | 法人契約プラン
+                    </h4>
+                   </div>
+                   <div class="m-membershipSummary__body" data-v-471ab6b9="">
+                    <a aria-label="ChatGPT研究所 AGIラボPRO | 法人契約プラン 月額100000円" class="m-membershipSummary__link a-link" data-v-43e40ddc="" data-v-471ab6b9="" href="/membership/join">
+                    </a>
+                    <div aria-label="月額100000円、人数制限あり" class="flex items-start mb-2 gap-2" data-v-471ab6b9="">
+                     <span class="text-sm font-bold text-text-success whitespace-nowrap" data-v-471ab6b9="">
+                      ¥100,000 / 月
+                     </span>
+                     <div class="flex flex-wrap gap-2 self-center" data-v-471ab6b9="">
+                      <small class="m-colorLabel" data-size="small" data-type="basic" data-v-471ab6b9="" data-v-863f4dce="">
+                       人数制限あり
+                      </small>
+                     </div>
+                    </div>
+                    <div class="m-readMoreContainer" data-v-36484ca0="" data-v-471ab6b9="" style="--max-height:240px;--sp-max-height:40px;">
+                     <div class="m-readMoreContainer__detail overflow-hidden transition-all duration-400 ease-inOut" data-v-36484ca0="">
+                      <p class="m-membershipSummary__description" data-v-36484ca0="" data-v-471ab6b9="">
+                       AGIラボPRO 法人プランでは、AI活用に必要な知識やノウハウを、最適なコストで継続的に提供します。企業向けに豊富な記事をPDF形式でまとめており、すべてをダウンロードして社内で自由に展開できます。また、Slackを通じた専門家への相談も可能です。
+                      </p>
+                      <ul aria-label="特典一覧" class="mb-4 m-BenefitAppealTexts flex flex-col gap-[0.125rem]" data-v-471ab6b9="">
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         全記事のPDFダウンロード権
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         法人向けコミュニティ（Slack）へのアクセス権
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         メンバー限定の会員証が発行されます
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         活動期間に応じたバッジを表示
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         メンバー限定掲示板を閲覧できます
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         メンバー特典記事を閲覧できます
+                        </span>
+                       </li>
+                       <li class="flex items-start break-all text-xs">
+                        <div class="mr-2 flex items-center justify-center">
+                         <i class="a-svgIcon a-svgIcon--medium">
+                         </i>
+                        </div>
+                        <span class="self-center">
+                         メンバー特典マガジンを閲覧できます
+                        </span>
+                       </li>
+                      </ul>
+                     </div>
+                    </div>
+                    <div class="m-membershipSummary__footer mt-4" data-v-471ab6b9="">
+                     <div class="m-membershipPurchasingButton" data-v-471ab6b9="" data-v-898fecf0="">
+                      <div data-v-898fecf0="">
+                       <div class="m-before-purchasing-button" data-v-4e9f5e66="" data-v-898fecf0="">
+                        <button class="a-button" data-disable-focus="false" data-size="medium" data-type="primary" data-v-4e9f5e66="" data-v-76f5188b="" data-width="fit" type="button">
+                         <div class="a-button__inner" data-v-76f5188b="">
+                          参加手続きへ
+                         </div>
+                        </button>
+                       </div>
+                      </div>
+                     </div>
+                    </div>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+               </div>
+              </section>
+             </div>
+             <div class="my-6" data-v-3ca0bd99="">
+              <a class="a-link a-link--underline text-sm flex justify-center items-center fn" data-type="none" data-v-4fdab92e="" href="https://note.com/cd/login?redirect_to=https%3A%2F%2Fchatgpt-lab.com%2Fn%2Fnc1a8b4bb4911%3Fgs%3D36f47f78884b" rel="nofollow" target="_self" undefined="">
+               ログイン
+              </a>
+             </div>
+             <div class="mt-3 mb-4" data-v-3ca0bd99="">
+              <div class="mx-auto w-fit pt-2" data-v-3ca0bd99="" data-v-8a71fdf2="">
+               <div data-v-0c9444a8="" data-v-8a71fdf2="" is-color="true">
+                <div class="m-contentRaters__body gap-x-2 gap-x-2" data-v-0c9444a8="">
+                 <div class="m-contentRaters__list" data-v-0c9444a8="">
+                  <div class="m-avatars" data-v-0c9444a8="" data-v-5162eff2="">
+                   <button class="m-avatars__list" data-v-5162eff2="" tabindex="0">
+                    <div class="m-avatars__item" data-v-5162eff2="">
+                     <div class="m-avatar m-avatar--small" data-v-5162eff2="" data-v-5c1c7fdc="">
+                      <img alt="ないとっち/AIで世界をハッピーに！" class="a-image m-avatar__image lazyload" data-src="https://assets.st-note.com/production/uploads/images/122460295/profile_0d01b6d5d702b359cf64802af60124fc.jpeg?fit=bounds&amp;format=jpeg&amp;quality=85&amp;width=330" data-v-50e2377b="" data-v-5c1c7fdc="" height="56" src="data:image/svg+xml;charset=utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22a%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2233%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23fff%22%2F%3E%3Cstop%20offset%3D%2267%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3CanimateTransform%20attributeName%3D%22gradientTransform%22%20type%3D%22translate%22%20from%3D%22-1%200%22%20to%3D%221%200%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath%20class%3D%22rect%22%20fill%3D%22url(%23a)%22%20d%3D%22M-100-100h300v300h-300z%22%2F%3E%3C%2Fsvg%3E" width="56"/>
+                     </div>
+                    </div>
+                    <div class="m-avatars__item" data-v-5162eff2="">
+                     <div class="m-avatar m-avatar--small" data-v-5162eff2="" data-v-5c1c7fdc="">
+                      <img alt="ディオ｜僕たちはどう生きるか" class="a-image m-avatar__image lazyload" data-src="https://assets.st-note.com/production/uploads/images/165939631/profile_b710f2f5fbcf377bab7cb06dc723ce7c.png?fit=bounds&amp;format=jpeg&amp;quality=85&amp;width=330" data-v-50e2377b="" data-v-5c1c7fdc="" height="56" src="data:image/svg+xml;charset=utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22a%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2233%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23fff%22%2F%3E%3Cstop%20offset%3D%2267%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3CanimateTransform%20attributeName%3D%22gradientTransform%22%20type%3D%22translate%22%20from%3D%22-1%200%22%20to%3D%221%200%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath%20class%3D%22rect%22%20fill%3D%22url(%23a)%22%20d%3D%22M-100-100h300v300h-300z%22%2F%3E%3C%2Fsvg%3E" width="56"/>
+                     </div>
+                    </div>
+                    <div class="m-avatars__item" data-v-5162eff2="">
+                     <div class="m-avatar m-avatar--small" data-v-5162eff2="" data-v-5c1c7fdc="">
+                      <img alt="Masaki Akiyama" class="a-image m-avatar__image lazyload" data-src="https://assets.st-note.com/production/uploads/images/34350591/profile_91586dbbd08cb6350ec19e641ac84d85.gif?fit=bounds&amp;format=jpeg&amp;quality=85&amp;width=330" data-v-50e2377b="" data-v-5c1c7fdc="" height="56" src="data:image/svg+xml;charset=utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22a%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2233%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23fff%22%2F%3E%3Cstop%20offset%3D%2267%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3CanimateTransform%20attributeName%3D%22gradientTransform%22%20type%3D%22translate%22%20from%3D%22-1%200%22%20to%3D%221%200%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath%20class%3D%22rect%22%20fill%3D%22url(%23a)%22%20d%3D%22M-100-100h300v300h-300z%22%2F%3E%3C%2Fsvg%3E" width="56"/>
+                     </div>
+                    </div>
+                    <div class="m-avatars__item" data-v-5162eff2="">
+                     <div class="m-avatar m-avatar--small" data-v-5162eff2="" data-v-5c1c7fdc="">
+                      <img alt="AI研究" class="a-image m-avatar__image lazyload" data-src="https://d2l930y2yx77uc.cloudfront.net/assets/default/default_profile_4-e3b57528da29acad20d5a2db33268c87f1d39015448757ddf346d60fb5861e49.png" data-v-50e2377b="" data-v-5c1c7fdc="" height="56" src="data:image/svg+xml;charset=utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22a%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2233%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23fff%22%2F%3E%3Cstop%20offset%3D%2267%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3CanimateTransform%20attributeName%3D%22gradientTransform%22%20type%3D%22translate%22%20from%3D%22-1%200%22%20to%3D%221%200%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath%20class%3D%22rect%22%20fill%3D%22url(%23a)%22%20d%3D%22M-100-100h300v300h-300z%22%2F%3E%3C%2Fsvg%3E" width="56"/>
+                     </div>
+                    </div>
+                    <div class="m-avatars__item" data-v-5162eff2="">
+                     <div class="m-avatar m-avatar--small" data-v-5162eff2="" data-v-5c1c7fdc="">
+                      <img alt="masaki" class="a-image m-avatar__image lazyload" data-src="https://d2l930y2yx77uc.cloudfront.net/assets/default/default_profile_2-5375e0fe14f8f6451ac8859ef34c1b34d978cfaec6bf1222d0655ad5412d97f6.png" data-v-50e2377b="" data-v-5c1c7fdc="" height="56" src="data:image/svg+xml;charset=utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22a%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2233%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23fff%22%2F%3E%3Cstop%20offset%3D%2267%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3CanimateTransform%20attributeName%3D%22gradientTransform%22%20type%3D%22translate%22%20from%3D%22-1%200%22%20to%3D%221%200%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath%20class%3D%22rect%22%20fill%3D%22url(%23a)%22%20d%3D%22M-100-100h300v300h-300z%22%2F%3E%3C%2Fsvg%3E" width="56"/>
+                     </div>
+                    </div>
+                    <div class="m-avatars__item" data-v-5162eff2="">
+                     <div class="m-avatar m-avatar--small" data-v-5162eff2="" data-v-5c1c7fdc="">
+                      <img alt="GORO" class="a-image m-avatar__image lazyload" data-src="https://d2l930y2yx77uc.cloudfront.net/assets/default/default_profile_5-043439195e40e86fd7641a3a1daf982637d77ec6f14b67d3fc98ab92374404ac.png" data-v-50e2377b="" data-v-5c1c7fdc="" height="56" src="data:image/svg+xml;charset=utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22a%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2233%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23fff%22%2F%3E%3Cstop%20offset%3D%2267%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23f7f9f9%22%2F%3E%3CanimateTransform%20attributeName%3D%22gradientTransform%22%20type%3D%22translate%22%20from%3D%22-1%200%22%20to%3D%221%200%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath%20class%3D%22rect%22%20fill%3D%22url(%23a)%22%20d%3D%22M-100-100h300v300h-300z%22%2F%3E%3C%2Fsvg%3E" width="56"/>
+                     </div>
+                    </div>
+                   </button>
+                  </div>
+                 </div>
+                 <button class="m-contentRaters__label" data-v-0c9444a8="" type="button">
+                  6人が高評価
+                 </button>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="p-article__contest" data-v-8a71fdf2="">
+           <div class="o-contestBanner" data-v-6b7a5912="" data-v-8a71fdf2="">
+            <h2 class="o-contestBanner__title" data-v-6b7a5912="">
+             この記事が参加している募集
+            </h2>
+            <div class="o-contestBanner__item" data-v-6b7a5912="">
+             <div class="m-odaiCard" data-v-72d1ffc7="" data-v-ce9c0b52="">
+              <a aria-label="AIとやってみた" class="a-link m-odaiCard__link fn" data-v-72d1ffc7="" data-v-ce9c0b52="" href="https://note.com/contest/AI%E3%81%A8%E3%82%84%E3%81%A3%E3%81%A6%E3%81%BF%E3%81%9F?f=hot" rel="noopener" target="_blank">
+               <div class="m-odaiCard__container" data-v-72d1ffc7="" data-v-ce9c0b52="">
+                <div class="m-odaiCard__title" data-v-72d1ffc7="" data-v-ce9c0b52="">
+                 <div class="flex flex-col justify-center items-center p-0 gap-2 size-[28px] rounded-[4px] font-bold text-[18px] mr-[5px] bg-[#EAEFF2] text-[#545E63]" data-v-72d1ffc7="" data-v-ce9c0b52="">
+                  #
+                 </div>
+                 <div class="flex-1" data-v-72d1ffc7="" data-v-ce9c0b52="">
+                  <p class="m-odaiCard__titleMain" data-v-72d1ffc7="" data-v-ce9c0b52="">
+                   AIとやってみた
+                  </p>
+                 </div>
+                </div>
+                <div class="m-odaiCard__detail" data-v-72d1ffc7="" data-v-ce9c0b52="">
+                 <p class="m-odaiCard__postCount text-[10px]" data-v-72d1ffc7="" data-v-ce9c0b52="">
+                  55,825件
+                 </p>
+                </div>
+               </div>
+              </a>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="p-article__hashtags" data-v-8a71fdf2="">
+           <div class="o-hashtags" data-v-51579e24="" data-v-8a71fdf2="">
+            <div class="m-tagList" data-v-4084a5f2="" data-v-51579e24="">
+             <ul class="m-tagList__body" data-v-4084a5f2="" id="tagListBody">
+              <li class="m-tagList__item" data-v-4084a5f2="" style="display:;" tabindex="-1">
+               <a class="hashtag a-link a-tag__link" data-v-4084a5f2="" data-v-43e40ddc="" data-v-4786055b="" href="https://note.com/hashtag/AI" rel="noopener" target="_blank">
+                <div class="a-tag a-tag__size_small" data-v-43e40ddc="" data-v-4786055b="">
+                 <div class="a-tag__label" data-v-43e40ddc="" data-v-4786055b="">
+                  #AI
+                 </div>
+                </div>
+               </a>
+              </li>
+              <li class="m-tagList__item" data-v-4084a5f2="" style="display:;" tabindex="-1">
+               <a class="hashtag a-link a-tag__link" data-v-4084a5f2="" data-v-43e40ddc="" data-v-4786055b="" href="https://note.com/hashtag/AI%E3%81%A8%E3%82%84%E3%81%A3%E3%81%A6%E3%81%BF%E3%81%9F" rel="noopener" target="_blank">
+                <div class="a-tag a-tag__size_small" data-v-43e40ddc="" data-v-4786055b="">
+                 <div class="a-tag__label" data-v-43e40ddc="" data-v-4786055b="">
+                  #AIとやってみた
+                 </div>
+                </div>
+               </a>
+              </li>
+              <li class="m-tagList__item" data-v-4084a5f2="" style="display:;" tabindex="-1">
+               <a class="hashtag a-link a-tag__link" data-v-4084a5f2="" data-v-43e40ddc="" data-v-4786055b="" href="https://note.com/hashtag/AI%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88" rel="noopener" target="_blank">
+                <div class="a-tag a-tag__size_small" data-v-43e40ddc="" data-v-4786055b="">
+                 <div class="a-tag__label" data-v-43e40ddc="" data-v-4786055b="">
+                  #AIエージェント
+                 </div>
+                </div>
+               </a>
+              </li>
+              <li class="m-tagList__item" data-v-4084a5f2="" style="display:;" tabindex="-1">
+               <a class="hashtag a-link a-tag__link" data-v-4084a5f2="" data-v-43e40ddc="" data-v-4786055b="" href="https://note.com/hashtag/Mastra" rel="noopener" target="_blank">
+                <div class="a-tag a-tag__size_small" data-v-43e40ddc="" data-v-4786055b="">
+                 <div class="a-tag__label" data-v-43e40ddc="" data-v-4786055b="">
+                  #Mastra
+                 </div>
+                </div>
+               </a>
+              </li>
+             </ul>
+            </div>
+           </div>
+          </div>
+          <div class="p-article__action" data-v-8a71fdf2="">
+           <div class="o-actionControl" data-v-8a71fdf2="" data-v-8eb4ccae="">
+            <div class="o-actionControl__item" data-v-8eb4ccae="">
+             <span class="o-noteLikeV3" data-v-5b0bbae8="" data-v-8eb4ccae="" enable-no-login-onboarding="true" likable-type="note">
+              <span class="o-noteLikeV3__iconContainer" data-circle-size="medium" data-v-5b0bbae8="">
+               <span class="o-noteLikeV3__iconContainerInner" data-v-5b0bbae8="">
+                <button aria-label="スキ" aria-pressed="false" class="o-noteLikeV3__iconButton leading-none flex items-center" data-v-5b0bbae8="">
+                 <i class="o-noteLikeV3__icon a-icon a-icon--heart a-icon--size_mediumSmall o-noteLikeV3__icon--colorBorder" data-circle-size="medium" data-disable-focus="true" data-fill="lightGray" data-tooltip="スキ" data-v-5b0bbae8="">
+                  <span class="a-icon__like-safe-area" data-size="medium">
+                  </span>
+                 </i>
+                </button>
+               </span>
+              </span>
+              <button aria-label="64スキ この記事にスキをつけたユーザーを見る" class="text-text-secondary o-noteLikeV3__count o-noteLikeV3__count--mediumSmall" data-v-5b0bbae8="">
+               64
+              </button>
+             </span>
+            </div>
+            <div class="o-actionControl__item relative" data-v-8eb4ccae="">
+             <button aria-controls="shareMenuDesktop" aria-expanded="false" aria-haspopup="true" class="h-6" data-tooltip="シェア" data-v-8eb4ccae="" id="shareButton" type="button" via="share-menu-desktop">
+              <i aria-label="" class="o-actionControl__reply a-svgIcon a-svgIcon--medium" data-v-8eb4ccae="">
+              </i>
+             </button>
+            </div>
+            <div class="o-actionControl__item o-actionControl__item" data-v-8eb4ccae="">
+             <button class="o-viewComment" data-v-36007f7a="" data-v-8eb4ccae="" type="button">
+              <i aria-label="コメントをみる" class="a-svgIcon a-svgIcon--medium" data-tooltip="コメントをみる" data-v-8eb4ccae="">
+              </i>
+             </button>
+            </div>
+            <div class="o-actionControl__item" data-v-8eb4ccae="">
+             <div class="m-recommendNote__actionsIcon" data-v-2d574709="" data-v-8eb4ccae="">
+              <button aria-label="その他" class="a-icon a-icon--more a-icon--size_medium" data-tooltip="その他" data-v-2d574709="" type="button">
+              </button>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="p-article__support" data-v-8a71fdf2="">
+           <div class="o-thanksMessage" data-v-220ed6e4="" data-v-8a71fdf2="">
+            <div class="o-thanksMessage__action" data-v-220ed6e4="" style="background-color:#41C9B4;">
+             <a class="o-thanksMessage__actionLink a-link" data-v-220ed6e4="" data-v-43e40ddc="" href="https://liff.line.me/1661450269-vVVoBGRq/landing?follow=%40488fftiy&amp;lp=rlbJuc&amp;liff_id=1661450269-vVVoBGRq" rel="noopener" target="_blank">
+              <div class="o-thanksMessage__actionBody" data-v-220ed6e4="" data-v-43e40ddc="">
+               <div class="o-thanksMessage__actionTitle" data-v-220ed6e4="" data-v-43e40ddc="" style="color:#08131A;">
+                ChatGPT全機能まとめ記事を受け取る
+               </div>
+               <div class="o-thanksMessage__actionDescription" data-v-220ed6e4="" data-v-43e40ddc="" style="color:#08131A;">
+                LINE登録でChatGPTの全機能をまとめた特別記事をプレゼント中です。ぜひご活用ください。
+               </div>
+               <i class="o-thanksMessage__actionArrow a-icon a-icon--navnext a-icon--size_medium" data-v-220ed6e4="" style="color:#08131A;">
+               </i>
+              </div>
+             </a>
+            </div>
+           </div>
+          </div>
+          <div class="p-article__creator" data-v-8a71fdf2="">
+           <div class="o-creatorProfile" data-v-30cada24="" data-v-8a71fdf2="">
+           </div>
+          </div>
+         </article>
+        </div>
+        <div data-v-8a71fdf2="">
+         <div class="p-article__extraItemContainer" data-v-8a71fdf2="">
+          <div class="a-loadingDots my-8" data-v-67ce1e68="" data-v-8a71fdf2="">
+           <div class="a-loadingDots__item a-loadingDots__item--color_black a-loadingDots__item--size_medium" data-v-67ce1e68="">
+           </div>
+           <div class="a-loadingDots__item a-loadingDots__item--color_black a-loadingDots__item--size_medium" data-v-67ce1e68="">
+           </div>
+           <div class="a-loadingDots__item a-loadingDots__item--color_black a-loadingDots__item--size_medium" data-v-67ce1e68="">
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="p-article__sideCreatorInfo" data-v-8a71fdf2="" style="top:44px;">
+        </div>
+       </main>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>
