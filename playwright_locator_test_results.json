@@ -1,0 +1,133 @@
+{
+  "google_search_top": [
+    {
+      "name": "Search Textbox (by Role/Label)",
+      "locator_type": "get_by_... (0)",
+      "status": "Fail (Not Found)",
+      "count": 0,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 31
+    },
+    {
+      "name": "Search Textbox (by Role/Label)",
+      "locator_type": "get_by_... (1)",
+      "status": "Success",
+      "count": 1,
+      "is_visible": true,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 3047
+    },
+    {
+      "name": "Search Button (by Role/Name)",
+      "locator_type": "get_by_... (0)",
+      "status": "Success",
+      "count": 1,
+      "is_visible": true,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 3031
+    },
+    {
+      "name": "Search Button (by Role/Name)",
+      "locator_type": "get_by_... (1)",
+      "status": "Fail (Found 2 elements)",
+      "count": 2,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 16
+    },
+    {
+      "name": "Feeling Lucky Button (by Role/Name)",
+      "locator_type": "get_by_... (0)",
+      "status": "Success",
+      "count": 1,
+      "is_visible": true,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 3031
+    },
+    {
+      "name": "Feeling Lucky Button (by Role/Name)",
+      "locator_type": "get_by_... (1)",
+      "status": "Fail (Found 2 elements)",
+      "count": 2,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 0
+    }
+  ],
+  "google_results": [
+    {
+      "name": "Result 1 Link (by Text/Role)",
+      "locator_type": "get_by_... (0)",
+      "status": "Fail (Not Found)",
+      "count": 0,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 62
+    },
+    {
+      "name": "Result 1 Link (by Text/Role)",
+      "locator_type": "get_by_... (1)",
+      "status": "Fail (Not Found)",
+      "count": 0,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 16
+    },
+    {
+      "name": "Result 2 Link (by nth)",
+      "locator_type": "get_by_... (0)",
+      "status": "Fail (Not Found)",
+      "count": 0,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 0
+    },
+    {
+      "name": "Result 2 Link (by nth)",
+      "locator_type": "get_by_... (1)",
+      "status": "Fail (Found 14 elements)",
+      "count": 14,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 15
+    },
+    {
+      "name": "Next Page Link (by Role/Text)",
+      "locator_type": "get_by_... (0)",
+      "status": "Fail (Not Visible)",
+      "count": 1,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 32
+    },
+    {
+      "name": "Next Page Link (by Role/Text)",
+      "locator_type": "get_by_... (1)",
+      "status": "Fail (Not Visible)",
+      "count": 1,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 15
+    }
+  ],
+  "news_article": [
+    {
+      "site": "news_article",
+      "status": "Navigation Failed",
+      "error": "Page.goto: net::ERR_NAME_NOT_RESOLVED at https://news.example.com/article123\nCall log:\n  - navigating to \"https://news.example.com/article123\", waiting until \"load\"\n"
+    }
+  ]
+}

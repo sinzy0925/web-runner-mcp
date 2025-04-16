@@ -1,0 +1,9 @@
+--- Web Runner 実行結果 ---
+
+--- Step 1: click (success) ---
+Selector: #searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)
+New page did not open within timeout.
+
+--- Step 2: select_option (error) ---
+Message: Failed to get target info before step: Root page was closed before step 2.
+

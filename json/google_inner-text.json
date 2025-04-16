@@ -4,19 +4,30 @@
     {
       "memo": "検索ボックスに入力",
       "action": "input",
-      "selector": "#APjFqb",
-      "value": "経済"
+      "selector": "textarea#APjFqb",
+      "value": "大阪府　株式会社　問い合わせ"
     },
     {
       "memo": "検索　をクリック",
       "action": "click",
-      "selector": "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b",
+      "selector": "input[name=\"btnK\"][value=\"Google 検索\"]",
       "wait_time_ms": 5000
     },
     {
-      "memo": "検索結果の１件目をクリック",
+      "memo": "次へ　クリック",
       "action": "click",
-      "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
+      "selector": "#pnnext > span.oeN89d",
+      "wait_time_ms": 5000
+    },
+    {
+      "action": "sleep",
+      "wait_time_ms": 5000,
+      "value": 5
+    },
+    {
+      "memo": "検索結果　クリック",
+      "action": "click",
+      "selector": "a.zReHs",
       "wait_time_ms": 5000
     },
     {

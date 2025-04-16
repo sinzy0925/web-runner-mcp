@@ -37,6 +37,681 @@ MCP_CLIENT_OUTPUT_FILE = 'output/web_runner_mcp.txt' # MCPクライアントの�
 
 
 - フォルダ名: .
+- ファイル名: crawl_results.txt
+- 内容:
+--- Web Runner 実行結果 ---
+
+--- Step 1: input (success) ---
+Selector: #APjFqb
+Other Details:
+  value: 東京都　昭島市　朝日町　会社概要
+
+--- Step 2: click (success) ---
+Selector: body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b
+New page did not open within timeout.
+
+--- Step 3: sleep (success) ---
+Other Details:
+  duration_sec: 2.0
+
+--- Step 4: get_all_attributes (success) ---
+Selector: #rso div.kb0PBd.A9Y9g.jGGQ5e span a
+Requested Attribute/Content: mail
+Results (10 items processed):
+  Extracted Emails (Unique Domains for this step):
+  - info@dilemma.co.jp
+  - info@realty-akishima.com
+  - info@tatsuki-k.com
+
+--- Step 5: click (success) ---
+Selector: #pnnext > span.oeN89d
+New page did not open within timeout.
+
+--- Step 6: sleep (success) ---
+Other Details:
+  duration_sec: 2.0
+
+--- Step 7: get_all_attributes (success) ---
+Selector: #rso div.kb0PBd.A9Y9g.jGGQ5e span a
+Requested Attribute/Content: mail
+Results (10 items processed):
+  Extracted Emails (Unique Domains for this step):
+  - info@artplancorp.jp
+  - asbestos@pandecon.net
+
+--- Step 8: click (success) ---
+Selector: #pnnext > span.oeN89d
+New page did not open within timeout.
+
+--- Step 9: sleep (success) ---
+Other Details:
+  duration_sec: 2.0
+
+--- Step 10: get_all_attributes (success) ---
+Selector: #rso div.kb0PBd.A9Y9g.jGGQ5e span a
+Requested Attribute/Content: mail
+Results (10 items processed):
+  Extracted Emails (Unique Domains for this step):
+    (No unique domain emails found for this step)
+
+--- Step 11: click (success) ---
+Selector: #pnnext > span.oeN89d
+New page did not open within timeout.
+
+--- Step 12: sleep (success) ---
+Other Details:
+  duration_sec: 2.0
+
+--- Step 13: get_all_attributes (success) ---
+Selector: #rso div.kb0PBd.A9Y9g.jGGQ5e span a
+Requested Attribute/Content: mail
+Results (10 items processed):
+  Extracted Emails (Unique Domains for this step):
+    (No unique domain emails found for this step)
+
+--- Step 14: click (success) ---
+Selector: #pnnext > span.oeN89d
+New page did not open within timeout.
+
+--- Step 15: sleep (success) ---
+Other Details:
+  duration_sec: 2.0
+
+--- Step 16: get_all_attributes (success) ---
+Selector: #rso div.kb0PBd.A9Y9g.jGGQ5e span a
+Requested Attribute/Content: mail
+Results (10 items processed):
+  Extracted Emails (Unique Domains for this step):
+  - contact@jrd.jp
+  - info-b@ouchi.co.jp
+
+--- Final Aggregated Summary ---
+
+Final Unique Domain Emails:
+[
+  "asbestos@pandecon.net",
+  "contact@jrd.jp",
+  "info-b@ouchi.co.jp",
+  "info@artplancorp.jp",
+  "info@dilemma.co.jp",
+  "info@realty-akishima.com",
+  "info@tatsuki-k.com"
+]
+
+
+
+
+---
+
+
+- フォルダ名: .
+- ファイル名: generated_crawl_proven.json
+- 内容:
+{
+  "target_url": "https://www.google.com/",
+  "actions": [
+    {
+      "memo": "検索ボックスに入力",
+      "action": "input",
+      "selector": "#APjFqb",
+      "value": "東京都　昭島市　朝日町　会社概要"
+    },
+    {
+      "memo": "検索ボタンをクリック",
+      "action": "click",
+      "selector": "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b",
+      "wait_time_ms": 5000
+    },
+    {
+      "memo": "検索結果表示待機 (2秒)",
+      "action": "sleep",
+      "value": 2
+    },
+    {
+      "memo": "ページ 1 メール抽出",
+      "action": "get_all_attributes",
+      "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
+      "attribute_name": "mail",
+      "wait_time_ms": 7000
+    },
+    {
+      "memo": "ページ 2 へ移動",
+      "action": "click",
+      "selector": "#pnnext > span.oeN89d",
+      "wait_time_ms": 5000
+    },
+    {
+      "memo": "ページ遷移待機 (2秒)",
+      "action": "sleep",
+      "value": 2
+    },
+    {
+      "memo": "ページ 2 メール抽出",
+      "action": "get_all_attributes",
+      "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
+      "attribute_name": "mail",
+      "wait_time_ms": 7000
+    },
+    {
+      "memo": "ページ 3 へ移動",
+      "action": "click",
+      "selector": "#pnnext > span.oeN89d",
+      "wait_time_ms": 5000
+    },
+    {
+      "memo": "ページ遷移待機 (2秒)",
+      "action": "sleep",
+      "value": 2
+    },
+    {
+      "memo": "ページ 3 メール抽出",
+      "action": "get_all_attributes",
+      "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
+      "attribute_name": "mail",
+      "wait_time_ms": 7000
+    },
+    {
+      "memo": "ページ 4 へ移動",
+      "action": "click",
+      "selector": "#pnnext > span.oeN89d",
+      "wait_time_ms": 5000
+    },
+    {
+      "memo": "ページ遷移待機 (2秒)",
+      "action": "sleep",
+      "value": 2
+    },
+    {
+      "memo": "ページ 4 メール抽出",
+      "action": "get_all_attributes",
+      "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
+      "attribute_name": "mail",
+      "wait_time_ms": 7000
+    },
+    {
+      "memo": "ページ 5 へ移動",
+      "action": "click",
+      "selector": "#pnnext > span.oeN89d",
+      "wait_time_ms": 5000
+    },
+    {
+      "memo": "ページ遷移待機 (2秒)",
+      "action": "sleep",
+      "value": 2
+    },
+    {
+      "memo": "ページ 5 メール抽出",
+      "action": "get_all_attributes",
+      "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
+      "attribute_name": "mail",
+      "wait_time_ms": 7000
+    }
+  ]
+}
+
+
+---
+
+
+- フォルダ名: .
+- ファイル名: info_extractor_tester.py
+- 内容:
+# info_extractor_tester.py:
+
+import os
+import google.generativeai as genai
+import pathlib
+from dotenv import load_dotenv
+import logging
+import traceback
+import time
+import json # JSONを扱うためにインポート
+
+# --- 初期設定 ---
+load_dotenv()
+api_key = os.getenv('API_KEY')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+if not api_key:
+    logging.error("API_KEYが環境変数に見つかりません。.envファイルを確認してください。")
+    exit()
+
+try:
+    genai.configure(api_key=api_key, transport='rest')
+except Exception as e:
+    logging.error(f"Geminiの設定中にエラーが発生しました: {e}")
+    exit()
+
+# --- Geminiモデル設定 ---
+# ★★★ 必要に応じてモデル名を変更 ★★★
+MODEL_NAME = "gemini-2.0-flash" # または "gemini-1.5-flash-latest" など
+try:
+    model = genai.GenerativeModel(model_name=MODEL_NAME)
+    logging.info(f"Geminiモデル '{MODEL_NAME}' を初期化しました。")
+except Exception as e:
+    logging.error(f"指定されたGeminiモデル '{MODEL_NAME}' の初期化に失敗しました: {e}")
+    exit()
+
+
+def extract_element_info(html_content: str, instruction: str, max_retries=3, retry_delay=5) -> dict | None:
+    """
+    与えられたHTMLコンテンツと自然言語指示に基づき、Gemini APIを使用して
+    要素特定情報をJSON形式で抽出します。
+
+    Args:
+        html_content (str): 解析対象のHTMLコンテンツ。
+        instruction (str): 抽出したい要素を示す自然言語の指示。
+        max_retries (int): APIエラー時の最大リトライ回数。
+        retry_delay (int): リトライ間の待機時間（秒）。
+
+    Returns:
+        dict | None: 抽出された要素情報の辞書、または失敗時にNone。
+    """
+    logging.info("-" * 30)
+    logging.info(f"指示に基づいて要素情報を抽出中: '{instruction}'")
+    logging.info(f"HTMLコンテンツ長: {len(html_content)} 文字")
+
+    # --- プロンプト設計 (要素情報抽出用) ---
+    prompt = f"""
+あなたはHTMLコンテンツとユーザーの指示を理解するエキスパートです。
+以下のHTMLコンテンツとユーザーの指示を読み、指示された要素を特定するために最も役立つ情報をJSON形式で抽出してください。
+
+# HTMLコンテンツ
+```html
+{html_content}
+
+ユーザーの指示
+
+「{instruction}」
+
+あなたのタスク
+
+ユーザーの指示に合致する要素を特定するための情報を以下のJSONフォーマットに従って抽出してください。
+可能な限り多くのフィールドを埋めてください。特にtext, role, test_idがあれば重要です。
+もし要素がリストの一部（例：検索結果リストのN番目）だと判断でき、順序が重要そうな場合は common_selector と index (0始まり) を設定してください。
+該当する要素が見つからない、または指示が不明瞭な場合は、 "error": "Element not found or instruction unclear" というキーを持つJSONオブジェクトを返してください。
+
+出力JSONフォーマット (この形式のJSONオブジェクトのみを出力すること)
+{{
+  "text": "要素に含まれる完全なテキスト or 部分テキスト (もしあれば、String)",
+  "role": "要素のARIAロール (例: 'button', 'link', 'textbox', もしあれば、String)",
+  "test_id": "data-testidなどのテスト用ID (もしあれば、String)",
+  "placeholder": "プレースホルダー属性の値 (もしあれば、String)",
+  "aria_label": "aria-label属性の値 (もしあれば、String)",
+  "common_selector": "もし要素がリストの一部なら、そのリスト要素全体に共通するCSSセレクター (例: '#rso .g', なければnull)",
+  "index": "リスト内の順序 (0始まりの整数、common_selectorとセットで使う、なければnull)",
+  "tag_name": "要素のHTMLタグ名 (例: 'a', 'button', 'input', String)",
+  "other_attributes": {{ "属性名": "属性値", ... }} // 上記以外で特定に役立ちそうな属性 (Object, なければ空の{{}})
+}}
+出力JSON:""" # 出力を促す接尾辞 (マークダウンは不要)
+    extracted_info = None
+    for attempt in range(max_retries):
+        try:
+            logging.info(f"Gemini APIへのリクエスト送信 (試行 {attempt + 1}/{max_retries})...")
+            start_time = time.monotonic()
+
+            safety_settings = [
+                {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
+            ]
+            # ★★★ JSONモードを試す (利用可能なモデルか確認が必要) ★★★
+            # モデルが対応していれば、より安定してJSONを出力する可能性がある
+            # 対応していない場合は通常の generate_content を使う
+            if hasattr(genai.GenerationConfig, 'response_mime_type') and MODEL_NAME in ["gemini-1.5-pro-latest", "gemini-1.5-flash-latest"]: # 例
+                generation_config = genai.GenerationConfig(
+                    response_mime_type="application/json",
+                    # temperature=0.1 # 必要なら設定
+                )
+                response = model.generate_content(
+                    prompt,
+                    generation_config=generation_config,
+                    safety_settings=safety_settings
+                )
+                logging.info("Gemini APIをJSONモードで呼び出しました。")
+            else:
+                # JSONモード非対応または不明なモデルの場合は通常モード
+                logging.info("Gemini APIを通常モードで呼び出します (JSONモード非対応の可能性)。")
+                response = model.generate_content(
+                    prompt,
+                    safety_settings=safety_settings
+                )
+
+
+            end_time = time.monotonic()
+            logging.info(f"Gemini API応答受信。処理時間: {end_time - start_time:.2f} 秒")
+
+            # --- 応答の解析 ---
+            if response.candidates and response.text:
+                raw_response_text = response.text.strip()
+                logging.debug(f"生の応答テキスト: {raw_response_text}")
+                # 応答がマークダウンのコードブロックで囲まれている場合、中身を抽出
+                if raw_response_text.startswith("```json") and raw_response_text.endswith("```"):
+                    json_text = raw_response_text[len("```json"): -len("```")].strip()
+                elif raw_response_text.startswith("```") and raw_response_text.endswith("```"):
+                    json_text = raw_response_text[len("```"): -len("```")].strip()
+                else:
+                    json_text = raw_response_text # マークダウンがない場合はそのまま
+
+                try:
+                    extracted_info = json.loads(json_text)
+                    # 簡単なバリデーション (辞書型かどうか)
+                    if isinstance(extracted_info, dict):
+                        logging.info("JSON形式の情報を正常に抽出・解析しました。")
+                        break # 成功したのでリトライループを抜ける
+                    else:
+                        logging.warning(f"GeminiがJSON形式でない応答を返しました: {type(extracted_info)}")
+                        extracted_info = {"error": "Invalid format from LLM", "raw_response": json_text}
+                        # 成功ではないのでリトライを続ける可能性がある
+
+                except json.JSONDecodeError as e:
+                    logging.warning(f"Geminiの応答JSONの解析に失敗しました: {e}")
+                    logging.warning(f"解析しようとしたテキスト: {json_text}")
+                    extracted_info = {"error": "JSONDecodeError from LLM response", "raw_response": json_text}
+                    # 失敗したのでリトライする
+            else:
+                logging.warning("Gemini APIからの応答が空か、候補がありませんでした。")
+                logging.debug(f"詳細な応答: {response}")
+                error_details = "Unknown error or empty response"
+                # ... (エラー詳細取得の試み - selector_tester.py と同様) ...
+                extracted_info = {"error": error_details}
+                # 失敗したのでリトライする
+
+        except Exception as e:
+            logging.error(f"Gemini API呼び出し中にエラーが発生しました (試行 {attempt + 1}): {e}")
+            logging.debug(traceback.format_exc())
+            extracted_info = {"error": f"API call failed: {e}"}
+            if attempt == max_retries - 1:
+                logging.error("最大リトライ回数に達しました。")
+                return extracted_info # 最後のエラー情報を返す
+
+        # リトライが必要な場合 (ループの最後で判定)
+        if attempt < max_retries - 1 and (extracted_info is None or extracted_info.get("error")):
+            logging.warning(f"{retry_delay}秒待機してリトライします...")
+            time.sleep(retry_delay)
+        elif extracted_info is not None and not extracted_info.get("error"):
+            break # 成功したので抜ける
+
+    # --- 最終的な結果を返す ---
+    if extracted_info and not extracted_info.get("error"):
+        # 不要なキーやnull値を除去するなどの後処理をここで行っても良い
+        logging.info(f"抽出された情報: {json.dumps(extracted_info, ensure_ascii=False, indent=2)}")
+        return extracted_info
+    else:
+        logging.error("要素情報の抽出に失敗しました。")
+        # 失敗した場合も、最後のエラー情報を含む辞書を返す
+        return extracted_info if extracted_info else {"error": "Extraction failed after retries"}
+#--- テストケース定義 (期待値をJSON形式に変更) ---
+
+TEST_CASES = [
+{
+"name": "Google Search Box",
+"html_file": "test_html/google_search.html",
+"instruction": "検索キーワードを入力するテキストエリア",
+"expected_info": { # ★期待する情報
+"role": "textbox", # textarea は textbox ロールを持つことが多い
+"tag_name": "textarea",
+"aria_label": "検索",
+"other_attributes": {"title": "検索", "id": "APjFqb", "class": "gLFyf"} # idもotherに含めるか要検討
+}
+},
+{
+"name": "Google Search Button",
+"html_file": "test_html/google_search.html",
+"instruction": "「Google 検索」ボタン",
+"expected_info": {
+"text": "Google 検索", # value属性が表示テキストになっている
+"role": "button",
+"tag_name": "input",
+"aria_label": "Google 検索",
+"other_attributes": {"name": "btnK", "class": "gNO89b", "type": "submit"}
+}
+},
+{
+"name": "Google Result 1 Link",
+"html_file": "test_html/google_results.html",
+"instruction": "最初の検索結果のタイトルへのリンク",
+"expected_info": {
+"text": "検索結果タイトル 1", # リンク内のテキスト
+"role": "link",
+"tag_name": "a",
+"common_selector": "#rso .g", # または "#rso > div.g" など、結果ブロックの共通セレクター
+"index": 0,
+"other_attributes": {"href": "https://example-result1.com/"}
+}
+},
+{
+"name": "Google Result 2 Link", # ★2番目のテストケースを追加
+"html_file": "test_html/google_results.html",
+"instruction": "2番目の検索結果のリンク",
+"expected_info": {
+"text": "Example Result 2",
+"role": "link",
+"tag_name": "a",
+"common_selector": "#rso .g", # 1番目と同じ共通セレクター
+"index": 1, # ★index が 1 になる
+"other_attributes": {"href": "https://example-result2.net/"}
+}
+},
+{
+"name": "Google Next Page Link",
+"html_file": "test_html/google_results.html",
+"instruction": "「次へ」のページネーションリンク",
+"expected_info": {
+"text": "次へ",
+"role": "link",
+"tag_name": "a",
+"other_attributes": {"id": "pnnext"}
+}
+},
+{
+"name": "News Article Title",
+"html_file": "test_html/news_article.html",
+"instruction": "記事の見出し (タイトル)",
+"expected_info": {
+"text": "今日のビッグニュース",
+"role": "heading", # h1 は heading ロール
+"tag_name": "h1",
+"other_attributes": {"class": "article-title main", "itemprop": "headline"}
+}
+},
+{
+"name": "News Share Button",
+"html_file": "test_html/news_article.html",
+"instruction": "共有ボタン",
+"expected_info": {
+"text": "共有",
+"role": "button",
+"tag_name": "button",
+"test_id": "share-button", # data-testid を抽出してほしい
+"other_attributes": {"class": "share-button"}
+}
+},
+{
+"name": "News Non-existent Element",
+"html_file": "test_html/news_article.html",
+"instruction": "記事へのコメント投稿フォーム",
+"expected_info": { # ★期待値としてエラーを示す
+"error": "Element not found or instruction unclear"
+}
+},
+]
+
+#--- テスト用HTMLファイルを作成するヘルパー関数 (変更なし) ---
+#selector_tester.py からコピー
+
+def create_test_html_files():
+    """テスト用のHTMLファイルを test_html ディレクトリに作成"""
+    html_dir = pathlib.Path("test_html")
+    html_dir.mkdir(exist_ok=True)
+    # --- Google検索トップページ ---
+    google_html = """
+    <!DOCTYPE html><html><head><title>Google</title></head><body>
+    <form action="/search">
+    <textarea class="gLFyf" id="APjFqb" title="検索" aria-label="検索" role="textbox"></textarea>
+    <div><center>
+    <input class="gNO89b" value="Google 検索" aria-label="Google 検索" name="btnK" role="button" type="submit" data-ved="0ahUKEwi...">
+    <input class="RNmpXc" value="I'm Feeling Lucky" aria-label="I'm Feeling Lucky" name="btnI" role="button" type="submit" data-ved="0ahUKEwi...">
+    </center></div>
+    </form></body></html>
+    """
+    with open(html_dir / "google_search.html", "w", encoding="utf-8") as f: f.write(google_html)
+    # --- 一般的なニュース記事ページ ---
+    news_html = """
+    <!DOCTYPE html><html><head><title>ニュース記事</title></head><body>
+    <header>サイトヘッダー</header><main><article>
+    <h1 class="article-title main" itemprop="headline" role="heading" aria-level="1">今日のビッグニュース</h1>
+    <div class="content body" role="article">
+    <p>記事の本文がここに続きます...</p><p>さらなる段落。</p>
+    <a href="/login" id="login-link" style="color: blue;" role="link">続きを読むにはログイン</a>
+    </div><footer>
+    <button class="share-button" data-testid="share-button" role="button">共有</button>
+    <button role="button">コメント</button>
+    </footer></article></main>
+    <footer>サイトフッター</footer></body></html>
+    """
+    with open(html_dir / "news_article.html", "w", encoding="utf-8") as f: f.write(news_html)
+    # --- Google検索結果ページ風HTML ---
+    google_results_html = """
+    <!DOCTYPE html><html><head><title>検索結果 - Google Search</title></head><body><div id="main"><div id="cnt"><div id="rcnt"><div id="center_col"><div id="res"><div id="search"><div id="rso">
+    <!-- 検索結果 1 -->
+    <div class="g Ww4FFb vt6azd tF2Cxc asEBEc"><div><div class="kb0PBd cvP2Ce jGGQ5e"><div class="yuRUbf"><div><span>
+    <a href="https://example-result1.com/" role="link"><br><h3 class="LC20lb MBeuO DKV0Md" role="heading" aria-level="3">検索結果タイトル 1</h3><div><cite>example-result1.com</cite></div></a>
+    </span></div></div></div><div class="VwiC3b"><span>検索結果の説明文1がここに入ります。</span></div></div></div>
+    <!-- 検索結果 2 -->
+    <div class="g Ww4FFb vt6azd tF2Cxc asEBEc"><div><div class="kb0PBd cvP2Ce jGGQ5e"><div class="yuRUbf">
+    <a href="https://example-result2.net/" role="link"><h3 class="LC20lb MBeuO DKV0Md" role="heading" aria-level="3">Example Result 2</h3><cite>example-result2.net</cite></a>
+    </div></div><div class="VwiC3b"><span>Description for the second result goes here.</span></div></div></div>
+    </div><div id="botstuff"><div class="navigation">
+    <a id="pnnext" href="/search?q=..." role="link"><span style="display:block;margin-left:53px">次へ</span></a>
+    </div></div></div></div></div></div></div></div></body></html>
+    """
+    with open(html_dir / "google_results.html", "w", encoding="utf-8") as f: f.write(google_results_html)
+    logging.info(f"テスト用HTMLファイルを '{html_dir}' に作成/更新しました。")
+
+    #--- テスト実行関数 (評価ロジックを修正) ---
+
+def run_all_tests():
+    """定義されたすべてのテストケースを実行"""
+    logging.info(">>> 要素情報抽出テストを開始します <<<")
+    create_test_html_files()
+
+    results = {"passed": 0, "failed": 0, "total": len(TEST_CASES)}
+    failed_cases = []
+
+    for case in TEST_CASES:
+        print("=" * 50)
+        logging.info(f"テストケース実行: {case['name']}")
+        logging.info(f"指示: {case['instruction']}")
+        logging.info(f"期待値:\n{json.dumps(case['expected_info'], ensure_ascii=False, indent=2)}")
+
+        html_path = pathlib.Path(case['html_file'])
+        if not html_path.exists():
+            logging.error(f"  エラー: HTMLファイルが見つかりません: {html_path}")
+            results["failed"] += 1
+            failed_cases.append({"name": case['name'], "reason": "HTML file not found"})
+            continue
+
+        try:
+            with open(html_path, 'r', encoding='utf-8') as f:
+                html_content = f.read()
+        except Exception as e:
+            logging.error(f"  エラー: HTMLファイルの読み込みに失敗しました: {e}")
+            results["failed"] += 1
+            failed_cases.append({"name": case['name'], "reason": f"HTML read error: {e}"})
+            continue
+
+        # 要素情報抽出関数を呼び出し
+        generated_info = extract_element_info(html_content, case['instruction'])
+
+        # --- 結果の評価 ---
+        expected = case['expected_info']
+        passed = False
+        reason = "Mismatch" # デフォルトの失敗理由
+
+        if generated_info is None:
+            reason = "LLM call failed or returned None"
+            logging.error(f"  結果: 情報抽出に失敗しました ❌")
+        elif isinstance(generated_info, dict) and "error" in generated_info:
+            if "error" in expected and generated_info["error"] == expected["error"]:
+                passed = True
+                reason = "Expected error matched"
+                logging.info(f"  結果: 期待通りエラーが返されました ✅ ({generated_info['error']})")
+            else:
+                reason = f"Unexpected error from LLM: {generated_info.get('error')}"
+                logging.warning(f"  結果: LLMが予期しないエラーを返しました ❌ ({generated_info.get('error')})")
+                logging.warning(f"    期待値: {expected}")
+        elif isinstance(generated_info, dict):
+            # ★★★ 期待値と生成値の比較 ★★★
+            # ここでは単純に完全一致を見るが、より柔軟な比較も可能
+            # 例えば、期待値に含まれるキーが生成値にも存在し、値が一致するかどうかなど
+            if generated_info == expected:
+                passed = True
+                reason = "Exact match"
+                logging.info(f"  結果: 完全に一致しました ✅")
+            else:
+                # 部分一致などの評価をここに入れることもできる
+                # 例: 主要キー (text, role, index など) が一致するかチェック
+                major_keys = ["text", "role", "index", "test_id"]
+                partial_match = True
+                mismatched_keys = []
+                for key in major_keys:
+                    if expected.get(key) != generated_info.get(key):
+                        # index が両方 None の場合は一致とみなすなど、細かい調整が可能
+                        if not (key == 'index' and expected.get(key) is None and generated_info.get(key) is None):
+                            partial_match = False
+                            mismatched_keys.append(key)
+
+                if partial_match and not mismatched_keys: # 主要キーが一致
+                    passed = True # 部分一致でも成功とみなす場合
+                    reason = f"Partial match (Major keys matched)"
+                    logging.info(f"  結果: 主要キーが一致しました (部分成功とみなす) ✅")
+                    logging.debug(f"    生成値:\n{json.dumps(generated_info, ensure_ascii=False, indent=2)}")
+                else:
+                    reason = f"Mismatch (Keys: {mismatched_keys})"
+                    logging.warning(f"  結果: 不一致 ❌ (Mismatched keys: {mismatched_keys})")
+                    logging.warning(f"    期待値:\n{json.dumps(expected, ensure_ascii=False, indent=2)}")
+                    logging.warning(f"    生成値:\n{json.dumps(generated_info, ensure_ascii=False, indent=2)}")
+        else:
+            reason = f"Unexpected return type: {type(generated_info)}"
+            logging.error(f"  結果: 予期しない型が返されました ❌ ({type(generated_info)})")
+
+        if passed:
+            results["passed"] += 1
+        else:
+            results["failed"] += 1
+            failed_cases.append({
+                "name": case['name'],
+                "reason": reason,
+                "expected": expected,
+                "generated": generated_info
+            })
+        print("-" * 30)
+
+    print("=" * 50)
+    logging.info(">>> 全テストケース完了 <<<")
+    logging.info(f"結果: {results['passed']} / {results['total']} 件成功")
+    if results['failed'] > 0:
+        logging.warning(f"{results['failed']} 件失敗しました。")
+        logging.warning("--- 失敗したケース詳細 ---")
+        for failure in failed_cases:
+            logging.warning(f"  Case: {failure['name']} ({failure['reason']})")
+            # logging.warning(f"    Expected: {json.dumps(failure['expected'], ensure_ascii=False, indent=2)}")
+            # logging.warning(f"    Generated: {json.dumps(failure['generated'], ensure_ascii=False, indent=2)}")
+    print("=" * 50)
+
+
+if __name__ == "__main__":
+    run_all_tests()
+
+
+
+
+---
+
+
+- フォルダ名: .
 - ファイル名: json_generator.html
 - 内容:
 <!DOCTYPE html>
@@ -587,98 +1262,8 @@ if __name__ == "__main__":
 Selector: #searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)
 New page did not open within timeout.
 
---- Step 2: select_option (success) ---
-Selector: #searchmenu > form > dl > dd:nth-child(2) > select:nth-child(1)
-Other Details:
-  option_type: index
-  option_value: 7
-
---- Step 3: input (success) ---
-Selector: #freewordtxt
-Other Details:
-  value: 不動産
-
---- Step 4: click (success) ---
-Selector: #searchbtn > img
-New page did not open within timeout.
-
---- Step 5: get_all_text_contents (success) ---
-Selector: tr td.title a
-Result Text List (23 items):
-- コミットメントラインの契約期間延長に関するお知らせ
-- クラウドファンディングでのファンド組成に係る販売用不動産の取得に関するお知らせ
-- 資金の借入れに関するお知らせ
-- 2025年2月期　決算短信(REIT)
-- 2025年2月期（第23期）決算説明資料
-- 規約の一部変更及び役員の選任に関するお知らせ
-- （訂正）「住友林業株式会社による当社株式に対する公開買付けに関する意見表明のお知らせ」の一部訂正について
-- 販売用不動産取得のお知らせ
-- 販売用不動産の売却に関するお知らせ
-- 販売用不動産の売買契約の締結に関するお知らせ
-- 資金の借入れ（借換え）に関するお知らせ
-- 賃貸用不動産の保有目的の変更に関するお知らせ
-- 金利スワップ契約の締結に関するお知らせ
-- 資金の借入れに関するお知らせ
-- 国内資産の譲渡に関するお知らせ（ＨＦ東新宿レジデンス、ＨＦ東心斎橋レジデンス）
-- 本日付公表の適時開示に関する補足説明資料
-- 2025年5月期（第47期）及び2025年11月期（第48期）の運用状況の予想の修正に関するお知らせ
-- （訂正）「国内資産の取得及び譲渡に関するお知らせ」及び「本日付公表の適時開示に関する補足説明資料」の一部訂正に関するお知らせ
-- 国内不動産信託受益権の取得及び貸借並びに譲渡に関するお知らせ
-- 今後の成長戦略に関する説明資料
-- 子会社の事業の全部休止、開発用不動産の減損損失並びに株式交換関連費用の発生、及びこれらに伴う特別損失の計上に関するお知らせ
-- 販売用不動産の売却に関するお知らせ
-- 投資法人債（グリーンボンド）の発行に関するお知らせ
-
---- Step 6: get_all_attributes (success) ---
-Selector: .title a
-Requested Attribute/Content: href
-Results (23 items found):
-  [1]
-    URL: https://www.release.tdnet.info/inbs/140120250415516016.pdf
-  [2]
-    URL: https://www.release.tdnet.info/inbs/140120250411513862.pdf
-  [3]
-    URL: https://www.release.tdnet.info/inbs/140120250415515850.pdf
-  [4]
-    URL: https://www.release.tdnet.info/inbs/140120250414514976.pdf
-  [5]
-    URL: https://www.release.tdnet.info/inbs/140120250414515595.pdf
-  [6]
-    URL: https://www.release.tdnet.info/inbs/140120250414515589.pdf
-  [7]
-    URL: https://www.release.tdnet.info/inbs/140120250414515451.pdf
-  [8]
-    URL: https://www.release.tdnet.info/inbs/140120250411513609.pdf
-  [9]
-    URL: https://www.release.tdnet.info/inbs/140120250410513021.pdf
-  [10]
-    URL: https://www.release.tdnet.info/inbs/140120250411513381.pdf
-  [11]
-    URL: https://www.release.tdnet.info/inbs/140120250411513190.pdf
-  [12]
-    URL: https://www.release.tdnet.info/inbs/140120250411513651.pdf
-  [13]
-    URL: https://www.release.tdnet.info/inbs/140120250411513868.pdf
-  [14]
-    URL: https://www.release.tdnet.info/inbs/140120250411513346.pdf
-  [15]
-    URL: https://www.release.tdnet.info/inbs/140120250410512822.pdf
-  [16]
-    URL: https://www.release.tdnet.info/inbs/140120250410512824.pdf
-  [17]
-    URL: https://www.release.tdnet.info/inbs/140120250410512830.pdf
-  [18]
-    URL: https://www.release.tdnet.info/inbs/140120250410512832.pdf
-  [19]
-    URL: https://www.release.tdnet.info/inbs/140120250409511912.pdf
-  [20]
-    URL: https://www.release.tdnet.info/inbs/140120250409511914.pdf
-  [21]
-    URL: https://www.release.tdnet.info/inbs/140120250410512673.pdf
-  [22]
-    URL: https://www.release.tdnet.info/inbs/140120250410512662.pdf
-  [23]
-    URL: https://www.release.tdnet.info/inbs/140120250409511555.pdf
+--- Step 2: select_option (error) ---
+Message: Failed to get target info before step: Root page was closed before step 2.
 
 
 
@@ -689,7 +1274,7 @@ Results (23 items found):
 - フォルダ名: .
 - ファイル名: playwright_actions.py
 - 内容:
-# --- ファイル: playwright_actions.py ---
+# --- ファイル: playwright_actions.py (修正版) ---
 """
 Playwrightの各アクション（クリック、入力、取得など）を実行するコアロジック。
 """
@@ -699,8 +1284,9 @@ import os
 import time
 import pprint
 import traceback
-from urllib.parse import urljoin
-from typing import List, Tuple, Optional, Union, Dict, Any
+import re # <<< 正規表現モジュールをインポート
+from urllib.parse import urljoin, urlparse # <<< urlparse を追加
+from typing import List, Tuple, Optional, Union, Dict, Any, Set # <<< Set を追加
 
 from playwright.async_api import (
     Page,
@@ -716,9 +1302,100 @@ from playwright.async_api import (
 import config
 import utils # PDF処理などで使用
 from playwright_finders import find_element_dynamically, find_all_elements_dynamically
-from playwright_helper_funcs import get_page_inner_text
+from playwright_helper_funcs import get_page_inner_text # get_page_inner_text は別途使用
 
 logger = logging.getLogger(__name__)
+
+# --- ▼▼▼ 追加: メールアドレス抽出用ヘルパー関数 ▼▼▼ ---
+# メールアドレス抽出用の正規表現 (一般的なもの)
+EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
+
+async def _extract_emails_from_page_async(context: BrowserContext, url: str, timeout: int) -> List[str]:
+    """
+    指定されたURLに新しいページでアクセスし、ページのinnerTextとmailtoリンクからメールアドレスを抽出する。
+    重複を含むメールアドレスのリストを返す。失敗時は空リストを返す。
+    """
+    page = None
+    emails_found: Set[str] = set() # ページ内での重複を避けるために Set を使用
+    start_time = time.monotonic()
+    # ページ遷移自体のタイムアウトも考慮
+    page_access_timeout = max(int(timeout * 0.8), 15000)
+    logger.info(f"URLからメール抽出開始: {url} (タイムアウト: {page_access_timeout}ms)")
+
+    try:
+        page = await context.new_page()
+        # ナビゲーションタイムアウトを設定
+        nav_timeout = max(int(page_access_timeout * 0.9), 10000)
+        logger.debug(f"  Navigating to {url} with timeout {nav_timeout}ms")
+        await page.goto(url, wait_until="load", timeout=nav_timeout)
+        logger.debug(f"  Navigation to {url} successful.")
+
+        # ページ全体のテキストを取得 (タイムアウトは残り時間で)
+        remaining_time_for_text = page_access_timeout - (time.monotonic() - start_time) * 1000
+        if remaining_time_for_text <= 1000: # 最低1秒は確保
+            raise PlaywrightTimeoutError(f"Not enough time left to get page text from {url}")
+        text_timeout = int(remaining_time_for_text)
+        logger.debug(f"  Getting page innerText with timeout {text_timeout}ms")
+        # bodyがない場合もあるので、ルート要素から取得を試みる
+        page_text = await page.locator(':root').inner_text(timeout=text_timeout)
+
+        # テキストからメールアドレスを抽出
+        if page_text:
+            found_in_text = EMAIL_REGEX.findall(page_text)
+            if found_in_text:
+                logger.debug(f"  Found {len(found_in_text)} potential emails in page text.")
+                emails_found.update(found_in_text) # Setに追加して重複排除
+
+        # mailto: リンクからメールアドレスを抽出
+        mailto_links = await page.locator("a[href^='mailto:']").all()
+        if mailto_links:
+            logger.debug(f"  Found {len(mailto_links)} mailto links.")
+            for link in mailto_links:
+                try:
+                    href = await link.get_attribute('href', timeout=500) # mailtoリンク取得は短時間で
+                    if href and href.startswith('mailto:'):
+                        # "mailto:" の部分と、?subject=...などのパラメータを除去
+                        email_part = href[len('mailto:'):].split('?')[0]
+                        if email_part:
+                             # URLデコードが必要な場合もあるが、まずはそのまま追加
+                             # 簡易バリデーション
+                             if EMAIL_REGEX.match(email_part):
+                                 emails_found.add(email_part)
+                                 logger.debug(f"    Extracted email from mailto: {email_part}")
+                             else:
+                                  logger.debug(f"    Skipping invalid mailto part: {email_part}")
+
+                except PlaywrightTimeoutError:
+                    logger.warning(f"  Timeout getting href from a mailto link on {url}")
+                except Exception as link_err:
+                    logger.warning(f"  Error processing a mailto link on {url}: {link_err}")
+
+        elapsed = (time.monotonic() - start_time) * 1000
+        logger.info(f"メール抽出完了 ({url})。ユニーク候補数: {len(emails_found)} ({elapsed:.0f}ms)")
+        return list(emails_found) # Set を List にして返す
+
+    except PlaywrightTimeoutError as e:
+        elapsed = (time.monotonic() - start_time) * 1000
+        logger.warning(f"メール抽出中のタイムアウト ({url}, {elapsed:.0f}ms): {e}")
+        return [] # タイムアウト時は空リスト
+    except Exception as e:
+        elapsed = (time.monotonic() - start_time) * 1000
+        # ネットワークエラーなど、ページアクセス自体が失敗した場合
+        if "net::ERR_" in str(e):
+             logger.warning(f"メール抽出中のネットワークエラー ({url}, {elapsed:.0f}ms): {type(e).__name__} - {e}")
+        else:
+             logger.error(f"メール抽出中に予期せぬエラー ({url}, {elapsed:.0f}ms): {type(e).__name__} - {e}", exc_info=False)
+             logger.debug(f"Detailed error during email extraction from {url}:", exc_info=True)
+        return [] # その他のエラーでも空リスト
+    finally:
+        if page and not page.is_closed():
+            try:
+                await page.close()
+                logger.debug(f"メール抽出用一時ページ ({url}) を閉じました。")
+            except Exception as close_e:
+                logger.warning(f"メール抽出用一時ページ ({url}) クローズ中にエラー (無視): {close_e}")
+# --- ▲▲▲ 追加 ▲▲▲ ---
+
 
 async def execute_actions_async(
     initial_page: Page,
@@ -1023,20 +1700,21 @@ async def execute_actions_async(
                     action_result_details["pdf_text"] = pdf_text_content # PDFテキストも結果に含める
                 results.append({"step": step_num, "status": "success", "action": action, **action_result_details})
 
+            # --- get_all_attributes 修正版 ---
             elif action == "get_all_attributes":
                 if not selector: raise ValueError("Action 'get_all_attributes' requires 'selector'.")
                 if not attribute_name: raise ValueError("Action 'get_all_attributes' requires 'attribute_name'.")
 
                 if not found_elements_list:
-                    logger.warning(f"動的探索で要素 '{selector}' が見つからなかったため、属性取得をスキップします。")
-                    action_result_details["attribute_list"] = [] # 空リストを結果として設定
-                    # href, pdf, content モードの場合も空リストを設定
-                    if attribute_name.lower() in ['href', 'pdf', 'content']:
+                    logger.warning(f"動的探索で要素 '{selector}' が見つからなかったため、属性/コンテンツ取得をスキップします。")
+                    action_result_details["results_count"] = 0 # 結果件数を0にする
+                    if attribute_name.lower() in ['href', 'pdf', 'content', 'mail']:
                         action_result_details["url_list"] = []
-                    if attribute_name.lower() == 'pdf':
-                        action_result_details["pdf_texts"] = []
-                    if attribute_name.lower() == 'content':
-                        action_result_details["scraped_texts"] = []
+                    if attribute_name.lower() == 'pdf': action_result_details["pdf_texts"] = []
+                    if attribute_name.lower() == 'content': action_result_details["scraped_texts"] = []
+                    if attribute_name.lower() == 'mail': action_result_details["extracted_emails"] = []
+                    if attribute_name.lower() not in ['href', 'pdf', 'content', 'mail']:
+                        action_result_details["attribute_list"] = []
                 else:
                     num_found = len(found_elements_list)
                     logger.info(f"動的探索で見つかった {num_found} 個の要素から属性/コンテンツ '{attribute_name}' を取得します。")
@@ -1045,48 +1723,53 @@ async def execute_actions_async(
                     url_list_for_file: List[Optional[str]] = []
                     pdf_texts_list_for_file: List[Optional[str]] = []
                     scraped_texts_list_for_file: List[Optional[str]] = []
+                    email_list_for_file: List[str] = [] # mailモード用 (ドメインユニーク)
                     generic_attribute_list_for_file: List[Optional[str]] = []
 
                     # --- 属性名に応じて処理を分岐 ---
-                    if attribute_name.lower() in ['href', 'pdf', 'content']:
-                        logger.info("href属性を取得し、絶対URLに変換、必要に応じてコンテンツを取得します...")
+                    # href, pdf, content モード (処理を共通化)
+                    if attribute_name.lower() in ['href', 'pdf', 'content', 'mail']: # <<< mail を追加
+                        logger.info(f"モード '{attribute_name.lower()}': href属性を取得し、絶対URLに変換、必要に応じてコンテンツを取得します...")
 
-                        # 同時実行数を制御するためのセマフォを作成 (同時実行数5)
-                        CONCURRENT_LIMIT = 5
+                        CONCURRENT_LIMIT = 5 # 同時実行数
                         semaphore = asyncio.Semaphore(CONCURRENT_LIMIT)
                         logger.info(f"URLアクセス/コンテンツ取得の同時実行数を {CONCURRENT_LIMIT} に制限します。")
 
-                        # 個々の要素から属性/コンテンツを取得する内部関数 (セマフォを受け取るように変更)
-                        async def process_single_element_for_href_content(
-                            locator: Locator, index: int, base_url: str, attr_mode: str, sem: asyncio.Semaphore # セマフォ引数を追加
-                        ) -> Tuple[Optional[str], Optional[str], Optional[str]]:
-                            """ 1要素のhrefを取得し、モードに応じてPDF/コンテンツも取得 (セマフォで同時実行制御) """
+                        # 個々の要素から属性/コンテンツを取得する内部関数
+                        async def process_single_element_for_href_related(
+                            locator: Locator, index: int, base_url: str, attr_mode: str, sem: asyncio.Semaphore
+                        ) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[List[str]]]: # <<< mail 用のリストを追加
+                            """ 1要素のhrefを取得し、モードに応じてPDF/コンテンツ/メールも取得 (セマフォで同時実行制御) """
                             original_href: Optional[str] = None
                             absolute_url: Optional[str] = None
                             pdf_text: Optional[str] = None
                             scraped_text: Optional[str] = None
+                            emails_from_page: Optional[List[str]] = None # <<< mail 用
 
-                            # セマフォを取得するまで待機し、処理ブロックを実行
-                            async with sem:
+                            async with sem: # セマフォで同時実行数を制御
                                 try:
-                                    logger.debug(f"  [{index+1}/{num_found}] Processing started (Semaphore acquired)...")
-                                    # href属性取得 (個々のタイムアウトは短めに調整)
+                                    logger.debug(f"  [{index+1}/{num_found}] Processing started ({attr_mode})...")
                                     href_timeout = max(500, action_wait_time // num_found if num_found > 5 else action_wait_time // 3)
-
                                     original_href = await locator.get_attribute("href", timeout=href_timeout)
+
                                     if original_href is None:
                                         logger.debug(f"  [{index+1}/{num_found}] href属性が見つかりません。")
-                                        return None, None, None # この要素の処理は終了
+                                        return None, None, None, None # URLなし
 
                                     # 絶対URL変換
                                     try:
                                         absolute_url = urljoin(base_url, original_href)
+                                        # URLスキーマが http/https でない場合はスキップ (javascript: mailto: など)
+                                        parsed_url = urlparse(absolute_url)
+                                        if parsed_url.scheme not in ['http', 'https']:
+                                            logger.debug(f"  [{index+1}/{num_found}] スキップ (非HTTP/HTTPS URL): {absolute_url}")
+                                            return absolute_url, None, None, None # URLは返す
                                     except Exception as url_conv_e:
                                          logger.warning(f"  [{index+1}/{num_found}] 絶対URL変換エラー ({original_href}): {url_conv_e}")
-                                         absolute_url = f"Error converting URL: {original_href}" # エラー情報を含める
+                                         return f"Error converting URL: {original_href}", None, None, None # エラーURL
 
                                     # pdf モードの場合
-                                    if attr_mode == 'pdf' and isinstance(absolute_url, str) and absolute_url.lower().endswith('.pdf'):
+                                    if attr_mode == 'pdf' and absolute_url.lower().endswith('.pdf'):
                                         pdf_start = time.monotonic()
                                         pdf_bytes = await utils.download_pdf_async(api_request_context, absolute_url)
                                         if pdf_bytes:
@@ -1097,51 +1780,86 @@ async def execute_actions_async(
                                         logger.info(f"  [{index+1}/{num_found}] PDF処理完了 ({pdf_elapsed:.0f}ms) URL: {absolute_url}")
 
                                     # content モードの場合 (PDF以外)
-                                    elif attr_mode == 'content' and isinstance(absolute_url, str) and not absolute_url.lower().endswith('.pdf'):
+                                    elif attr_mode == 'content' and not absolute_url.lower().endswith('.pdf'):
                                         content_start = time.monotonic()
-                                        # ページテキスト取得 (get_page_inner_textを使用, タイムアウトはアクション全体時間)
                                         success, content_or_error = await get_page_inner_text(current_context, absolute_url, action_wait_time)
                                         scraped_text = content_or_error
                                         content_elapsed = (time.monotonic() - content_start) * 1000
                                         logger.info(f"  [{index+1}/{num_found}] Content取得試行完了 ({content_elapsed:.0f}ms) URL: {absolute_url} Success: {success}")
 
-                                    logger.debug(f"  [{index+1}/{num_found}] Processing finished (Semaphore released). URL: {absolute_url}")
-                                    return absolute_url, pdf_text, scraped_text
+                                    # mail モードの場合 (PDFかどうかは問わない)
+                                    elif attr_mode == 'mail':
+                                         mail_start = time.monotonic()
+                                         # ヘルパー関数を呼び出し
+                                         emails_from_page = await _extract_emails_from_page_async(current_context, absolute_url, action_wait_time)
+                                         mail_elapsed = (time.monotonic() - mail_start) * 1000
+                                         logger.info(f"  [{index+1}/{num_found}] Mail抽出試行完了 ({mail_elapsed:.0f}ms) URL: {absolute_url} Found: {len(emails_from_page) if emails_from_page else 0}")
+
+                                    logger.debug(f"  [{index+1}/{num_found}] Processing finished. URL: {absolute_url}")
+                                    return absolute_url, pdf_text, scraped_text, emails_from_page # <<< mail 結果を返す
 
                                 except PlaywrightTimeoutError:
                                     logger.warning(f"  [{index+1}/{num_found}] href属性取得タイムアウト ({href_timeout}ms)。")
-                                    return f"Error: Timeout getting href", None, None
+                                    return f"Error: Timeout getting href", None, None, None
                                 except Exception as e:
-                                    logger.warning(f"  [{index+1}/{num_found}] href/コンテンツ取得中に予期せぬエラー: {type(e).__name__} - {e}", exc_info=True)
-                                    return f"Error: {type(e).__name__} - {e}", None, None
-                            # 'async with sem:' を抜けるとセマフォは自動的に解放される
+                                    logger.warning(f"  [{index+1}/{num_found}] href/コンテンツ/メール取得中に予期せぬエラー: {type(e).__name__} - {e}", exc_info=True)
+                                    return f"Error: {type(e).__name__} - {e}", None, None, None
 
-                        # --- 見つかった全要素に対して並行処理 (タスク作成時にセマフォを渡す) ---
+                        # --- 見つかった全要素に対して並行処理 ---
                         process_tasks = [
-                            process_single_element_for_href_content(loc, idx, current_base_url, attribute_name.lower(), semaphore)
+                            process_single_element_for_href_related(loc, idx, current_base_url, attribute_name.lower(), semaphore)
                             for idx, (loc, _) in enumerate(found_elements_list)
                         ]
-                        # asyncio.gather は全てのタスクが完了するのを待つ
                         results_tuples = await asyncio.gather(*process_tasks)
 
-                        # 結果をリストに格納
-                        for abs_url, pdf_content, scraped_content in results_tuples:
-                            url_list_for_file.append(abs_url)
-                            pdf_texts_list_for_file.append(pdf_content)
-                            scraped_texts_list_for_file.append(scraped_content)
+                        # 結果をリストに格納 & mailモードのドメイン重複排除
+                        all_extracted_emails_flat: List[str] = [] # mailモード用: 全メールアドレス（ドメイン重複排除前）
+                        processed_domains: Set[str] = set() # mailモード用: 処理済みドメイン
 
-                        logger.info(f"全 {num_found} 要素の href/コンテンツ処理が完了しました。")
+                        for abs_url, pdf_content, scraped_content, emails_list in results_tuples:
+                            url_list_for_file.append(abs_url) # URLは常に追加
+                            if attribute_name.lower() == 'pdf':
+                                pdf_texts_list_for_file.append(pdf_content)
+                            if attribute_name.lower() == 'content':
+                                scraped_texts_list_for_file.append(scraped_content)
+                            if attribute_name.lower() == 'mail' and emails_list:
+                                all_extracted_emails_flat.extend(emails_list) # まずフラットリストに追加
+
+                        # --- mail モードのドメイン重複排除処理 ---
+                        if attribute_name.lower() == 'mail':
+                            logger.info(f"メールアドレスのドメイン重複排除を開始 (候補総数: {len(all_extracted_emails_flat)})...")
+                            for email in all_extracted_emails_flat:
+                                if isinstance(email, str) and '@' in email:
+                                    try:
+                                        domain = email.split('@', 1)[1].lower() # ドメイン部分を小文字で取得
+                                        if domain and domain not in processed_domains:
+                                            email_list_for_file.append(email) # ユニークドメインのメールを最終リストへ
+                                            processed_domains.add(domain) # ドメインを処理済みセットへ
+                                            logger.debug(f"    Added unique domain email: {email}")
+                                        # else: logger.debug(f"    Skipping duplicate domain email: {email}")
+                                    except IndexError:
+                                        logger.warning(f"    Invalid email format skipped: {email}")
+                                else:
+                                     logger.debug(f"    Skipping invalid or non-string email entry: {email}")
+                            logger.info(f"ドメイン重複排除完了。ユニークドメインメールアドレス数: {len(email_list_for_file)}")
 
                         # 結果を action_result_details に格納
                         action_result_details["attribute"] = attribute_name
                         action_result_details["url_list"] = url_list_for_file # 常にURLリストを含める
+                        action_result_details["results_count"] = len(url_list_for_file) # 処理したURL数をカウント
                         if attribute_name.lower() == 'pdf':
                              action_result_details["pdf_texts"] = pdf_texts_list_for_file
                         if attribute_name.lower() == 'content':
                              action_result_details["scraped_texts"] = scraped_texts_list_for_file
-                        # hrefモードの場合は url_list が主要な結果
+                        if attribute_name.lower() == 'mail':
+                             action_result_details["extracted_emails"] = email_list_for_file # ドメインユニークなリスト
 
-                    else: # href, pdf, content 以外の通常の属性取得
+                        if len(email_list_for_file) > 0:
+                            with open("output/server_mails.txt", "a", encoding="utf-8") as f:
+                                f.write('\n'.join(email_list_for_file) + '\n')  # 各要素を改行で結合して書き込む
+
+                    # --- href, pdf, content, mail 以外の通常の属性取得 ---
+                    else:
                         logger.info(f"指定された属性 '{attribute_name}' を取得します...")
                         # 属性値を取得する内部関数
                         async def get_single_attr(locator: Locator, attr_name: str, index: int) -> Optional[str]:
@@ -1162,18 +1880,23 @@ async def execute_actions_async(
                         ]
                         generic_attribute_list_for_file = await asyncio.gather(*attr_tasks)
 
-                        action_result_details.update({"attribute": attribute_name, "attribute_list": generic_attribute_list_for_file})
+                        action_result_details.update({
+                            "attribute": attribute_name,
+                            "attribute_list": generic_attribute_list_for_file,
+                            "results_count": len(generic_attribute_list_for_file)
+                        })
                         logger.info(f"取得した属性値リスト ({len(generic_attribute_list_for_file)}件)")
 
                 # 最後に結果を追加
                 results.append({"step": step_num, "status": "success", "action": action, **action_result_details})
-
+            # --- ここまで get_all_attributes の修正 ---
 
             elif action == "get_all_text_contents":
                 if not selector: raise ValueError("Action 'get_all_text_contents' requires 'selector'.")
                 text_list: List[Optional[str]] = []
                 if not found_elements_list:
                     logger.warning(f"動的探索で要素 '{selector}' が見つからなかったため、テキスト取得をスキップします。")
+                    action_result_details["results_count"] = 0
                 else:
                     num_found = len(found_elements_list)
                     logger.info(f"動的探索で見つかった {num_found} 個の要素から textContent を取得します。")
@@ -1196,6 +1919,7 @@ async def execute_actions_async(
                     ]
                     text_list = await asyncio.gather(*get_text_tasks)
                     logger.info(f"取得したテキストリスト ({len(text_list)}件)")
+                    action_result_details["results_count"] = len(text_list)
 
                 action_result_details["text_list"] = text_list
                 results.append({"step": step_num, "status": "success", "action": action, **action_result_details})
@@ -2922,6 +3646,147 @@ async def run_playwright_automation_async(
 
 
 - フォルダ名: .
+- ファイル名: playwright_locator_test_results.json
+- 内容:
+{
+  "google_search_top": [
+    {
+      "name": "Search Textbox (by Role/Label)",
+      "locator_type": "get_by_... (0)",
+      "status": "Fail (Not Found)",
+      "count": 0,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 31
+    },
+    {
+      "name": "Search Textbox (by Role/Label)",
+      "locator_type": "get_by_... (1)",
+      "status": "Success",
+      "count": 1,
+      "is_visible": true,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 3047
+    },
+    {
+      "name": "Search Button (by Role/Name)",
+      "locator_type": "get_by_... (0)",
+      "status": "Success",
+      "count": 1,
+      "is_visible": true,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 3031
+    },
+    {
+      "name": "Search Button (by Role/Name)",
+      "locator_type": "get_by_... (1)",
+      "status": "Fail (Found 2 elements)",
+      "count": 2,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 16
+    },
+    {
+      "name": "Feeling Lucky Button (by Role/Name)",
+      "locator_type": "get_by_... (0)",
+      "status": "Success",
+      "count": 1,
+      "is_visible": true,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 3031
+    },
+    {
+      "name": "Feeling Lucky Button (by Role/Name)",
+      "locator_type": "get_by_... (1)",
+      "status": "Fail (Found 2 elements)",
+      "count": 2,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 0
+    }
+  ],
+  "google_results": [
+    {
+      "name": "Result 1 Link (by Text/Role)",
+      "locator_type": "get_by_... (0)",
+      "status": "Fail (Not Found)",
+      "count": 0,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 62
+    },
+    {
+      "name": "Result 1 Link (by Text/Role)",
+      "locator_type": "get_by_... (1)",
+      "status": "Fail (Not Found)",
+      "count": 0,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 16
+    },
+    {
+      "name": "Result 2 Link (by nth)",
+      "locator_type": "get_by_... (0)",
+      "status": "Fail (Not Found)",
+      "count": 0,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 0
+    },
+    {
+      "name": "Result 2 Link (by nth)",
+      "locator_type": "get_by_... (1)",
+      "status": "Fail (Found 14 elements)",
+      "count": 14,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 15
+    },
+    {
+      "name": "Next Page Link (by Role/Text)",
+      "locator_type": "get_by_... (0)",
+      "status": "Fail (Not Visible)",
+      "count": 1,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (0)",
+      "duration_ms": 32
+    },
+    {
+      "name": "Next Page Link (by Role/Text)",
+      "locator_type": "get_by_... (1)",
+      "status": "Fail (Not Visible)",
+      "count": 1,
+      "is_visible": false,
+      "error": null,
+      "selector_used": "get_by_... (1)",
+      "duration_ms": 15
+    }
+  ],
+  "news_article": [
+    {
+      "site": "news_article",
+      "status": "Navigation Failed",
+      "error": "Page.goto: net::ERR_NAME_NOT_RESOLVED at https://news.example.com/article123\nCall log:\n  - navigating to \"https://news.example.com/article123\", waiting until \"load\"\n"
+    }
+  ]
+}
+
+
+---
+
+
+- フォルダ名: .
 - ファイル名: README copy.md
 - 内容:
 # Web-Runner-mcp
@@ -3337,105 +4202,68 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 
 - フォルダ名: .
-- ファイル名: testapp.py
+- ファイル名: script.js
 - 内容:
-import time
-import random
-from playwright.sync_api import sync_playwright, Page, expect
-from playwright_stealth import stealth_sync # playwright-stealthをインポート
+(function() {
+    console.log("[JavaScript] Script loaded and running.");
 
-def human_like_delay(min_seconds=0.5, max_seconds=1.5):
-    """人間らしいランダムな遅延を生成"""
-    time.sleep(random.uniform(min_seconds, max_seconds))
+    function getSelector(element) {
+        let path = [];
+        while (element) {
+            let selector = element.tagName.toLowerCase();
 
-def run(page: Page):
-    """指定されたページでGoogle検索とクリック操作を実行"""
-    search_term = "あああ"
-    search_box_selector = ".gLFyf"
-    #first_result_selector = "#rso > div:nth-child(1) > div.A6K0A > div > div > div.kb0PBd.ieodic.jGGQ5e > div > div:nth-child(2) > div > div > span > a"
-    first_result_selector = "#rso > div:nth-child(3) > div > div > div.kb0PBd.A9Y9g.jGGQ5e > div > div:nth-child(2) > div > div > span > a"
+            if (element.id) {
+                selector += `#${element.id}`;
+            } else if (element.className) {
+                selector += `.${element.className.replace(/ /g, '.')}`;
+            } else {
+                let index = 1;
+                let sibling = element.previousElementSibling;
+                while (sibling) {
+                    if (sibling.tagName === element.tagName) {
+                        index++;
+                    }
+                    sibling = sibling.previousElementSibling;
+                }
+                selector += `:nth-of-type(${index})`;
+            }
 
-    print("1. Googleにアクセスします...")
-    page.goto("https://www.google.co.jp/", wait_until="networkidle")
-    human_like_delay(1, 2)
+            path.unshift(selector);
+            element = element.parentNode;
+        }
+        return path.slice(1).join(' > ');
+    }
 
-    print(f"2. 検索ボックス ({search_box_selector}) を探しています...")
-    search_box = page.locator(search_box_selector)
-    expect(search_box).to_be_visible(timeout=10000)
+    // DOMContentLoaded イベントを使用して、DOM がロードされた後にイベントリスナーを登録する
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("[JavaScript] DOMContentLoaded event fired.");
 
-    print("3. 検索ボックスをクリック（より人間らしく）...")
-    search_box.click()
-    human_like_delay(0.3, 0.8)
+        // イベント委譲を使用する
+        document.body.addEventListener('click', function(event) {
+            const target = event.target;
+            const selector = getSelector(target);
+            window.clickSelector = selector;
+            console.log("[JavaScript] Click event on:", selector, target);
+        });
 
-    print(f"4. '{search_term}' を人間のように入力します...")
-    search_box.type(search_term, delay=random.uniform(80, 250))
-    human_like_delay(0.5, 1.0)
+        document.body.addEventListener('focus', function(event) {
+            const target = event.target;
+            const selector = getSelector(target);
+            window.focusSelector = selector;
+            console.log("[JavaScript] Focus event on:", selector, target);
+        }, true); // キャプチャフェーズを使用
 
-    print("5. Enterキーを押します...")
-    search_box.press("Enter")
+         document.body.addEventListener('blur', function(event) {
+            const target = event.target;
+            const selector = getSelector(target);
+            window.blurSelector = selector;
+            console.log("[JavaScript] Blur event on:", selector, target);
+        }, true); // キャプチャフェーズを使用
 
-    print("6. 検索結果が表示されるのを待ちます...")
-    page.wait_for_selector(first_result_selector, state="visible", timeout=15000)
-    human_like_delay(1, 2.5)
-
-    print(f"7. 最初の結果 ({first_result_selector}) を探しています...")
-    first_result_link = page.locator(first_result_selector)
-    expect(first_result_link).to_be_visible(timeout=10000)
-
-    print("8. 結果リンクの上にマウスカーソルを移動（より人間らしく）...")
-    try:
-        first_result_link.hover()
-        human_like_delay(0.4, 0.9)
-    except Exception as e:
-        print(f"  警告: ホバー中にエラーが発生しました: {e}。クリックは試行します。")
-
-    print("9. 最初の結果をクリックします...")
-    first_result_link.click()
-
-    print("10. ページ遷移を待ちます...")
-    page.wait_for_load_state("networkidle", timeout=20000)
-    print("   新しいページがロードされました。")
-    human_like_delay(1.5, 3)
-
-    print("操作完了！")
-
-
-# --- メイン処理 ---
-with sync_playwright() as p:
-    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" # 例
-
-    browser = p.chromium.launch(headless=True,
-                                 args=["--start-maximized"],
-                                 slow_mo=random.uniform(50, 150)
-                                )
-    context = browser.new_context(
-        user_agent=user_agent,
-        viewport={'width': 1920, 'height': 1080},
-        locale='ja-JP',
-        timezone_id='Asia/Tokyo',
-        no_viewport=True
-    )
-
-    page = context.new_page()
-
-    # --- ここで stealth_sync を適用 ---
-    print("Stealth機能を適用します...")
-    stealth_sync(page)
-    # ------------------------------------
-
-    try:
-        run(page)
-    except Exception as e:
-        print(f"エラーが発生しました: {e}")
-        try:
-            page.screenshot(path="error_screenshot.png")
-            print("エラー発生時のスクリーンショットを 'error_screenshot.png' として保存しました。")
-        except Exception as se:
-            print(f"スクリーンショットの保存中にエラーが発生しました: {se}")
-    finally:
-        print("ブラウザを閉じます...")
-        human_like_delay(2, 4)
-        browser.close()
+        // 他のイベントも同様に処理する
+        console.log("[JavaScript] Event listeners added.");
+    });
+})();
 
 
 ---
@@ -3444,111 +4272,92 @@ with sync_playwright() as p:
 - フォルダ名: .
 - ファイル名: utils.py
 - 内容:
-# --- ファイル: utils.py (修正・テストコード追加版) ---
+# --- ファイル: utils.py (結果追記機能追加版) ---
 import json
 import logging
-import os # ★★★ os モジュールをインポート ★★★
+import os
 import sys
 import asyncio
 import time
-import traceback # ★★★ traceback をインポート ★★★
+import traceback
 import fitz  # PyMuPDF
 from playwright.async_api import APIRequestContext, TimeoutError as PlaywrightTimeoutError
-from typing import Optional, Dict, Any, List
+# <<< typing に Optional, Dict, Any, List, Union を追加 >>>
+from typing import Optional, Dict, Any, List, Union
 from urllib.parse import urljoin
 
 import config
 
 logger = logging.getLogger(__name__)
 
+# --- setup_logging_for_standalone, load_input_from_json, ---
+# --- extract_text_from_pdf_sync, download_pdf_async は変更なし ---
+# (コードは省略)
 def setup_logging_for_standalone(log_file_path: str = config.LOG_FILE):
     """Web-Runner単体実行用のロギング設定を行います。"""
     log_level = logging.INFO # デフォルトレベル
-
-    # ルートロガーを取得
     root_logger = logging.getLogger()
-    # 既存のハンドラをすべて削除
     for handler in root_logger.handlers[:]:
         root_logger.removeHandler(handler)
-
-    # フォーマッタ
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-    # コンソールハンドラ
-    console_handler = logging.StreamHandler(sys.stdout) # 標準出力へ
+    console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(formatter)
     handlers = [console_handler]
     log_target = "Console"
-
-    # ファイルハンドラ
-    file_handler = None # ★★★ 初期化 ★★★
+    file_handler = None
     try:
         log_dir = os.path.dirname(log_file_path)
-        if log_dir: # ディレクトリパスが空でない場合のみ処理
+        if log_dir:
             if not os.path.exists(log_dir):
                 try:
                     os.makedirs(log_dir, exist_ok=True)
-                    print(f"DEBUG [utils]: Created directory '{log_dir}'") # デバッグ出力
+                    print(f"DEBUG [utils]: Created directory '{log_dir}'")
                 except Exception as e:
                     print(f"警告 [utils]: ログディレクトリ '{log_dir}' の作成に失敗しました: {e}", file=sys.stderr)
-                    # ディレクトリ作成失敗時はファイルログを諦める
-                    raise # エラーを再送出して try ブロックを抜ける
+                    raise
             else:
-                print(f"DEBUG [utils]: Directory '{log_dir}' already exists.") # デバッグ出力
-
-        # ★★★ ファイルが開けるか先にテスト ★★★
+                print(f"DEBUG [utils]: Directory '{log_dir}' already exists.")
         try:
             with open(log_file_path, 'a') as f:
                 print(f"DEBUG [utils]: Successfully opened (or created) '{log_file_path}' for appending.")
         except Exception as e:
              print(f"警告 [utils]: ログファイル '{log_file_path}' を開けません（権限確認）: {e}", file=sys.stderr)
-             raise # ファイルが開けない場合はハンドラ設定に進まない
-
-        file_handler = logging.FileHandler(log_file_path, encoding='utf-8', mode='a') # 追記モード
+             raise
+        file_handler = logging.FileHandler(log_file_path, encoding='utf-8', mode='a')
         file_handler.setFormatter(formatter)
         handlers.append(file_handler)
         log_target += f" and File ('{log_file_path}')"
-        print(f"DEBUG [utils]: FileHandler created for '{log_file_path}'") # デバッグ出力
+        print(f"DEBUG [utils]: FileHandler created for '{log_file_path}'")
     except Exception as e:
         print(f"警告 [utils]: ログファイル '{log_file_path}' のハンドラ設定に失敗しました: {e}", file=sys.stderr)
-        # ファイル設定失敗時はコンソールのみで続行
-
-    # basicConfig を使ってハンドラとレベルを設定 (force=True で再設定可能に)
     logging.basicConfig(
         level=log_level,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', # basicConfig でのフォーマット指定も念のため
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         handlers=handlers,
-        force=True # ★★★ 既存設定を強制上書き ★★★
+        force=True
     )
-    # Playwrightの冗長なログを抑制
     logging.getLogger('playwright').setLevel(logging.WARNING)
-    # ログ設定完了メッセージを出力（ハンドラ設定後なのでログに出力されるはず）
-    # getLogger(__name__) で utils ロガーを取得して出力
     current_logger = logging.getLogger(__name__)
     current_logger.info(f"Standalone logger setup complete. Level: {logging.getLevelName(log_level)}. Target: {log_target}")
-    print(f"DEBUG [utils]: Logging setup finished. Root handlers: {logging.getLogger().handlers}") # デバッグ出力
+    print(f"DEBUG [utils]: Logging setup finished. Root handlers: {logging.getLogger().handlers}")
 
-# --- load_input_from_json, extract_text_from_pdf_sync, download_pdf_async, write_results_to_file は変更なし ---
-# (これらの関数は省略)
 def load_input_from_json(filepath: str) -> Dict[str, Any]:
     """指定されたJSONファイルから入力データを読み込む。"""
     logger.info(f"入力ファイル '{filepath}' の読み込みを開始します...")
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        # 必須キーのチェック
         if "target_url" not in data or not data["target_url"]:
             raise ValueError("JSONファイルに必須キー 'target_url' が存在しないか、値が空です。")
         if "actions" not in data or not isinstance(data["actions"], list):
             raise ValueError("JSONファイルに必須キー 'actions' が存在しないか、リスト形式ではありません。")
         if not data["actions"]:
              logger.warning(f"入力ファイル '{filepath}' の 'actions' リストが空です。")
-
         logger.info(f"入力ファイル '{filepath}' を正常に読み込みました。")
         return data
     except FileNotFoundError:
         logger.error(f"入力ファイルが見つかりません: {filepath}")
-        raise # エラーを再送出
+        raise
     except json.JSONDecodeError as e:
         logger.error(f"JSON形式のエラーです ({filepath}): {e}")
         raise
@@ -3571,32 +4380,25 @@ def extract_text_from_pdf_sync(pdf_data: bytes) -> Optional[str]:
             page_start_time = time.monotonic()
             try:
                 page = doc.load_page(page_num)
-                # テキスト抽出 (ソートして論理的な順序に)
                 page_text = page.get_text("text", sort=True)
                 if page_text:
                     text_parts.append(page_text.strip())
-                # else:
-                #     logger.debug(f"ページ {page_num + 1}/{len(doc)} からテキストは抽出されませんでした。")
                 page_elapsed = (time.monotonic() - page_start_time) * 1000
                 logger.debug(f"ページ {page_num + 1} 処理完了 ({page_elapsed:.0f}ms)。")
             except Exception as page_e:
                 logger.warning(f"ページ {page_num + 1} の処理中にエラー: {page_e}")
                 text_parts.append(f"--- Error processing page {page_num + 1}: {page_e} ---")
-
         full_text = "\n--- Page Separator ---\n".join(text_parts)
-        # 空白行を除去して整形
         cleaned_text = '\n'.join([line.strip() for line in full_text.splitlines() if line.strip()])
         logger.info(f"PDFテキスト抽出完了。総文字数 (整形後): {len(cleaned_text)}")
-        # テキストが全く抽出できなかった場合もNoneではなく空文字列を返すか、あるいはその旨を示すメッセージを返すのが良いかもしれない
         return cleaned_text if cleaned_text else "(No text extracted from PDF)"
-    except fitz.fitz.TryingToReadFromEmptyFileError: # fitz.fitz... PyMuPDF 1.24+
+    except fitz.fitz.TryingToReadFromEmptyFileError:
          logger.error("PDF処理エラー: ファイルデータが空または破損しています。")
          return "Error: PDF data is empty or corrupted."
-    except fitz.fitz.FileDataError as e: # fitz.fitz...
-         logger.error(f"PDF処理エラー (PyMuPDF FileDataError): {e}", exc_info=False) # トレースバックは不要な場合も
+    except fitz.fitz.FileDataError as e:
+         logger.error(f"PDF処理エラー (PyMuPDF FileDataError): {e}", exc_info=False)
          return f"Error: PDF file data error - {e}"
     except RuntimeError as e:
-        # PyMuPDFの他のランタイムエラー（メモリ不足など）
         logger.error(f"PDF処理エラー (PyMuPDF RuntimeError): {e}", exc_info=True)
         return f"Error: PDF processing failed (PyMuPDF RuntimeError) - {e}"
     except Exception as e:
@@ -3604,53 +4406,36 @@ def extract_text_from_pdf_sync(pdf_data: bytes) -> Optional[str]:
         return f"Error: Unexpected error during PDF text extraction - {e}"
     finally:
         if doc:
-            try:
-                doc.close()
-                logger.debug("PDFドキュメントを閉じました。")
-            except Exception as close_e:
-                # クローズエラーは警告レベルに留める
-                logger.warning(f"PDFドキュメントのクローズ中にエラーが発生しました (無視): {close_e}")
+            try: doc.close(); logger.debug("PDFドキュメントを閉じました。")
+            except Exception as close_e: logger.warning(f"PDFドキュメントのクローズ中にエラーが発生しました (無視): {close_e}")
 
 async def download_pdf_async(api_request_context: APIRequestContext, url: str) -> Optional[bytes]:
     """指定されたURLからPDFを非同期でダウンロードし、バイトデータを返す。失敗時はNoneを返す。"""
     logger.info(f"PDFを非同期でダウンロード中: {url} (Timeout: {config.PDF_DOWNLOAD_TIMEOUT}ms)")
     try:
-        # 一般的なブラウザに近いヘッダーを設定
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
             'Accept': 'application/pdf,text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            'Accept-Encoding': 'gzip, deflate, br, zstd', # 圧縮を受け入れる
+            'Accept-Encoding': 'gzip, deflate, br, zstd',
             'Accept-Language': 'ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7'
         }
-        # リクエスト実行 (fail_on_status_code=False で 4xx/5xx でもエラーにしない)
         response = await api_request_context.get(url, headers=headers, timeout=config.PDF_DOWNLOAD_TIMEOUT, fail_on_status_code=False)
-
-        # ステータスコード確認
         if not response.ok:
             logger.error(f"PDFダウンロード失敗 ({url}) - Status: {response.status} {response.status_text}")
             try:
-                # エラーレスポンスのボディをデバッグログに出力 (最初の500文字)
-                error_body = await response.text(timeout=5000) # ボディ読み取りにもタイムアウト
+                error_body = await response.text(timeout=5000)
                 logger.debug(f"エラーレスポンスボディ (一部): {error_body[:500]}")
-            except Exception as body_err:
-                logger.warning(f"エラーレスポンスボディの読み取り中にエラーが発生しました: {body_err}")
-            return None # 失敗時はNoneを返す
-
-        # Content-Type確認 (小文字化して比較)
+            except Exception as body_err: logger.warning(f"エラーレスポンスボディの読み取り中にエラーが発生しました: {body_err}")
+            return None
         content_type = response.headers.get('content-type', '').lower()
         if 'application/pdf' not in content_type:
             logger.warning(f"レスポンスのContent-TypeがPDFではありません ({url}): '{content_type}'。ダウンロードは続行しますが、後続処理で失敗する可能性があります。")
-            # ここでNoneを返すか、続行するかは要件による
-            # return None
-
-        # レスポンスボディ取得
         body = await response.body()
         if not body:
              logger.warning(f"PDFダウンロード成功 ({url}) Status: {response.status} ですが、レスポンスボディが空です。")
              return None
         logger.info(f"PDFダウンロード成功 ({url})。サイズ: {len(body)} bytes")
-        return body # 成功時はバイトデータを返す
-
+        return body
     except PlaywrightTimeoutError:
         logger.error(f"PDFダウンロード中にタイムアウトが発生しました ({url})。設定タイムアウト: {config.PDF_DOWNLOAD_TIMEOUT}ms")
         return None
@@ -3658,11 +4443,18 @@ async def download_pdf_async(api_request_context: APIRequestContext, url: str) -
         logger.error(f"PDF非同期ダウンロード中に予期せぬエラーが発生しました ({url}): {e}", exc_info=True)
         return None
 
-def write_results_to_file(results: List[Dict[str, Any]], filepath: str):
-    """実行結果を指定されたファイルに書き込む。"""
+# --- ▼▼▼ write_results_to_file 修正 ▼▼▼ ---
+def write_results_to_file(
+    results: List[Dict[str, Any]],
+    filepath: str,
+    final_summary_data: Optional[Dict[str, Any]] = None # <<< 集約結果を受け取る引数を追加
+):
+    """
+    実行結果を指定されたファイルに書き込む。
+    オプションで最終的な集約結果も追記する。
+    """
     logger.info(f"実行結果を '{filepath}' に書き込みます...")
     try:
-        # 出力ディレクトリが存在しない場合は作成
         output_dir = os.path.dirname(filepath)
         if output_dir and not os.path.exists(output_dir):
             os.makedirs(output_dir, exist_ok=True)
@@ -3670,153 +4462,130 @@ def write_results_to_file(results: List[Dict[str, Any]], filepath: str):
 
         with open(filepath, "w", encoding="utf-8") as file:
             file.write("--- Web Runner 実行結果 ---\n\n")
+            # --- 各ステップ結果の書き込み (ここは変更なし) ---
+            if not results:
+                 file.write("(実行ステップ結果がありません)\n")
             for i, res in enumerate(results):
+                 # ステップ結果が辞書でない場合のエラーハンドリングを追加
+                if not isinstance(res, dict):
+                    file.write(f"--- Step {i+1}: Invalid Format ---\n")
+                    file.write(f"Received non-dict data: {res}\n\n")
+                    continue
+
                 step_num = res.get('step', i + 1)
                 action_type = res.get('action', 'Unknown')
                 status = res.get('status', 'Unknown')
-                selector = res.get('selector') # セレクター情報取得
+                selector = res.get('selector')
 
                 file.write(f"--- Step {step_num}: {action_type} ({status}) ---\n")
-                if selector: # セレクターがあれば表示
-                    file.write(f"Selector: {selector}\n")
-                if res.get('iframe_selector'): # iframeセレクターがあれば表示
-                    file.write(f"IFrame Selector (for switch): {res.get('iframe_selector')}\n")
-                if res.get('required_state'): # 要素探索時の状態指定があれば表示
-                    file.write(f"Required Element State: {res.get('required_state')}\n")
+                if res.get('memo'): file.write(f"Memo: {res.get('memo')}\n") # メモも表示
+                if selector: file.write(f"Selector: {selector}\n")
+                if res.get('iframe_selector'): file.write(f"IFrame Selector (for switch): {res.get('iframe_selector')}\n")
+                if res.get('required_state'): file.write(f"Required Element State: {res.get('required_state')}\n")
 
                 if status == "error":
-                     # エラーメッセージと詳細情報を書き込む
                      file.write(f"Message: {res.get('message')}\n")
-                     # full_error が message と異なる場合のみ詳細として出力
-                     if res.get('full_error') and res.get('full_error') != res.get('message'):
-                          file.write(f"Details: {res.get('full_error')}\n")
-                     if res.get('error_screenshot'):
-                          file.write(f"Screenshot: {res.get('error_screenshot')}\n")
-                     # トレースバック情報があれば出力 (デバッグに有用)
-                     if res.get('traceback'):
-                         file.write(f"Traceback:\n{res.get('traceback')}\n")
-
+                     if res.get('full_error') and res.get('full_error') != res.get('message'): file.write(f"Details: {res.get('full_error')}\n")
+                     if res.get('error_screenshot'): file.write(f"Screenshot: {res.get('error_screenshot')}\n")
+                     if res.get('traceback'): file.write(f"Traceback:\n{res.get('traceback')}\n")
                 elif status == "success":
-                    # 成功時の詳細情報を pop しながら書き込む (元の辞書を変更しないようにコピー)
                     details_to_write = res.copy()
-                    # 共通情報を削除
-                    for key in ['step', 'status', 'action', 'selector', 'iframe_selector', 'required_state']:
-                        details_to_write.pop(key, None)
-
-                    # --- アクションタイプに応じた整形出力 ---
+                    for key in ['step', 'status', 'action', 'selector', 'iframe_selector', 'required_state', 'memo']: details_to_write.pop(key, None)
+                    # --- アクションタイプに応じた整形出力 (ここは変更なし) ---
                     if action_type == 'get_all_attributes':
                         attr_name = details_to_write.pop('attribute', 'N/A')
+                        results_count = details_to_write.pop('results_count', 0)
                         url_list = details_to_write.pop('url_list', None)
                         pdf_texts = details_to_write.pop('pdf_texts', None)
                         scraped_texts = details_to_write.pop('scraped_texts', None)
+                        email_list = details_to_write.pop('extracted_emails', None)
                         attr_list = details_to_write.pop('attribute_list', None)
-
                         file.write(f"Requested Attribute/Content: {attr_name}\n")
-
-                        # 結果リストの最大長を取得
-                        list_lengths = [len(lst) for lst in [url_list, pdf_texts, scraped_texts, attr_list] if lst is not None]
-                        max_len = max(list_lengths) if list_lengths else 0
-
-                        if max_len > 0:
-                            file.write(f"Results ({max_len} items found):\n")
-                            for idx in range(max_len):
-                                file.write(f"  [{idx+1}]\n")
-                                # 各リストから安全に値を取得
-                                current_url = url_list[idx] if url_list and idx < len(url_list) else None
-                                pdf_content = pdf_texts[idx] if pdf_texts and idx < len(pdf_texts) else None
-                                scraped_content = scraped_texts[idx] if scraped_texts and idx < len(scraped_texts) else None
-                                attr_content = attr_list[idx] if attr_list and idx < len(attr_list) else None
-
-                                if current_url is not None:
-                                     file.write(f"    URL: {current_url}\n")
-
-                                # コンテンツや属性値を出力
-                                content_written = False
-                                if pdf_content is not None:
-                                    prefix = "PDF Content"
-                                    if isinstance(pdf_content, str) and pdf_content.startswith("Error:"):
-                                        file.write(f"      -> {prefix} (Error): {pdf_content}\n")
-                                    elif pdf_content == "(No text extracted from PDF)":
-                                        file.write(f"      -> {prefix}: (No text extracted)\n")
-                                    else:
-                                        file.write(f"      -> {prefix} (Length: {len(pdf_content or '')}):\n")
-                                        indented_content = "\n".join(["        " + line for line in str(pdf_content).splitlines()])
-                                        file.write(indented_content + "\n")
-                                    content_written = True
-                                if scraped_content is not None: # pdf と scraped は通常排他だが両方出力
-                                    prefix = "Page Content"
-                                    if isinstance(scraped_content, str) and scraped_content.startswith("Error"):
-                                        file.write(f"      -> {prefix} (Error): {scraped_content}\n")
-                                    else:
-                                        file.write(f"      -> {prefix} (Length: {len(scraped_content or '')}):\n")
-                                        indented_content = "\n".join(["        " + line for line in str(scraped_content).splitlines()])
-                                        file.write(indented_content + "\n")
-                                    content_written = True
-                                if attr_content is not None:
-                                     # href, pdf, content 以外の汎用属性の場合
-                                     file.write(f"      -> Attribute '{attr_name}' Value: {attr_content}\n")
-                                     content_written = True
-
-                                # if not content_written and current_url is not None:
-                                #     file.write("      -> (No specific content/attribute requested or found for this item)\n")
-
-                        else: # max_len == 0
-                             file.write("Results: (No items found matching the selector)\n")
-
+                        file.write(f"Results ({results_count} items processed):\n")
+                        if results_count > 0:
+                            if email_list is not None:
+                                file.write("  Extracted Emails (Unique Domains for this step):\n")
+                                if email_list: file.write('\n'.join(f"  - {email}" for email in email_list) + "\n")
+                                else: file.write("    (No unique domain emails found for this step)\n")
+                            if url_list is not None and attr_name.lower() != 'mail':
+                                file.write(f"  Processed URLs ({len(url_list)}):\n")
+                                for idx, url in enumerate(url_list): file.write(f"    [{idx+1}] {url if url else '(URL not processed or invalid)'}\n")
+                            if pdf_texts is not None:
+                                file.write("  Extracted PDF Texts:\n")
+                                for idx, pdf_content in enumerate(pdf_texts):
+                                    if pdf_content is not None:
+                                        file.write(f"    [{idx+1}]")
+                                        if isinstance(pdf_content, str) and pdf_content.startswith("Error:"): file.write(f" (Error): {pdf_content}\n")
+                                        elif pdf_content == "(No text extracted from PDF)": file.write(": (No text extracted)\n")
+                                        else:
+                                            file.write(f" (Length: {len(pdf_content or '')}):\n")
+                                            indented_content = "\n".join(["      " + line for line in str(pdf_content).splitlines()])
+                                            file.write(indented_content + "\n")
+                            if scraped_texts is not None:
+                                file.write("  Scraped Page Texts:\n")
+                                for idx, scraped_content in enumerate(scraped_texts):
+                                    if scraped_content is not None:
+                                        file.write(f"    [{idx+1}]")
+                                        if isinstance(scraped_content, str) and scraped_content.startswith("Error"): file.write(f" (Error): {scraped_content}\n")
+                                        else:
+                                            file.write(f" (Length: {len(scraped_content or '')}):\n")
+                                            indented_content = "\n".join(["      " + line for line in str(scraped_content).splitlines()])
+                                            file.write(indented_content + "\n")
+                            if attr_list is not None:
+                                file.write(f"  Attribute '{attr_name}' Values:\n")
+                                for idx, attr_content in enumerate(attr_list): file.write(f"    [{idx+1}] {attr_content}\n")
+                        else: file.write("  (No items found matching the selector for this step)\n")
                     elif action_type == 'get_all_text_contents':
                         text_list_result = details_to_write.pop('text_list', [])
+                        results_count = details_to_write.pop('results_count', len(text_list_result) if isinstance(text_list_result, list) else 0)
+                        file.write(f"Result Text List ({results_count} items):\n")
                         if isinstance(text_list_result, list):
                             valid_texts = [str(text) for text in text_list_result if text is not None]
-                            file.write(f"Result Text List ({len(valid_texts)} items):\n")
-                            if valid_texts:
-                                file.write('\n'.join(f"- {text}" for text in valid_texts) + "\n")
-                            else:
-                                file.write("(No text content found)\n")
-                        else:
-                             file.write("Result Text List: (Invalid format received)\n")
-
-                    elif action_type == 'get_text_content' or action_type == 'get_inner_text':
-                        text = details_to_write.pop('text', None)
-                        file.write(f"Result Text:\n{text}\n")
-                    elif action_type == 'get_inner_html':
-                        html = details_to_write.pop('html', None)
-                        file.write(f"Result HTML:\n{html}\n") # HTMLはそのまま出力
+                            if valid_texts: file.write('\n'.join(f"- {text}" for text in valid_texts) + "\n")
+                            else: file.write("(No text content found)\n")
+                        else: file.write("(Invalid format received)\n")
+                    elif action_type in ['get_text_content', 'get_inner_text'] and 'text' in details_to_write: file.write(f"Result Text:\n{details_to_write.pop('text', '')}\n")
+                    elif action_type == 'get_inner_html' and 'html' in details_to_write: file.write(f"Result HTML:\n{details_to_write.pop('html', '')}\n")
                     elif action_type == 'get_attribute':
                         attr_name = details_to_write.pop('attribute', ''); attr_value = details_to_write.pop('value', None)
                         file.write(f"Result Attribute ('{attr_name}'): {attr_value}\n")
-                        pdf_text = details_to_write.pop('pdf_text', None)
-                        if pdf_text:
-                             prefix = "Extracted PDF Text"
-                             if isinstance(pdf_text, str) and pdf_text.startswith("Error:"):
-                                 file.write(f"{prefix} (Error): {pdf_text}\n")
-                             elif pdf_text == "(No text extracted from PDF)":
-                                 file.write(f"{prefix}: (No text extracted)\n")
-                             else:
-                                 file.write(f"{prefix}:\n{pdf_text}\n")
-                    elif action_type == 'screenshot':
-                         filename = details_to_write.pop('filename', None)
-                         if filename: file.write(f"Screenshot saved to: {filename}\n")
-                    elif action_type == 'click':
-                         if details_to_write.get('new_page_opened'):
-                              file.write(f"New page opened: {details_to_write.get('new_page_url')}\n")
-                         else:
-                              file.write("New page did not open within timeout.\n")
-                         # 不要なキーを削除
-                         details_to_write.pop('new_page_opened', None)
-                         details_to_write.pop('new_page_url', None)
-
-                    # 残りの詳細情報（汎用）を書き込む
+                        if 'pdf_text' in details_to_write:
+                            pdf_text = details_to_write.pop('pdf_text', '')
+                            prefix = "Extracted PDF Text"
+                            if isinstance(pdf_text, str) and pdf_text.startswith("Error:"): file.write(f"{prefix} (Error): {pdf_text}\n")
+                            elif pdf_text == "(No text extracted from PDF)": file.write(f"{prefix}: (No text extracted)\n")
+                            else: file.write(f"{prefix}:\n{pdf_text}\n")
+                    elif action_type == 'screenshot' and 'filename' in details_to_write: file.write(f"Screenshot saved to: {details_to_write.pop('filename')}\n")
+                    elif action_type == 'click' and 'new_page_opened' in details_to_write:
+                        if details_to_write.get('new_page_opened'): file.write(f"New page opened: {details_to_write.get('new_page_url')}\n")
+                        else: file.write("New page did not open within timeout.\n")
+                        details_to_write.pop('new_page_opened', None); details_to_write.pop('new_page_url', None)
                     if details_to_write:
                         file.write("Other Details:\n")
-                        for key, val in details_to_write.items():
-                             file.write(f"  {key}: {val}\n")
+                        for key, val in details_to_write.items(): file.write(f"  {key}: {val}\n")
+                elif status == "skipped" or status == "warning": file.write(f"Message: {res.get('message', 'No message provided.')}\n")
+                else: file.write(f"Raw Data: {res}\n") # 不明な場合は生データを書き出す
+                file.write("\n")
 
-                elif status == "skipped" or status == "warning":
-                    file.write(f"Message: {res.get('message', 'No message provided.')}\n")
-                else: # Unknown status or other cases
-                     file.write(f"Raw Data: {res}\n") # 不明な場合は生データを書き出す
-
-                file.write("\n") # ステップ間の空行
+            # --- ▼▼▼ 最終集約結果の追記処理 ▼▼▼ ---
+            if final_summary_data:
+                file.write("--- Final Aggregated Summary ---\n\n")
+                for summary_key, summary_value in final_summary_data.items():
+                    file.write(f"{summary_key}:\n")
+                    if isinstance(summary_value, list):
+                        # リスト（配列）形式で出力
+                        # JSON形式でインデント付きで書き込む
+                        try:
+                             json_output = json.dumps(summary_value, indent=2, ensure_ascii=False)
+                             file.write(json_output + "\n")
+                        except TypeError:
+                             # JSONシリアライズできない場合は repr で出力
+                             file.write(repr(summary_value) + "\n")
+                    else:
+                        # リスト以外はそのまま出力
+                        file.write(f"{summary_value}\n")
+                file.write("\n")
+            # --- ▲▲▲ 最終集約結果の追記処理 ▲▲▲ ---
 
         logger.info(f"結果の書き込みが完了しました: '{filepath}'")
     except IOError as e:
@@ -3824,42 +4593,245 @@ def write_results_to_file(results: List[Dict[str, Any]], filepath: str):
     except Exception as e:
         logger.error(f"結果の処理またはファイル書き込み中に予期せぬエラーが発生しました: {e}", exc_info=True)
 
-
-# --- ▼▼▼ utils.py のテスト用コード（デバッグ目的で追加） ▼▼▼ ---
+# --- utils.py のテスト用コード (変更なし) ---
+# (コードは省略)
 if __name__ == "__main__":
     print("--- Testing logging setup from utils.py ---")
-    # ★★★ テスト用のログファイルパスを MCP_SERVER_LOG_FILE に合わせる ★★★
     TEST_LOG_FILE = config.MCP_SERVER_LOG_FILE
     print(f"Test log file path: {TEST_LOG_FILE}")
-
-    # 既存のテストログファイルがあれば削除（追記モードなので必須ではないが、クリーンなテストのため）
     if os.path.exists(TEST_LOG_FILE):
-        try:
-            os.remove(TEST_LOG_FILE)
-            print(f"Removed existing test log file: {TEST_LOG_FILE}")
-        except Exception as e:
-            print(f"Could not remove existing test log file: {e}")
-
-    # setup_logging_for_standalone をテストログファイルで呼び出す
+        try: os.remove(TEST_LOG_FILE); print(f"Removed existing test log file: {TEST_LOG_FILE}")
+        except Exception as e: print(f"Could not remove existing test log file: {e}")
     try:
         setup_logging_for_standalone(log_file_path=TEST_LOG_FILE)
-
-        # ロギングが機能するかテスト
         test_logger = logging.getLogger("utils_test")
         print("\nAttempting to log messages...")
         test_logger.info("INFO message from utils_test.")
         test_logger.warning("WARNING message from utils_test.")
         test_logger.error("ERROR message from utils_test.")
-
         print(f"\nLogging test complete.")
-        print(f"Please check the console output above and the content of the file: {os.path.abspath(TEST_LOG_FILE)}") # 絶対パス表示
+        print(f"Please check the console output above and the content of the file: {os.path.abspath(TEST_LOG_FILE)}")
         print(f"Root logger handlers: {logging.getLogger().handlers}")
+    except Exception as e: print(f"\n--- Error during logging test ---"); print(f"{type(e).__name__}: {e}"); traceback.print_exc()
 
-    except Exception as e:
-        print(f"\n--- Error during logging test ---")
-        print(f"{type(e).__name__}: {e}")
-        traceback.print_exc()
-# --- ▲▲▲ utils.py のテスト用コード ▲▲▲ ---
+
+---
+
+
+- フォルダ名: .
+- ファイル名: web_runner_google_email_crawler.py
+- 内容:
+# --- ファイル: generate_and_run_google_crawl.py (結果処理 再々修正版) ---
+import asyncio
+import json
+import sys
+import os
+import time
+import argparse
+import traceback
+from pathlib import Path
+from typing import List, Set, Dict, Any, Optional, Tuple, Union
+import re # <<< 正規表現モジュールをインポート
+
+# --- インポート (変更なし) ---
+try: from web_runner_mcp_client_core import execute_web_runner_via_mcp
+except ImportError: print("Error: web_runner_mcp_client_core.py not found..."); sys.exit(1)
+try:
+    import config
+    import utils
+    DEFAULT_OUTPUT_FILE = Path(config.MCP_CLIENT_OUTPUT_FILE)
+    DEFAULT_OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+except ImportError: print("Warning: config/utils not found..."); utils = None; DEFAULT_OUTPUT_FILE = None
+
+# --- 定数 (次へセレクターを実績値に戻す) ---
+GOOGLE_SEARCH_URL = "https://www.google.com/"
+SEARCH_BOX_SELECTOR = "#APjFqb"
+SEARCH_BUTTON_SELECTOR = "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b"
+EMAIL_EXTRACT_SELECTOR = "#rso div.kb0PBd.A9Y9g.jGGQ5e span a"
+# 「次へ」セレクターを実績値に戻す
+NEXT_PAGE_SELECTOR = "#pnnext > span.oeN89d"
+# NEXT_PAGE_SELECTOR = "#pnnext" # こちらの方が安定する場合もある
+
+DEFAULT_WAIT_MS = 5000
+EMAIL_EXTRACT_WAIT_MS = 7000
+DEFAULT_SLEEP_SEC = 2
+
+# --- JSON生成ヘルパー関数 (次へセレクター変更) ---
+def generate_google_crawl_json(search_term: str, max_pages: int) -> Dict[str, Any]:
+    actions: List[Dict[str, Any]] = []
+    actions.append({"memo": "検索ボックスに入力", "action": "input", "selector": SEARCH_BOX_SELECTOR, "value": search_term})
+    actions.append({"memo": "検索ボタンをクリック", "action": "click", "selector": SEARCH_BUTTON_SELECTOR, "wait_time_ms": DEFAULT_WAIT_MS})
+    actions.append({"memo": f"検索結果表示待機 ({DEFAULT_SLEEP_SEC}秒)", "action": "sleep", "value": DEFAULT_SLEEP_SEC})
+    for page_num in range(1, max_pages + 1):
+        actions.append({"memo": f"ページ {page_num} メール抽出", "action": "get_all_attributes", "selector": EMAIL_EXTRACT_SELECTOR, "attribute_name": "mail", "wait_time_ms": EMAIL_EXTRACT_WAIT_MS})
+        if page_num < max_pages:
+            actions.append({
+                "memo": f"ページ {page_num + 1} へ移動",
+                "action": "click",
+                "selector": NEXT_PAGE_SELECTOR, # <<< 実績値に戻したセレクター
+                "wait_time_ms": DEFAULT_WAIT_MS
+            })
+            actions.append({"memo": f"ページ遷移待機 ({DEFAULT_SLEEP_SEC}秒)", "action": "sleep", "value": DEFAULT_SLEEP_SEC})
+    return {"target_url": GOOGLE_SEARCH_URL, "actions": actions}
+
+# --- 結果処理ヘルパー関数 (エラー時のJSON抽出を修正) ---
+def process_results(
+    success: bool,
+    result_data_or_error: Union[str, Dict[str, Any]]
+) -> Tuple[List[str], List[Dict[str, Any]]]:
+    """
+    Web-Runnerからの結果またはエラー情報を処理し、
+    ユニークドメインメールアドレスリストと全ステップ結果リストを返す。
+    エラー発生時でも、それまでに成功したメール抽出結果は集約する。
+    """
+    all_steps_results: List[Dict[str, Any]] = []
+    collected_emails: List[str] = []
+    processed_domains: Set[str] = set()
+
+    # --- 結果/エラーデータの解析 ---
+    if success and isinstance(result_data_or_error, str):
+        try:
+            all_steps_results = json.loads(result_data_or_error)
+            if not isinstance(all_steps_results, list):
+                print("[エラー] Web-Runnerからの成功結果がリスト形式ではありません。")
+                all_steps_results = [{"raw_success_result": result_data_or_error}]
+        except json.JSONDecodeError:
+            print("[エラー] Web-Runnerからの成功結果JSONの解析に失敗しました。")
+            all_steps_results = [{"raw_success_result": result_data_or_error}]
+
+    elif not success and isinstance(result_data_or_error, dict):
+        print("[情報] Web-Runner実行中にエラーが発生しました。エラー詳細を解析します。")
+        raw_details_str = result_data_or_error.get("raw_details")
+
+        # --- ▼▼▼ エラー詳細からのJSON抽出ロジック (正規表現使用) ▼▼▼ ---
+        if isinstance(raw_details_str, str):
+            # "raw_error" の値を取得し、そこからJSONリストを抽出する試み
+            raw_error_val = result_data_or_error.get("raw_error")
+            if isinstance(raw_error_val, str):
+                # "Details in JSON content: " の後の最初の '[' から最後の ']' までを抽出
+                # (?s) は '.' が改行にもマッチするようにするフラグ
+                match = re.search(r"Details in JSON content:\s*(\[(?s:.*)\])", raw_error_val)
+                if match:
+                    potential_json_str = match.group(1) # 括弧の中身を取得
+                    print(f"  -> Extracted potential JSON from error (length {len(potential_json_str)}): {potential_json_str[:100]}...")
+                    try:
+                        # ここで抽出した文字列を直接パース
+                        parsed_data = json.loads(potential_json_str)
+                        if isinstance(parsed_data, list):
+                            all_steps_results = parsed_data
+                            print("  -> エラー詳細からステップ結果リストを抽出・解析しました。")
+                        else:
+                            print("  [警告] エラー詳細から抽出したJSONがリスト形式ではありません。")
+                            all_steps_results = [{"parsed_error_detail": parsed_data}]
+                    except json.JSONDecodeError as e:
+                        print(f"  [警告] 抽出したJSON部分の解析に失敗しました。エラー: {e}")
+                        # エラーが発生したJSON文字列をデバッグ用に記録
+                        all_steps_results = [{"error_parsing_json_from_error": potential_json_str}]
+                    except Exception as e:
+                         print(f"  [警告] エラー詳細内のJSON処理中に予期せぬエラー: {e}")
+                         all_steps_results = [result_data_or_error] # 元のエラー辞書
+                else:
+                    print("  [警告] エラー詳細内で 'Details in JSON content: [...]' パターンが見つかりません。")
+                    all_steps_results = [result_data_or_error] # 元のエラー辞書
+            else:
+                print("  [警告] エラー詳細に 'raw_error' キーがないか、値が文字列ではありません。")
+                all_steps_results = [result_data_or_error]
+        else:
+             # raw_details がないか文字列でない場合
+             all_steps_results = [result_data_or_error] # 元のエラー辞書をそのままリストに
+        # --- ▲▲▲ エラー詳細からのJSON抽出ロジック (正規表現使用) ▲▲▲ ---
+
+    elif isinstance(result_data_or_error, str): # success=False で文字列の場合
+        print("[エラー] Web-Runnerからエラー文字列を受け取りました。")
+        all_steps_results = [{"error_string": result_data_or_error}]
+    else: # その他の予期しない形式
+        print("[エラー] 不明な結果/エラー形式を受け取りました。")
+        all_steps_results = [{"unknown_result": str(result_data_or_error)}]
+
+    # --- ステップ結果の処理とメール集約 (変更なし) ---
+    print("\n--- 各ステップの結果サマリ (エラー発生時も含む) ---")
+    if not all_steps_results:
+        print("(有効なステップ結果がありません)")
+        return [], []
+
+    for step_result in all_steps_results:
+        if not isinstance(step_result, dict): print(f"  [警告] 無効なステップデータ形式をスキップ: {type(step_result)}"); continue
+        step_num = step_result.get("step", "?"); action = step_result.get("action", "N/A"); status = step_result.get("status", "N/A"); memo = step_result.get("memo", "")
+        print(f"Step {step_num}: {action} ({status}) {f'- {memo}' if memo else ''}")
+        if (action == "get_all_attributes" and step_result.get("attribute") == "mail" and status == "success"):
+            page_emails = step_result.get("extracted_emails", [])
+            if page_emails:
+                print(f"  -> 抽出されたメールアドレス候補 (ドメインユニーク): {len(page_emails)} 件")
+                added_count = 0
+                for email in page_emails:
+                    if isinstance(email, str) and '@' in email:
+                        try:
+                            domain = email.split('@', 1)[1].lower()
+                            if domain and domain not in processed_domains: 
+                                collected_emails.append(email)
+                                processed_domains.add(domain)
+                                added_count += 1
+                        except IndexError: pass
+                if added_count > 0: print(f"     -> うち {added_count} 件を最終リストに追加。")
+            else: print("  -> このステップではメールアドレスは見つかりませんでした。")
+        elif status == "error":
+             message = step_result.get('message', 'No message'); selector = step_result.get('selector', 'N/A')
+             print(f"  [エラー] Selector: {selector} - Message: {message}")
+             if step_result.get('traceback'): print(f"  [エラー] 詳細なエラー情報はログファイルを確認してください。")
+
+    return collected_emails, all_steps_results
+
+# --- メイン実行関数 (変更なし) ---
+async def main():
+    # ... (ArgumentParser部分は変更なし) ...
+    parser = argparse.ArgumentParser(description="Generate JSON and run Google Search Email Crawler via Web-Runner MCP")
+    parser.add_argument("search_term", type=str, help="Google検索キーワード")
+    parser.add_argument("--max_pages", type=int, default=3, help="クロール最大ページ数 (デフォルト: 3)")
+    parser.add_argument('--headless', action=argparse.BooleanOptionalAction, default=False, help="ヘッドレス実行")
+    parser.add_argument("--slowmo", type=int, default=0, help="SlowMo遅延 (ms, デフォルト: 0)")
+    parser.add_argument("--output_json", type=Path, default=None, help="生成した実行用JSONを保存するパス (オプション)")
+    parser.add_argument("--output_result", type=Path, default=DEFAULT_OUTPUT_FILE, help=f"Web-Runnerの実行結果を保存するパス (デフォルト: {DEFAULT_OUTPUT_FILE})")
+    args = parser.parse_args()
+    # --- 1. JSON生成 (変更なし) ---
+    print("--- 1. 実行用JSONを生成中 ---")
+    web_runner_input_json = generate_google_crawl_json(args.search_term, args.max_pages)
+    print(f"生成されたアクション数: {len(web_runner_input_json['actions'])}")
+    if args.output_json:
+        try:
+            args.output_json.parent.mkdir(parents=True, exist_ok=True)
+            with open(args.output_json, 'w', encoding='utf-8') as f: json.dump(web_runner_input_json, f, indent=2, ensure_ascii=False)
+            print(f"実行用JSONを保存しました: {args.output_json}")
+        except Exception as e: print(f"[警告] 実行用JSONの保存に失敗しました: {e}")
+    # --- 2. Web-Runner実行 (変更なし) ---
+    print("\n--- 2. Web-Runner をMCP経由で実行中 ---")
+    start_time = time.monotonic()
+    success, result_or_error = await execute_web_runner_via_mcp(web_runner_input_json, headless=args.headless, slow_mo=args.slowmo)
+    end_time = time.monotonic(); print(f"Web-Runner実行時間: {end_time - start_time:.2f} 秒")
+    # --- 3. 結果処理 & 出力 (変更なし) ---
+    print("\n--- 3. 実行結果を処理中 ---")
+    final_unique_emails, all_steps_results_list = process_results(success, result_or_error)
+    print("\n" + "=" * 30)
+    print(f"--- 最終結果: ユニークドメインメールアドレス ({len(final_unique_emails)} 件) [配列形式] ---")
+    print(json.dumps(sorted(final_unique_emails), indent=2, ensure_ascii=False))
+    print("=" * 30)
+    if args.output_result and utils:
+        print(f"\nWeb-Runnerの全ステップ結果と最終メールリストをファイルに書き込みます: {args.output_result}")
+        try:
+            output_path = Path(args.output_result); output_path.parent.mkdir(parents=True, exist_ok=True)
+            final_summary = {"Final Unique Domain Emails": sorted(final_unique_emails)}
+            #with open("output_mail.txt", "a", encoding="utf-8") as f:
+            #    f.write('\n'.join(final_unique_emails) + '\n')  # 各要素を改行で結合して書き込む
+            utils.write_results_to_file(all_steps_results_list, str(output_path), final_summary_data=final_summary)
+            print("結果ファイルの書き込みが完了しました。")
+        except Exception as e: print(f"[エラー] 結果ファイルの書き込みに失敗しました: {e}"); traceback.print_exc()
+    elif args.output_result and not utils: print(f"[警告] utilsモジュールが見つからないため、結果ファイル '{args.output_result}' への書き込みをスキップします。")
+
+if __name__ == "__main__":
+    # ... (実行部分は変更なし) ...
+    if sys.platform == "win32": pass
+    try: asyncio.run(main())
+    except KeyboardInterrupt: print("\n処理が中断されました。")
+    except Exception as e: print(f"\n予期せぬエラーが発生しました: {e}"); traceback.print_exc()
 
 
 ---
@@ -4916,6 +5888,51 @@ if __name__ == "__main__":  # ← インデントレベル 0
 
 
 - フォルダ名: .\json
+- ファイル名: google_company2mail.json
+- 内容:
+{
+  "target_url": "https://www.google.com/",
+  "actions": [
+    {
+      "memo": "検索ボックスに入力",
+      "action": "input",
+      "selector": "#APjFqb",
+      "value": "東京都　渋谷区　株式会社　お問い合わせ"
+    },
+    {
+      "memo": "検索ボタンをクリック",
+      "action": "click",
+      "selector": "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b",
+      "wait_time_ms": 5000
+    },
+    {
+      "memo": "mail = 全てのメルアドを取得する。（ドメイン単位でユニークにする）",
+      "action": "get_all_attributes",
+      "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
+      "wait_time_ms": 5000,
+      "attribute_name": "mail"
+    },
+    {
+      "memo": "次へボタンをクリック",
+      "action": "click",
+      "selector": "#pnnext > span.oeN89d",
+      "wait_time_ms": 5000
+    },
+    {
+      "memo": "mail = 全てのメルアドを取得する。（ドメイン単位でユニークにする）",
+      "action": "get_all_attributes",
+      "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
+      "wait_time_ms": 5000,
+      "attribute_name": "mail"
+    }
+  ]
+}
+
+
+---
+
+
+- フォルダ名: .\json
 - ファイル名: google_domein2company1.json
 - 内容:
 {
@@ -4988,19 +6005,30 @@ if __name__ == "__main__":  # ← インデントレベル 0
     {
       "memo": "検索ボックスに入力",
       "action": "input",
-      "selector": "#APjFqb",
-      "value": "経済"
+      "selector": "textarea#APjFqb",
+      "value": "大阪府　株式会社　問い合わせ"
     },
     {
       "memo": "検索　をクリック",
       "action": "click",
-      "selector": "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.FPdoLc.lJ9FBc > center > input.gNO89b",
+      "selector": "input[name=\"btnK\"][value=\"Google 検索\"]",
       "wait_time_ms": 5000
     },
     {
-      "memo": "検索結果の１件目をクリック",
+      "memo": "次へ　クリック",
       "action": "click",
-      "selector": "#rso div.kb0PBd.A9Y9g.jGGQ5e span a",
+      "selector": "#pnnext > span.oeN89d",
+      "wait_time_ms": 5000
+    },
+    {
+      "action": "sleep",
+      "wait_time_ms": 5000,
+      "value": 5
+    },
+    {
+      "memo": "検索結果　クリック",
+      "action": "click",
+      "selector": "a.zReHs",
       "wait_time_ms": 5000
     },
     {
@@ -5355,5 +6383,46 @@ if __name__ == "__main__":  # ← インデントレベル 0
       "attribute_name": "pdf"
     }
 
+  ]
+}
+
+
+---
+
+
+- フォルダ名: .\json
+- ファイル名: zip-code-tokyo.json
+- 内容:
+{
+  "target_url": "https://www.post.japanpost.jp/zipcode/",
+  "actions": [
+    {
+      "memo": "表示待ち",
+      "action": "wait_visible",
+      "selector": "#zipcode > div.wrapper > div.contWrap > div > div > div.inner > div.areaTxt.sp-t30 > ul > li:nth-child(3) > a:nth-child(1)",
+      "wait_time_ms": 10000
+    },
+    {
+      "memo": "東京をクリック",
+      "action": "click",
+      "selector": "#zipcode > div.wrapper > div.contWrap > div > div > div.inner > div.areaTxt.sp-t30 > ul > li:nth-child(3) > a:nth-child(1)",
+      "wait_time_ms": 5000
+    },
+    {
+      "memo": "昭島市をクリック",
+      "action": "click",
+      "selector": "#main-box > div > div:nth-child(9) > table > tbody > tr:nth-child(2) > th > a",
+      "wait_time_ms": 5000
+    },
+
+
+    {      
+      "memo": "href = url",
+      "action": "get_all_text_contents",
+      "selector": "table.prefList",
+      "wait_time_ms": 5000,
+      "attribute_name": "content"
+
+    }
   ]
 }
