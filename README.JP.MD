@@ -263,5 +263,5 @@ if __name__ == "__main__":
 ## 貢献 (Contributing)
 - バグ報告、機能提案、プルリクエストを歓迎します！ 詳細は CONTRIBUTING.md をご覧ください (まだ存在しない場合は作成予定)。
 
-## ライセンス (License)
+## ライセンス (License) 
 このプロジェクトは MIT License の下で公開されています。[LICENSE](LICENSE)
