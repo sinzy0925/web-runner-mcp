@@ -5,7 +5,7 @@
       "memo": "検索ボックスに入力",
       "action": "input",
       "selector": "#APjFqb",
-      "value": "東京都　渋谷区　株式会社　お問い合わせ"
+      "value": "東京都　昭島市　朝日町　お問い合わせ　mail"
     },
     {
       "memo": "検索ボタンをクリック",
